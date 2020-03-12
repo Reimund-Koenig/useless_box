@@ -1,7 +1,7 @@
 ARDUINO_DIR = /usr/share/arduino
-ARDUINO_PORT = /dev/ttyACM*
+ARDUINO_PORT = /dev/ttyS0
 
-USER_LIB_PATH = ~/workspace/useless-box/arduino/libraries
+USER_LIB_PATH = ~/workspace/useless_box/include
 BOARD_TAG = uno
 # BOARD_TAG = mega2560
 

@@ -1,5 +1,6 @@
 #include "ub_motor.hpp"
 #include <stdio.h>
+#include "Arduino.h"
 
 ub::Motor::Motor() {
     ub::Motor::speed = MOTOR_DEFAULT_SPEED;
