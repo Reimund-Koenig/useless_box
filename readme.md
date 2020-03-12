@@ -1,7 +1,8 @@
 # UselessBox
 
 ## How to clone this project
-    mkdir ~/workspace -r
+    mkdir ~/workspace
+    cd ~/workspace
     git clone https://Reimund_K@bitbucket.org/Reimund_K/useless_box.git
 
 ## How to run unit tests
