@@ -36,10 +36,8 @@ class TestMain : public ::testing::Test {
 TEST_F(TestMain, test_gearmotor_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestMain, test_gearmotor_defaults) {
-    int default_direction = GEARMOTOR_DIRECTION_STOP;
-    EXPECT_EQ(gearmotorUnderTest->get_direction(), default_direction);
-    int default_speed = 100;
-    EXPECT_EQ(gearmotorUnderTest->get_speed(), default_speed);
+    EXPECT_EQ(gearmotorUnderTest->get_direction(), GEARMOTOR_DEFAULT_DIRECTION);
+    EXPECT_EQ(gearmotorUnderTest->get_speed(), GEARMOTOR_DEFAULT_SPEED);
 }
 
 TEST_F(TestMain, test_gearmotor_speed) {
@@ -67,12 +65,14 @@ TEST_F(TestMain, test_gearmotor_direction_backward) {
 }
 
 TEST_F(TestMain, test_gearmotor_direction_stop) {
+    int possitiv_non_direction_value = 42;
+    int negative_non_direction_value = -42;
     EXPECT_CALL(*arduinoMock, digitalWrite(TEST_PIN_FORWARD,LOW)).Times(3);
     EXPECT_CALL(*arduinoMock, digitalWrite(TEST_PIN_BACKWARD,LOW)).Times(3);
     gearmotorUnderTest->move(GEARMOTOR_DIRECTION_STOP, 200);
     EXPECT_EQ(gearmotorUnderTest->get_direction(), GEARMOTOR_DIRECTION_STOP);
-    gearmotorUnderTest->move(42,200);
+    gearmotorUnderTest->move(possitiv_non_direction_value,200);
     EXPECT_EQ(gearmotorUnderTest->get_direction(), GEARMOTOR_DIRECTION_STOP);
-    gearmotorUnderTest->move(-42,200);
+    gearmotorUnderTest->move(negative_non_direction_value,200);
     EXPECT_EQ(gearmotorUnderTest->get_direction(), GEARMOTOR_DIRECTION_STOP);
 }

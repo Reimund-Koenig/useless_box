@@ -1,7 +1,6 @@
 #include "ub_gearmotor.hpp"
 #include <stdio.h>
 #include "Arduino.h"
-#include "../libs/Arduino.h"
 
 ub::Gearmotor::Gearmotor(int pin_pwm_speed, int pin_forward, int pin_backward) {
     ub::Gearmotor::speed = GEARMOTOR_DEFAULT_SPEED;

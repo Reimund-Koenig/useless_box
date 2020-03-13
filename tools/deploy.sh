@@ -9,6 +9,7 @@ cp ../Makefile ./
 cp ../../include/* ./
 cp ../../src/* ./
 rm Arduino.h
+rm Servo.h
 make upload clean
 cd ..
 rm sketch -rf
