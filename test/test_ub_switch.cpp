@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "ub_switch.hpp"
+#include "mocks/mock_arduino.hpp"
 
 class TestMain : public ::testing::Test {
 };

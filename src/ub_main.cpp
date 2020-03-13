@@ -4,7 +4,12 @@
 
 ub::Main::Main() {
     // setup
-    pinMode(LED_BUILTIN, OUTPUT);
+    // pinMode(GSM1, OUTPUT);
+    // pinMode(GSM2, OUTPUT);
+    // pinMode(in1, OUTPUT);
+    // pinMode(in2, OUTPUT);
+    // pinMode(in3, OUTPUT);
+    // pinMode(in4, OUTPUT);
 }
 
 ub::Main::~Main() {
@@ -18,9 +23,3 @@ int ub::Main::lastResult() {
     return m_lastResult;
 }
 
-void ub::Main::blink() {
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
-}

@@ -13,16 +13,16 @@
 
 
 ## Install Arduino related stuff
-sudo apt-get install gcc-avr avr-libc avrdude
-sudo apt install arduino-mk
-sudo apt install screen
+    sudo apt-get install gcc-avr avr-libc avrdude
+    sudo apt install arduino-mk
+    sudo apt install screen
 
 ### Compile code
-cd ~/workspace/useless_box/arduino
-make
+    cd ~/workspace/useless_box/arduino
+    make
 
 ### Compile and run code
-cd ~/workspace/useless_box/arduino
-make upload clean
+    cd ~/workspace/useless_box/arduino
+    make upload clean
 #### or
-~/workspace/useless_box/tools/deploy.sh
+    ~/workspace/useless_box/tools/deploy.sh

@@ -8,11 +8,20 @@ class Main {
   private:
     int m_lastResult = -1;
 
+    // Gearmotor 1 Pin Setup
+    int pin_gearmotor_1_pwm_speed = 10;
+    int pin_gearmotor_1_forward = 9;
+    int pin_gearmotor_1_backward = 8;
+
+    // Gearmotor 2 Pin Setup
+    int pin_gearmotor_2_pwm_speed = 5;
+    int pin_gearmotor_2_forward = 7;
+    int pin_gearmotor_2_backward = 6;
+
   protected:
   public:
     Main();
     virtual ~Main();
-    virtual void blink();
     virtual void addition(int, int);
     virtual int lastResult();
 };
