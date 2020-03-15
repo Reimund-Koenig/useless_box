@@ -22,8 +22,10 @@ class Main {
   public:
     Main();
     virtual ~Main();
+    virtual void run();
     virtual void addition(int, int);
     virtual int lastResult();
+
 };
 
 } // namespace ub

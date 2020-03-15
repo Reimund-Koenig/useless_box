@@ -8,5 +8,5 @@ void setup()
 
 void loop()
 {
-  ub_main.blink();
+  ub_main.run();
 }

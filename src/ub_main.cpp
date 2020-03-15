@@ -15,6 +15,9 @@ ub::Main::Main() {
 ub::Main::~Main() {
 }
 
+void ub::Main::run() {
+}
+
 void ub::Main::addition(int a, int b) {
     m_lastResult = a + b;
 }
