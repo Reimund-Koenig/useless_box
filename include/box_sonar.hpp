@@ -1,9 +1,9 @@
-#ifndef BOX_ULTRASONIC_HPP_
-#define BOX_ULTRASONIC_HPP_
+#ifndef BOX_SONAR_HPP_
+#define BOX_SONAR_HPP_
 
 namespace box {
 
-class Ultrasonic {
+class Sonar {
 
   private:
     int m_lastResult = -1;
@@ -17,4 +17,4 @@ class Ultrasonic {
 
 } // namespace box
 
-#endif // BOX_ULTRASONIC_HPP_
+#endif // BOX_SONAR_HPP_
