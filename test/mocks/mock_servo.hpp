@@ -8,6 +8,7 @@
 class ServoMock : public Servo {
   public:
     MOCK_METHOD1(write, void(int));
+    MOCK_METHOD0(read, int());
 };
 
 /**
@@ -23,8 +24,11 @@ uint8_t Servo::attach(int pin) { return 0; }
 void Servo::write(int value) {
   return servoMock->write(value);
 }
+int Servo::read() {
+  return servoMock->read();
+}
+
 void Servo::writeMicroseconds(int value){}
-int Servo::read() {  return  0; }
 int Servo::readMicroseconds() { return 0; }
 bool Servo::attached(){  return false ; }
 

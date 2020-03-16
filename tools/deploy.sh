@@ -11,6 +11,8 @@ cp ../../include/* ./
 cp ../../src/* ./
 rm Arduino.h
 rm Servo.h
+rm box_gearmotor.cpp
+rm box_gearmotor.hpp
 cp /usr/share/arduino/libraries/Servo/Servo.h ./
 cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 make upload clean

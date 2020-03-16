@@ -2,9 +2,11 @@
 #include "box_servomotor.hpp"
 #include <stdio.h>
 
-box::Servomotor::Servomotor(int pin_pwm_servomotor) {
+box::Servomotor::Servomotor(int pin_pwm_servomotor, int min_peak_angle, int max_peak_angle) {
     servo.attach(pin_pwm_servomotor);
-    box::Servomotor::angle = SERVOMOTOR_DEFAULT_ANGLE;
+    box::Servomotor::min_peak_angle = min_peak_angle;
+    box::Servomotor::max_peak_angle = max_peak_angle;
+    box::Servomotor::angle = min_peak_angle;
     box::Servomotor::direction = SERVOMOTOR_DEFAULT_DIRECTION;
 }
 
@@ -14,6 +16,15 @@ box::Servomotor::~Servomotor() {
 /*************************************************************************************************
  * Public Methods
  *************************************************/
+
+void box::Servomotor::move_to_percent(int percentage) {
+    int angle = (int)(((box::Servomotor::max_peak_angle -  box::Servomotor::min_peak_angle) *
+                        (percentage / 100.0)) +
+                        box::Servomotor::min_peak_angle
+                     );
+    set_angle(angle);
+    servo.write(box::Servomotor::angle);
+}
 
 void box::Servomotor::move(int direction) {
     set_direction(direction);
@@ -34,13 +45,17 @@ int box::Servomotor::get_angle() {
     return box::Servomotor::angle;
 }
 
+int box::Servomotor::get_current_angle() {
+    return servo.read();
+}
+
 /*************************************************************************************************
  * Private Methods
  *************************************************/
 
 void box::Servomotor::set_angle(int angle) {
-    if(angle < 0) { box::Servomotor::angle = 0; return; }
-    if(angle > 180) { box::Servomotor::angle = 180; return; }
+    if(angle < min_peak_angle) { box::Servomotor::angle = min_peak_angle; return; }
+    if(angle > max_peak_angle) { box::Servomotor::angle = max_peak_angle; return; }
     box::Servomotor::angle = angle;
 }
 
@@ -58,10 +73,10 @@ void box::Servomotor::move_stop() {
 
 void box::Servomotor::move_forward() {
     set_angle(angle+1);
-    servo.write(angle);
+    servo.write(box::Servomotor::angle);
 }
 
 void box::Servomotor::move_backward() {
     set_angle(angle-1);
-    servo.write(angle);
+    servo.write(box::Servomotor::angle);
 }

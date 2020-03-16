@@ -4,7 +4,7 @@
 #include "box_main.hpp"
 
 box::Main::Main() {
-    servo1 = new box::Servomotor(pin_servomotor_pwm);
+    servo1 = new box::Servomotor(pin_servomotor_pwm, 0, 180);
     pinMode(LED_BUILTIN, OUTPUT);
 }
 
