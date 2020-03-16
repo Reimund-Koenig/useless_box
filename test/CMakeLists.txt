@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2.2)
 
 project(UselessBoxUnitTest)
 include(CTest)
-add_compile_options(-std=c++11 -fpermissive -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable)
+add_compile_options(-std=c++11 -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable)
 
 
 #*************************************************************************************************

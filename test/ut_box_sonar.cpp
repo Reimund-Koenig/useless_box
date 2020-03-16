@@ -32,14 +32,13 @@ struct SonarUnderTest : public box::Sonar {
 class TestSonar : public ::testing::Test {
   protected:
     SonarUnderTest* sonarUnderTest;
-    void (*dummy_function) () = NULL;
-    void (*attachInterrupt_call)(int, void (*)(), int);
+    void (*echo_isr_callback)();
 
     virtual void SetUp() {
         arduinoMock = new NiceMock<ArduinoMock>;
         EXPECT_CALL(*arduinoMock, attachInterrupt(TEST_PIN_INTERRUPT,_,CHANGE))
             .Times(AtLeast(1))
-            .WillOnce(SaveArg<1>(&attachInterrupt_call));
+            .WillOnce(SaveArg<1>(&echo_isr_callback));
         sonarUnderTest = new SonarUnderTest();
     }
     virtual void TearDown() {
@@ -69,12 +68,12 @@ TEST_F(TestSonar, test_start_function) {
 
 TEST_F(TestSonar, test_interrupt_start) {
     EXPECT_CALL(*arduinoMock, digitalRead(TEST_PIN_ECHO)).Times(1).WillOnce(Return(HIGH));
-    attachInterrupt_call(TEST_PIN_INTERRUPT,dummy_function,0);
+    echo_isr_callback();
     EXPECT_FALSE(sonarUnderTest->isFinished());
 }
 
 TEST_F(TestSonar, test_interrupt_end) {
     EXPECT_CALL(*arduinoMock, digitalRead(TEST_PIN_ECHO)).Times(1).WillOnce(Return(LOW));
-    attachInterrupt_call(TEST_PIN_INTERRUPT,dummy_function,0);
+    echo_isr_callback();
     EXPECT_TRUE(sonarUnderTest->isFinished());
 }
