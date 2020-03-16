@@ -1,7 +1,7 @@
-#ifndef UB_ULTRASONIC_HPP_
-#define UB_ULTRASONIC_HPP_
+#ifndef BOX_ULTRASONIC_HPP_
+#define BOX_ULTRASONIC_HPP_
 
-namespace ub {
+namespace box {
 
 class Ultrasonic {
 
@@ -15,6 +15,6 @@ class Ultrasonic {
     int lastResult();
 };
 
-} // namespace ub
+} // namespace box
 
-#endif // UB_ULTRASONIC_HPP_
+#endif // BOX_ULTRASONIC_HPP_

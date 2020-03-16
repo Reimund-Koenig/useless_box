@@ -1,5 +1,5 @@
-#ifndef UB_SERVOMOTOR_HPP_
-#define UB_SERVOMOTOR_HPP_
+#ifndef BOX_SERVOMOTOR_HPP_
+#define BOX_SERVOMOTOR_HPP_
 
 #include "Servo.h"
 
@@ -10,7 +10,7 @@
 #define SERVOMOTOR_DEFAULT_ANGLE 0
 #define SERVOMOTOR_DEFAULT_DIRECTION SERVOMOTOR_DIRECTION_STOP
 
-namespace ub {
+namespace box {
 
 class Servomotor {
 
@@ -35,6 +35,6 @@ class Servomotor {
     virtual int get_angle();
 };
 
-} // namespace ub
+} // namespace box
 
-#endif // UB_SERVOMOTOR_HPP_
+#endif // BOX_SERVOMOTOR_HPP_

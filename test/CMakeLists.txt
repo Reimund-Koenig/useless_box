@@ -22,8 +22,8 @@ add_subdirectory(   "${CMAKE_BINARY_DIR}/googletest-src"
 # Set sources
 #************************************************
 
-set(UB_SRC         "${CMAKE_CURRENT_LIST_DIR}/../src")
-set(UB_INCLUDE     "${CMAKE_CURRENT_LIST_DIR}/../include")
+set(BOX_SRC         "${CMAKE_CURRENT_LIST_DIR}/../src")
+set(BOX_INCLUDE     "${CMAKE_CURRENT_LIST_DIR}/../include")
 
 #*************************************************************************************************
 # Enable debugging
@@ -50,7 +50,7 @@ include_directories(
 macro(register_test test_name)
     add_executable(${test_name} ${test_name}.cpp ${ARGN})
     target_link_libraries(${test_name} gmock_main uselessbox systemd)
-    target_include_directories(${test_name} PRIVATE ${UB_INCLUDE})
+    target_include_directories(${test_name} PRIVATE ${BOX_INCLUDE})
     add_test (NAME ${test_name} COMMAND ${test_name})
 endmacro()
 enable_testing()
@@ -59,20 +59,20 @@ enable_testing()
 # Add sources to library to reduce build times
 #************************************************
 add_library(uselessbox
-    ${UB_SRC}/ub_main.cpp
-    ${UB_SRC}/ub_gearmotor.cpp
-    ${UB_SRC}/ub_switch.cpp
-    ${UB_SRC}/ub_servomotor.cpp
-    ${UB_SRC}/ub_ultrasonic.cpp
+    ${BOX_SRC}/box_main.cpp
+    ${BOX_SRC}/box_gearmotor.cpp
+    ${BOX_SRC}/box_switch.cpp
+    ${BOX_SRC}/box_servomotor.cpp
+    ${BOX_SRC}/box_ultrasonic.cpp
 )
-target_include_directories(uselessbox PRIVATE ${UB_INCLUDE})
+target_include_directories(uselessbox PRIVATE ${BOX_INCLUDE})
 
 #*************************************************************************************************
 # Add Tests
 #************************************************
-register_test(test_ub_main)
-register_test(test_ub_gearmotor)
-register_test(test_ub_servomotor)
-register_test(test_ub_switch)
-register_test(test_ub_ultrasonic)
+register_test(ut_box_main)
+register_test(ut_box_gearmotor)
+register_test(ut_box_servomotor)
+register_test(ut_box_switch)
+register_test(ut_box_ultrasonic)
 

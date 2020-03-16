@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "mocks/mock_arduino.hpp"
-#include "ub_gearmotor.hpp"
+#include "box_gearmotor.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;
@@ -14,7 +14,7 @@ using ::testing::NiceMock;
 #define TEST_PIN_FORWARD 2
 #define TEST_PIN_BACKWARD 3
 
-struct GearmotorUnderTest : public ub::Gearmotor {
+struct GearmotorUnderTest : public box::Gearmotor {
     GearmotorUnderTest() : Gearmotor(TEST_PIN_PWM_SPEED,
                                      TEST_PIN_FORWARD,
                                      TEST_PIN_BACKWARD) {}

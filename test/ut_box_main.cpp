@@ -2,7 +2,7 @@
 #include <future>
 #include "gtest/gtest.h"
 
-#include "ub_main.hpp"
+#include "box_main.hpp"
 #include "mocks/mock_arduino.hpp"
 
 class TestMain : public ::testing::Test {

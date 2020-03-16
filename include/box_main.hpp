@@ -1,15 +1,15 @@
-#ifndef UB_MAIN_HPP_
-#define UB_MAIN_HPP_
+#ifndef BOX_MAIN_HPP_
+#define BOX_MAIN_HPP_
 
-#include "ub_servomotor.hpp"
+#include "box_servomotor.hpp"
 
-namespace ub {
+namespace box {
 
 class Main {
 
   private:
     int m_lastResult = -1;
-    ub::Servomotor* servo1;
+    box::Servomotor* servo1;
 
     int pin_servomotor_pwm = 9;
 
@@ -21,6 +21,6 @@ class Main {
 
 };
 
-} // namespace ub
+} // namespace box
 
-#endif // UB_MAIN_HPP_
+#endif // BOX_MAIN_HPP_

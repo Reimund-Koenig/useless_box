@@ -1,5 +1,5 @@
-#ifndef UB_GEARMOTOR_HPP_
-#define UB_GEARMOTOR_HPP_
+#ifndef BOX_GEARMOTOR_HPP_
+#define BOX_GEARMOTOR_HPP_
 
 #define GEARMOTOR_DIRECTION_FORWARD 0
 #define GEARMOTOR_DIRECTION_BACKWARD 1
@@ -8,7 +8,7 @@
 #define GEARMOTOR_DEFAULT_SPEED 100
 #define GEARMOTOR_DEFAULT_DIRECTION GEARMOTOR_DIRECTION_STOP
 
-namespace ub {
+namespace box {
 
 class Gearmotor {
 
@@ -34,6 +34,6 @@ class Gearmotor {
     virtual int get_speed();
 };
 
-} // namespace ub
+} // namespace box
 
-#endif // UB_GEARMOTOR_HPP_
+#endif // BOX_GEARMOTOR_HPP_

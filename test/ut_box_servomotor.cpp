@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "mocks/mock_servo.hpp"
-#include "ub_servomotor.hpp"
+#include "box_servomotor.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;
@@ -12,7 +12,7 @@ using ::testing::NiceMock;
 
 #define TEST_PIN_PWM_SERVOMOTOR 1
 
-struct ServomotorUnderTest : public ub::Servomotor {
+struct ServomotorUnderTest : public box::Servomotor {
     ServomotorUnderTest() : Servomotor(TEST_PIN_PWM_SERVOMOTOR) {}
 };
 

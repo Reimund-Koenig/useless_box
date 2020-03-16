@@ -2,7 +2,7 @@
 #include <future>
 #include "gtest/gtest.h"
 
-#include "ub_switch.hpp"
+#include "box_switch.hpp"
 #include "mocks/mock_arduino.hpp"
 
 class TestSwitch : public ::testing::Test {

@@ -2,7 +2,7 @@
 #include <future>
 #include "gtest/gtest.h"
 
-#include "ub_ultrasonic.hpp"
+#include "box_ultrasonic.hpp"
 #include "mocks/mock_arduino.hpp"
 
 class TestUltrasonic : public ::testing::Test {

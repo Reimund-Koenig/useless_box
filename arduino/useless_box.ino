@@ -1,6 +1,6 @@
-#include "ub_main.hpp"
+#include "box_main.hpp"
 
-ub::Main ub_main;
+box::Main box_main;
 
 void setup()
 {
@@ -8,5 +8,5 @@ void setup()
 
 void loop()
 {
-  ub_main.run();
+  box_main.run();
 }

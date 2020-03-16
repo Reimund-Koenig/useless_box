@@ -1,7 +1,7 @@
-#ifndef UB_SWITCH_HPP_
-#define UB_SWITCH_HPP_
+#ifndef BOX_SWITCH_HPP_
+#define BOX_SWITCH_HPP_
 
-namespace ub {
+namespace box {
 
 class Switch {
 
@@ -15,6 +15,6 @@ class Switch {
     int lastResult();
 };
 
-} // namespace ub
+} // namespace box
 
-#endif // UB_SWITCH_HPP_
+#endif // BOX_SWITCH_HPP_
