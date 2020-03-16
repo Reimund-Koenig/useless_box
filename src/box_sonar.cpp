@@ -1,7 +1,6 @@
 #include "box_sonar.hpp"
 #include "Arduino.h"
 #include "stdio.h"
-#include <cassert>
 
 static box::Sonar* sonar_instance;
 
@@ -18,7 +17,6 @@ box::Sonar::Sonar(int pin_trigger, int pin_echo, int pin_interrupt, int max_dist
     // attachInterrupt(digitalPinToInterrupt(box::Sonar::pin_interrupt),
     //             box::Sonar::echo_isr, CHANGE);
     attachInterrupt(box::Sonar::pin_interrupt, box::Sonar::echo_isr, CHANGE);
-    assert(nullptr == sonar_instance);
     sonar_instance = this;
 }
 
@@ -42,7 +40,7 @@ bool box::Sonar::isFinished(){
 }
 
 unsigned int box::Sonar::getRange(bool units){
-  return (box::Sonar::endtime - box::Sonar::starttime)/((units)?58:148);
+    return (box::Sonar::endtime - box::Sonar::starttime)/((units)?58:148);
 }
 
 /*************************************************************************************************
