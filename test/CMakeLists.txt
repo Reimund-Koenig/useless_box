@@ -63,6 +63,7 @@ add_library(uselessbox
     ${UB_SRC}/ub_gearmotor.cpp
     ${UB_SRC}/ub_switch.cpp
     ${UB_SRC}/ub_servomotor.cpp
+    ${UB_SRC}/ub_ultrasonic.cpp
 )
 target_include_directories(uselessbox PRIVATE ${UB_INCLUDE})
 
@@ -73,4 +74,5 @@ register_test(test_ub_main)
 register_test(test_ub_gearmotor)
 register_test(test_ub_servomotor)
 register_test(test_ub_switch)
+register_test(test_ub_ultrasonic)
 
