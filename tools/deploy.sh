@@ -9,10 +9,10 @@ cp ../useless_box.ino ./
 cp ../Makefile ./
 cp ../../include/* ./
 cp ../../src/* ./
-cp /usr/share/arduino/libraries/Servo/Servo.h ./
-cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 rm Arduino.h
 rm Servo.h
+cp /usr/share/arduino/libraries/Servo/Servo.h ./
+cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 make upload clean
 cd ..
 rm sketch -rf

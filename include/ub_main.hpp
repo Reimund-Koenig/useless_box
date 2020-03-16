@@ -1,12 +1,16 @@
 #ifndef UB_MAIN_HPP_
 #define UB_MAIN_HPP_
 
+// #include "ub_servomotor.hpp"
+// #include "Servo.h"
+
 namespace ub {
 
 class Main {
 
   private:
     int m_lastResult = -1;
+    // ub::Servomotor* servo1;
 
     // Gearmotor 1 Pin Setup
     int pin_gearmotor_1_pwm_speed = 10;

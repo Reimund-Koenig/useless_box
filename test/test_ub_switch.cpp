@@ -5,12 +5,7 @@
 #include "ub_switch.hpp"
 #include "mocks/mock_arduino.hpp"
 
-class TestMain : public ::testing::Test {
+class TestSwitch : public ::testing::Test {
 };
 
-TEST_F(TestMain, test_switch_addition) {
-    ub::Switch ub_switch;
-    EXPECT_EQ(ub_switch.lastResult(), -1);
-    ub_switch.addition(30,12);
-    EXPECT_EQ(ub_switch.lastResult(), 42);
-}
+TEST_F(TestSwitch, test_switch_init) { EXPECT_TRUE(true); }

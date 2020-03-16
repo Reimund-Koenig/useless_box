@@ -7,7 +7,6 @@
 #define SERVOMOTOR_DIRECTION_BACKWARD 1
 #define SERVOMOTOR_DIRECTION_STOP 2
 
-#define SERVOMOTOR_DEFAULT_SPEED 10
 #define SERVOMOTOR_DEFAULT_ANGLE 0
 #define SERVOMOTOR_DEFAULT_DIRECTION SERVOMOTOR_DIRECTION_STOP
 
@@ -24,17 +23,15 @@ class Servomotor {
     virtual void move_backward();
     virtual void move_stop();
     virtual void set_direction(int);
-    virtual void set_speed(int);
     virtual void set_angle(int);
 
-  protected:
-    Servomotor(int pin_pwm_servomotor);
+  // protected:
 
   public:
+    Servomotor(int pin_pwm_servomotor);
     virtual ~Servomotor();
-    virtual void move(int direction, int speed);
+    virtual void move(int direction);
     virtual int get_direction();
-    virtual int get_speed();
     virtual int get_angle();
 };
 

@@ -1,6 +1,8 @@
 #ifndef Arduino_h
 #define Arduino_h
 
+#define LED_BUILTIN 0
+
 extern "C" {
     #define OUTPUT 0
     #define LOW 0
@@ -8,6 +10,7 @@ extern "C" {
     void pinMode(int, int);
     void digitalWrite(int, int);
     void analogWrite(int, int);
+    void delay(int);
 }
 
 #endif

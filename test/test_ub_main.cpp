@@ -8,9 +8,4 @@
 class TestMain : public ::testing::Test {
 };
 
-TEST_F(TestMain, test_main_addition) {
-    ub::Main ub_main;
-    EXPECT_EQ(ub_main.lastResult(), -1);
-    ub_main.addition(30,12);
-    EXPECT_EQ(ub_main.lastResult(), 42);
-}
+TEST_F(TestMain, test_main_init) { EXPECT_TRUE(true); }
