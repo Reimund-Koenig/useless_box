@@ -17,6 +17,7 @@ class ArduinoMock {
     // MOCK_METHOD1(random, long(long));
     MOCK_METHOD1(randomSeed, void(unsigned int));
     MOCK_METHOD0(micros, unsigned long());
+    MOCK_METHOD0(millis, unsigned long());
     MOCK_METHOD3(attachInterrupt, void(int, void (*)(), int));
 };
 
@@ -58,6 +59,9 @@ extern "C" {
   }
   unsigned long micros() {
     return arduinoMock->micros();
+  }
+  unsigned long millis() {
+    return arduinoMock->millis();
   }
   void attachInterrupt(int pin, void (*cb) (), int mode) {
     return arduinoMock->attachInterrupt(pin, cb, mode);

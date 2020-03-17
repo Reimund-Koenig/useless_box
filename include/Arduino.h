@@ -19,6 +19,7 @@ extern "C" {
     void delay(int);
     void delayMicroseconds(int);
     unsigned long micros();
+    unsigned long millis();
     void attachInterrupt(int, void (*)(void), int mode);
     // long random(long);
     void randomSeed(unsigned int);
