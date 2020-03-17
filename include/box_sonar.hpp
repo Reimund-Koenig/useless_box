@@ -12,22 +12,13 @@ namespace box {
 class Sonar {
 
   private:
-    int m_lastResult = -1;
     int pin_trigger;
     int pin_echo;
-    int pin_interrupt;
-    int max_distance;
-    volatile unsigned long starttime;
-    volatile unsigned long endtime;
-    volatile bool finished;
-    static void echo_isr();
 
   public:
-    Sonar(int trigger, int echo, int interrupt, int max_distance);
+    Sonar(int trigger, int echo);
     virtual ~Sonar();
-    virtual void start();
-    virtual bool isFinished();
-    virtual unsigned int getRange(bool units=CM);
+    unsigned int  get_distance_cm();
 };
 
 } // namespace box

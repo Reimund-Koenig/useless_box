@@ -19,6 +19,8 @@ class ArduinoMock {
     MOCK_METHOD0(micros, unsigned long());
     MOCK_METHOD0(millis, unsigned long());
     MOCK_METHOD3(attachInterrupt, void(int, void (*)(), int));
+    MOCK_METHOD1(detachInterrupt, void(int));
+    MOCK_METHOD3(pulseIn, unsigned long(int pin, int state, unsigned long timeout));
 };
 
 /**
@@ -65,6 +67,12 @@ extern "C" {
   }
   void attachInterrupt(int pin, void (*cb) (), int mode) {
     return arduinoMock->attachInterrupt(pin, cb, mode);
+  }
+  void detachInterrupt(int pin) {
+    return arduinoMock->detachInterrupt(pin);
+  }
+  unsigned long pulseIn(int pin, int state, unsigned long timeout) {
+    return arduinoMock->pulseIn(pin, state, timeout);
   }
 }
 
