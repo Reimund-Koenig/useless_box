@@ -26,8 +26,6 @@ class Servomotor {
     virtual void set_direction(int);
     virtual void set_angle(int);
 
-  // protected:
-
   public:
     Servomotor(int pin_pwm_servomotor, int min_peak_angle, int max_peak_angle);
     virtual ~Servomotor();

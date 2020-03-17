@@ -24,10 +24,8 @@ class Gearmotor {
     virtual void set_direction(int);
     virtual void set_speed(int);
 
-  protected:
-    Gearmotor(int pin_pwm_speed, int pin_forward, int pin_backward);
-
   public:
+    Gearmotor(int pin_pwm_speed, int pin_forward, int pin_backward);
     virtual ~Gearmotor();
     virtual void move(int direction, int speed);
     virtual int get_direction();

@@ -9,14 +9,15 @@ class Button {
     int pin_button;
     int last_button_state;
     int button_state;
+    bool last_state_pressed;
     unsigned long last_debounce_time;
     unsigned long debounce_delay;
-
-  protected:
-    Button(int pin_button, unsigned long debounce_delay);
-  public:
-    ~Button();
     bool get_state();
+
+  public:
+    Button(int pin_button, unsigned long debounce_delay);
+    ~Button();
+    bool pressed();
 };
 
 } // namespace box

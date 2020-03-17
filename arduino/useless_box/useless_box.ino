@@ -2,11 +2,9 @@
 
 box::Main box_main;
 
-void setup()
-{
+void setup() {
 }
 
-void loop()
-{
-  box_main.run();
+void loop() {
+    box_main.run();
 }

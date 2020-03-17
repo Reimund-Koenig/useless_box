@@ -8,10 +8,9 @@ class Switch {
   private:
     int pin_switch;
 
-  protected:
-    Switch(int pin_switch);
   public:
-    ~Switch();
+    Switch(int pin_switch);
+    virtual ~Switch();
     int get_state();
 };
 

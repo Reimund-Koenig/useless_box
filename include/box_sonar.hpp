@@ -22,10 +22,8 @@ class Sonar {
     volatile bool finished;
     static void echo_isr();
 
-  protected:
-        Sonar(int trigger, int echo, int interrupt, int max_distance);
-
   public:
+    Sonar(int trigger, int echo, int interrupt, int max_distance);
     virtual ~Sonar();
     virtual void start();
     virtual bool isFinished();

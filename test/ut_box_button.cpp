@@ -39,7 +39,26 @@ TEST_F(TestButton, test_button_state_change_to_high_no_debounce_block) {
     EXPECT_CALL(*arduinoMock, millis()).Times(2)
                                        .WillOnce(Return(100))
                                        .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1));
-    EXPECT_TRUE(buttonUnderTest->get_state());
+    EXPECT_TRUE(buttonUnderTest->pressed());
+}
+
+TEST_F(TestButton, test_button_pressed_two_times_in_a_row) {
+    EXPECT_CALL(*arduinoMock, digitalRead(TEST_PIN_BUTTON)).Times(2).WillRepeatedly(Return(HIGH));
+    EXPECT_CALL(*arduinoMock, millis()).Times(3)
+                                       .WillOnce(Return(100))
+                                       .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1))
+                                       .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 2));
+    EXPECT_TRUE(buttonUnderTest->pressed());
+    EXPECT_FALSE(buttonUnderTest->pressed());
+}
+
+TEST_F(TestButton, test_button_not_pressed_two_times_in_a_row) {
+    EXPECT_CALL(*arduinoMock, digitalRead(TEST_PIN_BUTTON)).Times(2).WillRepeatedly(Return(LOW));
+    EXPECT_CALL(*arduinoMock, millis()).Times(2)
+                                       .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1))
+                                       .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 2));
+    EXPECT_FALSE(buttonUnderTest->pressed());
+    EXPECT_FALSE(buttonUnderTest->pressed());
 }
 
 TEST_F(TestButton, test_button_state_no_change_to_high_because_debounce_blocks) {
@@ -47,19 +66,19 @@ TEST_F(TestButton, test_button_state_no_change_to_high_because_debounce_blocks) 
     EXPECT_CALL(*arduinoMock, millis()).Times(2)
                                        .WillOnce(Return(100))
                                        .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY));
-    EXPECT_FALSE(buttonUnderTest->get_state());
+    EXPECT_FALSE(buttonUnderTest->pressed());
 }
 
 TEST_F(TestButton, test_button_state_keep_low_after_debounce_mechanism) {
     EXPECT_CALL(*arduinoMock, digitalRead(TEST_PIN_BUTTON)).Times(1).WillOnce(Return(LOW));
     EXPECT_CALL(*arduinoMock, millis()).Times(1)
                                        .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1));
-    EXPECT_FALSE(buttonUnderTest->get_state());
+    EXPECT_FALSE(buttonUnderTest->pressed());
 }
 
 TEST_F(TestButton, test_button_state_keep_low_without_debounce_trigger) {
     EXPECT_CALL(*arduinoMock, digitalRead(TEST_PIN_BUTTON)).Times(1).WillOnce(Return(LOW));
     EXPECT_CALL(*arduinoMock, millis()).Times(1)
                                        .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY));
-    EXPECT_FALSE(buttonUnderTest->get_state());
+    EXPECT_FALSE(buttonUnderTest->pressed());
 }
