@@ -6,13 +6,13 @@ namespace box {
 class Switch {
 
   private:
-    int m_lastResult = -1;
+    int pin_switch;
 
-
+  protected:
+    Switch(int pin_switch);
   public:
-
-    void addition(int, int);
-    int lastResult();
+    ~Switch();
+    int get_state();
 };
 
 } // namespace box

@@ -1,11 +1,20 @@
 #include "box_switch.hpp"
 #include "Arduino.h"
+#include "stdio.h"
 
-void box::Switch::addition(int a, int b) {
-    m_lastResult = a + b;
+
+box::Switch::Switch(int pin_switch) {
+    box::Switch::pin_switch = pin_switch;
+    pinMode(pin_switch, INPUT_PULLUP);
 }
 
-int box::Switch::lastResult() {
-    return m_lastResult;
+box::Switch::~Switch() {
 }
 
+/*************************************************************************************************
+ * Public Methods
+ *************************************************/
+
+int box::Switch::get_state() {
+    return digitalRead(box::Switch::pin_switch);
+}
