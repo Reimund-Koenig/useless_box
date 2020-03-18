@@ -12,7 +12,6 @@ class Main {
     box::Servomotor* servo1;
     int pin_servomotor_pwm = 9;
 
-  protected:
   public:
     Main();
     virtual ~Main();

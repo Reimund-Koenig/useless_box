@@ -1,11 +1,16 @@
-#include <cstdio>
-#include <future>
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include <cstdio>
 
+#include "box_systemtest.hpp"
+#include "mocks/mock_serial.hpp"
 #include "mocks/mock_arduino.hpp"
 #include "mocks/mock_servomotor.hpp"
-#include "box_systemtest.hpp"
 
+using ::testing::_;
+using ::testing::AtLeast;
+using ::testing::Eq;
+using ::testing::Return;
 using ::testing::NiceMock;
 
 struct Systemtest_under_test : public box::Systemtest {
@@ -16,13 +21,15 @@ class TestSystemtest : public ::testing::Test {
   protected:
     Systemtest_under_test* systemtest_under_test;
     virtual void SetUp() {
+        serial_mock = new NiceMock<SerialMock>;
         arduino_mock = new NiceMock<ArduinoMock>;
         servomotor_mock = new NiceMock<ServomotorMock>;
         systemtest_under_test = new Systemtest_under_test();
     }
     virtual void TearDown() {
-        delete servomotor_mock;
         delete arduino_mock;
+        delete servomotor_mock;
+        delete serial_mock;
         delete systemtest_under_test;
     }
 };

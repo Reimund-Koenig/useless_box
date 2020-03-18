@@ -1,3 +1,5 @@
+
+#include "Serial.h"
 #include "box_systemtest.hpp"
 #include "box_servomotor.hpp"
 #include "box_button.hpp"
@@ -5,6 +7,7 @@
 #include "box_potentiometer.hpp"
 #include "box_sonar.hpp"
 #include "Arduino.h"
+#include <stdio.h>
 
 #define PIN_RANDOM 0 //A0
 #define PIN_POTENTIOMETER 1 //A1
@@ -35,6 +38,7 @@ box::Systemtest::Systemtest() {
     systemtest_state = 1;
     number_of_functions = 4;
     pinMode(LED_BUILTIN, OUTPUT);
+    serial.begin(9600);
 }
 
 box::Systemtest::~Systemtest() {
@@ -42,6 +46,7 @@ box::Systemtest::~Systemtest() {
 
 void box::Systemtest::run() {
     update_systemtest_state();
+    serial.write("Test");
     // TODO: SERIAL PRINT LINE State
     switch (systemtest_state) {
         case 1:  // Switch

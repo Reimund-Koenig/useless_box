@@ -11,6 +11,7 @@ cp ../../include/* ./
 cp ../../src/* ./
 rm Arduino.h
 rm Servo.h
+rm Serial.h
 rm box_gearmotor.cpp
 rm box_gearmotor.hpp
 cp /usr/share/arduino/libraries/Servo/Servo.h ./

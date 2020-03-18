@@ -1,6 +1,7 @@
 #ifndef BOX_SYSTEMTEST_HPP_
 #define BOX_SYSTEMTEST_HPP_
 
+#include "../include/Serial.h"
 #include "box_button.hpp"
 #include "box_switch.hpp"
 #include "box_potentiometer.hpp"
@@ -12,6 +13,7 @@ namespace box {
 class Systemtest {
 
   private:
+    Serial serial;
     int systemtest_state;
     int number_of_functions;
     int servomotor_angle = -1;
@@ -27,10 +29,8 @@ class Systemtest {
     box::Switch* box_switch;
     box::Sonar* box_sonar;
 
-  protected:
-    Systemtest();
-
   public:
+    Systemtest();
     virtual ~Systemtest();
     virtual void run();
 
