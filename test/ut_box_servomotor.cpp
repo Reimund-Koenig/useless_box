@@ -2,7 +2,7 @@
 #include "gmock/gmock.h"
 #include <cstdio>
 
-#include "mocks/mock_servo.hpp"
+#include "mocks/mock_servomotor.hpp"
 #include "box_servomotor.hpp"
 
 using ::testing::_;
@@ -23,12 +23,12 @@ class TestServo : public ::testing::Test {
   protected:
     ServomotorUnderTest* servomotorUnderTest;
     virtual void SetUp() {
-        servoMock = new NiceMock<ServoMock>;
+        servomotor_mock = new NiceMock<ServomotorMock>;
         servomotorUnderTest = new ServomotorUnderTest();
     }
     virtual void TearDown() {
         delete servomotorUnderTest;
-        delete servoMock;
+        delete servomotor_mock;
     }
 };
 
@@ -41,26 +41,26 @@ TEST_F(TestServo, test_servomotor_defaults) {
 
 TEST_F(TestServo, test_servomotor_get_current_angle) {
     int expected_angle = 13;
-    EXPECT_CALL(*servoMock, read()).Times(1).WillOnce(Return(expected_angle));
+    EXPECT_CALL(*servomotor_mock, read()).Times(1).WillOnce(Return(expected_angle));
     EXPECT_EQ(servomotorUnderTest->get_current_angle(), expected_angle);
 }
 
 TEST_F(TestServo, test_servomotor_move_percentage) {
     int expected_angle_50_percent = 15;
     int expected_angle_75_percent = 17;
-    EXPECT_CALL(*servoMock, write(expected_angle_50_percent)).Times(1);
+    EXPECT_CALL(*servomotor_mock, write(expected_angle_50_percent)).Times(1);
     servomotorUnderTest->move_to_percent(50);
     EXPECT_EQ(servomotorUnderTest->get_angle(),expected_angle_50_percent);
-    EXPECT_CALL(*servoMock, write(expected_angle_75_percent)).Times(1);
+    EXPECT_CALL(*servomotor_mock, write(expected_angle_75_percent)).Times(1);
     servomotorUnderTest->move_to_percent(75);
     EXPECT_EQ(servomotorUnderTest->get_angle(),expected_angle_75_percent);
 }
 
 TEST_F(TestServo, test_servomotor_direction_forward_with_angle_max_peak) {
-    EXPECT_CALL(*servoMock, write(_)).Times(TEST_MAX_ANGLE-TEST_MIN_ANGLE+1);
+    EXPECT_CALL(*servomotor_mock, write(_)).Times(TEST_MAX_ANGLE-TEST_MIN_ANGLE+1);
     int expected_angle = servomotorUnderTest->get_angle() + 1;
     for(int i = TEST_MIN_ANGLE; i <= TEST_MAX_ANGLE; i++) {
-        servomotorUnderTest->move(SERVOMOTOR_DIRECTION_FORWARD);
+        servomotorUnderTest->move_direction(SERVOMOTOR_DIRECTION_FORWARD);
         EXPECT_EQ(servomotorUnderTest->get_direction(), SERVOMOTOR_DIRECTION_FORWARD);
         EXPECT_EQ(servomotorUnderTest->get_angle(),expected_angle);
         if(expected_angle < TEST_MAX_ANGLE) { expected_angle++; }
@@ -68,25 +68,33 @@ TEST_F(TestServo, test_servomotor_direction_forward_with_angle_max_peak) {
 }
 
 TEST_F(TestServo, test_servomotor_direction_backward_with_angle_min_peak) {
-    EXPECT_CALL(*servoMock, write(11)).Times(1);
-    EXPECT_CALL(*servoMock, write(10)).Times(2);
-    servomotorUnderTest->move(SERVOMOTOR_DIRECTION_FORWARD);
+    EXPECT_CALL(*servomotor_mock, write(11)).Times(1);
+    EXPECT_CALL(*servomotor_mock, write(10)).Times(2);
+    servomotorUnderTest->move_direction(SERVOMOTOR_DIRECTION_FORWARD);
     int expected_angle = servomotorUnderTest->get_angle() - 1;
-    servomotorUnderTest->move(SERVOMOTOR_DIRECTION_BACKWARD);
+    servomotorUnderTest->move_direction(SERVOMOTOR_DIRECTION_BACKWARD);
     EXPECT_EQ(servomotorUnderTest->get_direction(), SERVOMOTOR_DIRECTION_BACKWARD);
     EXPECT_EQ(servomotorUnderTest->get_angle(),expected_angle);
-    servomotorUnderTest->move(SERVOMOTOR_DIRECTION_BACKWARD);
+    servomotorUnderTest->move_direction(SERVOMOTOR_DIRECTION_BACKWARD);
     EXPECT_EQ(servomotorUnderTest->get_angle(),expected_angle);
 }
 
 TEST_F(TestServo, test_servomotor_direction_stop) {
     int possitiv_non_direction_value = 42;
     int negative_non_direction_value = -42;
-    EXPECT_CALL(*servoMock, write(_)).Times(0);
-    servomotorUnderTest->move(SERVOMOTOR_DIRECTION_STOP);
+    EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
+    servomotorUnderTest->move_direction(SERVOMOTOR_DIRECTION_STOP);
     EXPECT_EQ(servomotorUnderTest->get_direction(), SERVOMOTOR_DIRECTION_STOP);
-    servomotorUnderTest->move(possitiv_non_direction_value);
+    servomotorUnderTest->move_direction(possitiv_non_direction_value);
     EXPECT_EQ(servomotorUnderTest->get_direction(), SERVOMOTOR_DIRECTION_STOP);
-    servomotorUnderTest->move(negative_non_direction_value);
+    servomotorUnderTest->move_direction(negative_non_direction_value);
     EXPECT_EQ(servomotorUnderTest->get_direction(), SERVOMOTOR_DIRECTION_STOP);
+}
+
+
+TEST_F(TestServo, test_servomotor_move_ange) {
+    int expected_value = (int) ((TEST_MIN_ANGLE + TEST_MAX_ANGLE)/2);
+    EXPECT_CALL(*servomotor_mock, write(expected_value)).Times(1);
+    servomotorUnderTest->move_angle(expected_value);
+    EXPECT_EQ(servomotorUnderTest->get_angle(),expected_value);
 }

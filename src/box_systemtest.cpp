@@ -1,13 +1,14 @@
-
+#include "Arduino.h"
 #include "Servo.h"
 #include "box_servomotor.hpp"
 #include "box_button.hpp"
 #include "box_switch.hpp"
+#include "box_potentiometer.hpp"
 #include "box_sonar.hpp"
 #include "box_systemtest.hpp"
-#include "Arduino.h"
 
-#define PIN_RANDOM 0
+#define PIN_RANDOM 0 //A0
+#define PIN_POTENTIOMETER 1 //A1
 #define PIN_BUTTON 2
 #define PIN_SWITCH 3
 #define PIN_SERVOMOTOR_1 9
@@ -15,16 +16,26 @@
 #define PIN_SONAR_TRIGGER 11
 #define PIN_SONAR_ECHO 12
 
+#define BOX_MIN_RANGE 0
+#define BOX_MAX_RANGE 200
+#define BOX_BUTTON_DEBOUNCE_DELAY 50
+
 box::Systemtest::Systemtest() {
-    box_servo1 = new box::Servomotor(PIN_SERVOMOTOR_1, 0, 200);
-    box_servo2 = new box::Servomotor(PIN_SERVOMOTOR_2, 0, 200);
-    box_button = new box::Button(PIN_BUTTON, 50);
-    box_switch = new box::Switch(PIN_SWITCH);
-    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
+    box_potentiometer = new box::Potentiometer(PIN_POTENTIOMETER,
+                                               BOX_MIN_RANGE,
+                                               BOX_MAX_RANGE);
+    box_servomotor_1 = new box::Servomotor(PIN_SERVOMOTOR_1,
+                                           BOX_MIN_RANGE,
+                                           BOX_MAX_RANGE);
+    box_servomotor_2 = new box::Servomotor(PIN_SERVOMOTOR_2,
+                                           BOX_MIN_RANGE,
+                                           BOX_MAX_RANGE);
+    // box_button = new box::Button(PIN_BUTTON, BOX_BUTTON_DEBOUNCE_DELAY);
+    // box_switch = new box::Switch(PIN_SWITCH);
+    // box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
     systemtest_state = 1;
     number_of_functions = 4;
     pinMode(LED_BUILTIN, OUTPUT);
-    randomSeed(analogRead(PIN_RANDOM));
 }
 
 box::Systemtest::~Systemtest() {
@@ -74,17 +85,11 @@ void box::Systemtest::test_sonar() {
 }
 
 void box::Systemtest::test_servomotor_1() {
-    // Potentiometer needed
-    // while(servo1->get_angle() < 180 ) {
-    //     servo1->move(SERVOMOTOR_DIRECTION_FORWARD);
-    // }
-    return;
+    servomotor_angle = box_potentiometer->get_value();
+    box_servomotor_1->move_angle(servomotor_angle);
 }
 
 void box::Systemtest::test_servomotor_2() {
-    // Potentiometer needed
-    // while(servo1->get_angle() < 180 ) {
-    //     servo1->move(SERVOMOTOR_DIRECTION_FORWARD);
-    // }
-    return;
+    servomotor_angle = box_potentiometer->get_value();
+    box_servomotor_2->move_angle(servomotor_angle);
 }

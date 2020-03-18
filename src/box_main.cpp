@@ -21,10 +21,10 @@ void box::Main::run() {
     digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
     delay(1000);                       // wait for a second
     while(servo1->get_angle() < 180 ) {
-        servo1->move(SERVOMOTOR_DIRECTION_FORWARD);
+        servo1->move_direction(SERVOMOTOR_DIRECTION_FORWARD);
     }
     delay(5000);
     while(servo1->get_angle() > 0 ) {
-        servo1->move(SERVOMOTOR_DIRECTION_BACKWARD);
+        servo1->move_direction(SERVOMOTOR_DIRECTION_BACKWARD);
     }
 }

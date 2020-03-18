@@ -26,7 +26,12 @@ void box::Servomotor::move_to_percent(int percentage) {
     servo.write(box::Servomotor::angle);
 }
 
-void box::Servomotor::move(int direction) {
+void box::Servomotor::move_angle(int angle) {
+    set_angle(angle);
+    servo.write(box::Servomotor::angle);
+}
+
+void box::Servomotor::move_direction(int direction) {
     set_direction(direction);
     if (box::Servomotor::direction == SERVOMOTOR_DIRECTION_STOP) {
         move_stop();

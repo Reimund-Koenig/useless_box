@@ -1,5 +1,5 @@
-#ifndef BOX_SWITCH_HPP_
-#define BOX_SWITCH_HPP_
+#ifndef BOX_POTENTIOMETER_HPP_
+#define BOX_POTENTIOMETER_HPP_
 
 namespace box {
 
@@ -18,4 +18,4 @@ class Potentiometer {
 
 } // namespace box
 
-#endif // BOX_SWITCH_HPP_
+#endif // BOX_POTENTIOMETER_HPP_

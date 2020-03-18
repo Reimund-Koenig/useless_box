@@ -1,11 +1,11 @@
-#ifndef MOCK_ARDUINO_HPP_
-#define MOCK_ARDUINO_HPP_
+#ifndef MOCK_SERVOMOTORMOTOR_HPP_
+#define MOCK_SERVOMOTORMOTOR_HPP_
 
 #include "Servo.h"
 #include"gmock/gmock.h"
 #include "gtest/gtest.h"
 
-class ServoMock : public Servo {
+class ServomotorMock : public Servo {
   public:
     MOCK_METHOD1(write, void(int));
     MOCK_METHOD0(read, int());
@@ -13,23 +13,23 @@ class ServoMock : public Servo {
 
 /**
  * Use this global pointer in your test, like so:
- * servoMock = new NiceMock<ServoMock>;
+ * servomotor_mock = new NiceMock<ServomotorMock>;
  * ...
- * delete servoMock;
+ * delete servomotor_mock;
  */
-::testing::NiceMock<ServoMock>* servoMock;
+::testing::NiceMock<ServomotorMock>* servomotor_mock;
 
 Servo::Servo(){}
 uint8_t Servo::attach(int pin) { return 0; }
 void Servo::write(int value) {
-  return servoMock->write(value);
+  return servomotor_mock->write(value);
 }
 int Servo::read() {
-  return servoMock->read();
+  return servomotor_mock->read();
 }
 
 void Servo::writeMicroseconds(int value){}
 int Servo::readMicroseconds() { return 0; }
 bool Servo::attached(){  return false ; }
 
-#endif // MOCK_ARDUINO_HPP_
+#endif // MOCK_SERVOMOTORMOTOR_HPP_
