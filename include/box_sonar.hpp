@@ -1,13 +1,10 @@
 #ifndef BOX_SONAR_HPP_
 #define BOX_SONAR_HPP_
 
-#include <Arduino.h>
-
 #define CM true
 #define INCH false
 
 namespace box {
-
 
 class Sonar {
 

@@ -1,6 +1,6 @@
-#include "Arduino.h"
 #include "box_sonar.hpp"
-#include "stdio.h"
+#include "Arduino.h"
+#include <stdio.h>
 
 box::Sonar::Sonar(int pin_trigger, int pin_echo) {
     box::Sonar::pin_trigger = pin_trigger;

@@ -26,57 +26,57 @@ class ArduinoMock {
 
 /**
  * Use this global pointer in your test, like so:
- * arduinoMock = new NiceMock<ArduinoMock>;
+ * arduino_mock = new NiceMock<ArduinoMock>;
  * ...
- * delete arduinoMock;
+ * delete arduino_mock;
  */
-::testing::NiceMock<ArduinoMock>* arduinoMock;
+::testing::NiceMock<ArduinoMock>* arduino_mock;
 
 extern "C" {
   long map(long input, long min_input, long max_input, long min_output, long max_output) {
-    return arduinoMock->map(input, min_input, max_input, min_output, max_output);
+    return arduino_mock->map(input, min_input, max_input, min_output, max_output);
   }
   void pinMode(int pin, int mode)  {
-    return arduinoMock->pinMode(pin, mode);
+    return arduino_mock->pinMode(pin, mode);
   }
   void digitalWrite(int pin, int state) {
-    return arduinoMock->digitalWrite(pin, state);
+    return arduino_mock->digitalWrite(pin, state);
   }
   int digitalRead(int pin) {
-    return arduinoMock->digitalRead(pin);
+    return arduino_mock->digitalRead(pin);
   }
   void analogWrite(int pin, int state) {
-    return arduinoMock->analogWrite(pin, state);
+    return arduino_mock->analogWrite(pin, state);
   }
   int analogRead(int pin) {
-    return arduinoMock->analogRead(pin);
+    return arduino_mock->analogRead(pin);
   }
   void delay(int time_miliseconds) {
-    return arduinoMock->delay(time_miliseconds);
+    return arduino_mock->delay(time_miliseconds);
   }
   void delayMicroseconds(int time_microseconds) {
-    return arduinoMock->delayMicroseconds(time_microseconds);
+    return arduino_mock->delayMicroseconds(time_microseconds);
   }
   // long random(long range) {
-  //   return arduinoMock->random(range);
+  //   return arduino_mock->random(range);
   // }
   void randomSeed(unsigned int pin) {
-    return arduinoMock->randomSeed(pin);
+    return arduino_mock->randomSeed(pin);
   }
   unsigned long micros() {
-    return arduinoMock->micros();
+    return arduino_mock->micros();
   }
   unsigned long millis() {
-    return arduinoMock->millis();
+    return arduino_mock->millis();
   }
   void attachInterrupt(int pin, void (*cb) (), int mode) {
-    return arduinoMock->attachInterrupt(pin, cb, mode);
+    return arduino_mock->attachInterrupt(pin, cb, mode);
   }
   void detachInterrupt(int pin) {
-    return arduinoMock->detachInterrupt(pin);
+    return arduino_mock->detachInterrupt(pin);
   }
   unsigned long pulseIn(int pin, int state, unsigned long timeout) {
-    return arduinoMock->pulseIn(pin, state, timeout);
+    return arduino_mock->pulseIn(pin, state, timeout);
   }
 }
 

@@ -1,5 +1,5 @@
-#include "Servo.h"
 #include "box_servomotor.hpp"
+#include "Servo.h"
 #include <stdio.h>
 
 box::Servomotor::Servomotor(int pin_pwm_servomotor, int min_peak_angle, int max_peak_angle) {

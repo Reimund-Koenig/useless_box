@@ -1,8 +1,6 @@
 #ifndef BOX_SYSTEMTEST_HPP_
 #define BOX_SYSTEMTEST_HPP_
 
-#include "Arduino.h"
-#include "Servo.h"
 #include "box_button.hpp"
 #include "box_switch.hpp"
 #include "box_potentiometer.hpp"

@@ -1,8 +1,8 @@
-
+#include "box_main.hpp"
 #include "Servo.h"
 #include "box_servomotor.hpp"
-#include "box_main.hpp"
 #include "Arduino.h"
+#include <stdio.h>
 
 box::Main::Main() {
     servo1 = new box::Servomotor(pin_servomotor_pwm, 0, 180);

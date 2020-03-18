@@ -15,30 +15,30 @@ using ::testing::NiceMock;
 #define TEST_MIN_PEAK_POTENTIOMETER 10
 #define TEST_MAX_PEAK_POTENTIOMETER 20
 
-struct PotentiometerUnderTest : public box::Potentiometer {
-    PotentiometerUnderTest() : Potentiometer(TEST_PIN_POTENTIOMETER,
+struct Potentiometer_under_test : public box::Potentiometer {
+    Potentiometer_under_test() : Potentiometer(TEST_PIN_POTENTIOMETER,
                                              TEST_MIN_PEAK_POTENTIOMETER,
                                              TEST_MAX_PEAK_POTENTIOMETER) {}
 };
 
 class TestPotentiometer : public ::testing::Test {
   protected:
-    PotentiometerUnderTest* potentiometerUnderTest;
+    Potentiometer_under_test* potentiometer_under_test;
     virtual void SetUp() {
-        arduinoMock = new NiceMock<ArduinoMock>;
-        potentiometerUnderTest = new PotentiometerUnderTest();
+        arduino_mock = new NiceMock<ArduinoMock>;
+        potentiometer_under_test = new Potentiometer_under_test();
     }
     virtual void TearDown() {
-        delete potentiometerUnderTest;
-        delete arduinoMock;
+        delete potentiometer_under_test;
+        delete arduino_mock;
     }
 };
 
 TEST_F(TestPotentiometer, test_potentiometer_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestPotentiometer, test_potentiometer_get_value) {
-    EXPECT_CALL(*arduinoMock, analogRead(TEST_PIN_POTENTIOMETER)).Times(1).WillOnce(Return(15));
-    EXPECT_CALL(*arduinoMock, map(15,_,_,TEST_MIN_PEAK_POTENTIOMETER, TEST_MAX_PEAK_POTENTIOMETER))
+    EXPECT_CALL(*arduino_mock, analogRead(TEST_PIN_POTENTIOMETER)).Times(1).WillOnce(Return(15));
+    EXPECT_CALL(*arduino_mock, map(15,_,_,TEST_MIN_PEAK_POTENTIOMETER, TEST_MAX_PEAK_POTENTIOMETER))
                              .Times(1).WillOnce(Return(15));
-    EXPECT_EQ(potentiometerUnderTest->get_value(), 15);
+    EXPECT_EQ(potentiometer_under_test->get_value(), 15);
 }

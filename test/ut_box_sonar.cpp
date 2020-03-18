@@ -19,24 +19,24 @@ using ::testing::Throw;
 #define TEST_PIN_TRIGGER 1
 #define TEST_PIN_ECHO 2
 
-struct SonarUnderTest : public box::Sonar {
-    SonarUnderTest() : Sonar(TEST_PIN_TRIGGER,
+struct Sonar_under_test : public box::Sonar {
+    Sonar_under_test() : Sonar(TEST_PIN_TRIGGER,
                             TEST_PIN_ECHO) {}
-    virtual ~SonarUnderTest() = default;
+    virtual ~Sonar_under_test() = default;
 };
 
 class TestSonar : public ::testing::Test {
   protected:
-    SonarUnderTest* sonarUnderTest;
+    Sonar_under_test* sonar_under_test;
     void (*echo_isr_callback)();
 
     virtual void SetUp() {
-        arduinoMock = new NiceMock<ArduinoMock>;
-        sonarUnderTest = new SonarUnderTest();
+        arduino_mock = new NiceMock<ArduinoMock>;
+        sonar_under_test = new Sonar_under_test();
     }
     virtual void TearDown() {
-        delete sonarUnderTest;
-        delete arduinoMock;
+        delete sonar_under_test;
+        delete arduino_mock;
     }
 };
 
@@ -44,12 +44,12 @@ TEST_F(TestSonar, test_sonar_init) {EXPECT_TRUE(1); }
 
 TEST_F(TestSonar, test_get_distance_cm) {
     unsigned int expected_result = 5;
-    EXPECT_CALL(*arduinoMock, digitalWrite(TEST_PIN_TRIGGER, HIGH)).Times(1);
-    EXPECT_CALL(*arduinoMock, digitalWrite(TEST_PIN_TRIGGER, LOW)).Times(2);
-    EXPECT_CALL(*arduinoMock, delayMicroseconds(10)).Times(1);
-    EXPECT_CALL(*arduinoMock, delayMicroseconds(2)).Times(1);
-    EXPECT_CALL(*arduinoMock, pulseIn(TEST_PIN_ECHO, HIGH, _))
+    EXPECT_CALL(*arduino_mock, digitalWrite(TEST_PIN_TRIGGER, HIGH)).Times(1);
+    EXPECT_CALL(*arduino_mock, digitalWrite(TEST_PIN_TRIGGER, LOW)).Times(2);
+    EXPECT_CALL(*arduino_mock, delayMicroseconds(10)).Times(1);
+    EXPECT_CALL(*arduino_mock, delayMicroseconds(2)).Times(1);
+    EXPECT_CALL(*arduino_mock, pulseIn(TEST_PIN_ECHO, HIGH, _))
                                         .Times(1)
                                         .WillOnce(Return((expected_result*2)/0.034));
-    EXPECT_EQ(sonarUnderTest->get_distance_cm(), expected_result);
+    EXPECT_EQ(sonar_under_test->get_distance_cm(), expected_result);
 }

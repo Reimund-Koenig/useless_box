@@ -1,7 +1,6 @@
 #ifndef BOX_SERVOMOTOR_HPP_
 #define BOX_SERVOMOTOR_HPP_
 
-#include "Arduino.h"
 #include "Servo.h"
 
 #define SERVOMOTOR_DIRECTION_FORWARD 0
