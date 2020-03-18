@@ -1,7 +1,7 @@
 #include "box_main.hpp"
 #include "Servo.h"
 #include "box_servomotor.hpp"
-#include "Arduino.h"
+#include <Arduino.h>
 #include <stdio.h>
 
 box::Main::Main() {

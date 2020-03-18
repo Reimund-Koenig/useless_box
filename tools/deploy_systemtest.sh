@@ -1,7 +1,7 @@
 #!/bin/bash
 
 screen -X quit
-cd ~/workspace/useless_box/arduino/useless_box
+cd ~/workspace/useless_box/arduino/useless_box_systemtest
 rm sketch -rf
 mkdir sketch
 cd sketch
@@ -14,8 +14,8 @@ rm Servo.h
 rm Serial.h
 rm box_gearmotor.cpp
 rm box_gearmotor.hpp
-rm box_systemtest.hpp
-rm box_systemtest.cpp
+rm main.cpp
+rm main.hpp
 cp /usr/share/arduino/libraries/Servo/Servo.h ./
 cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 make upload clean

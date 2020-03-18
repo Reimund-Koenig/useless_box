@@ -1,5 +1,5 @@
 #include "box_potentiometer.hpp"
-#include "Arduino.h"
+#include <Arduino.h>
 #include <stdio.h>
 
 

@@ -27,9 +27,9 @@ class TestSystemtest : public ::testing::Test {
         systemtest_under_test = new Systemtest_under_test();
     }
     virtual void TearDown() {
+        delete serial_mock;
         delete arduino_mock;
         delete servomotor_mock;
-        delete serial_mock;
         delete systemtest_under_test;
     }
 };

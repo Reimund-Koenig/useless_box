@@ -1,12 +1,11 @@
-
-#include "Serial.h"
 #include "box_systemtest.hpp"
 #include "box_servomotor.hpp"
 #include "box_button.hpp"
 #include "box_switch.hpp"
 #include "box_potentiometer.hpp"
 #include "box_sonar.hpp"
-#include "Arduino.h"
+#include <Arduino.h>
+#include <Serial.h>
 #include <stdio.h>
 
 #define PIN_RANDOM 0 //A0
@@ -39,6 +38,8 @@ box::Systemtest::Systemtest() {
     number_of_functions = 4;
     pinMode(LED_BUILTIN, OUTPUT);
     serial.begin(9600);
+    delay(1000);
+    serial.print("Systemtest Started");
 }
 
 box::Systemtest::~Systemtest() {
@@ -46,8 +47,6 @@ box::Systemtest::~Systemtest() {
 
 void box::Systemtest::run() {
     update_systemtest_state();
-    serial.write("Test");
-    // TODO: SERIAL PRINT LINE State
     switch (systemtest_state) {
         case 1:  // Switch
             test_switch();
@@ -66,13 +65,22 @@ void box::Systemtest::run() {
     }
     delay(1000);
 }
+void box::Systemtest::println(const char* str, int val=-1) {
+    serial.print(str);
+    if(val != -1) {
+        serial.print(val);
+    }
+    serial.println(".");
+}
 
 void box::Systemtest::update_systemtest_state() {
     if(box_button->pressed()) {
+        println("Button pressed");
         systemtest_state++;
         if(systemtest_state > number_of_functions) {
             systemtest_state = 1;
         }
+        println("Switched to Systemtest ", systemtest_state);
     }
 }
 
@@ -81,25 +89,27 @@ void box::Systemtest::test_switch() {
     // TODO: SERIAL PRINT LINE switch_state
     if(switch_state) {
         digitalWrite(LED_BUILTIN, HIGH);
+        println("Switch State is  ", HIGH);
     } else {
         digitalWrite(LED_BUILTIN, LOW);
+        println("Switch State is  ", LOW);
     }
 }
 
 void box::Systemtest::test_sonar() {
     int distance_cm = box_sonar->get_distance_cm();
-    // TODO: SERIAL PRINT LINE distance_cm
+    println("Distance is  ", distance_cm);
     return;
 }
 
 void box::Systemtest::test_servomotor_1() {
     servomotor_angle = box_potentiometer->get_value();
     box_servomotor_1->move_angle(servomotor_angle);
-    // TODO: SERIAL PRINT LINE servomotor_angle
+    println("Motorangle is  ", servomotor_angle);
 }
 
 void box::Systemtest::test_servomotor_2() {
     servomotor_angle = box_potentiometer->get_value();
     box_servomotor_2->move_angle(servomotor_angle);
-    // TODO: SERIAL PRINT LINE servomotor_angle
+    println("Motorangle is  ", servomotor_angle);
 }

@@ -1,9 +1,9 @@
 #ifndef MOCK_SERVOMOTORMOTOR_HPP_
 #define MOCK_SERVOMOTORMOTOR_HPP_
 
-#include "Servo.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include <Servo.h>
 
 class ServomotorMock : public Servo {
   public:

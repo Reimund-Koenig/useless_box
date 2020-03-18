@@ -1,9 +1,9 @@
 #ifndef MOCK_ARDUINO_HPP_
 #define MOCK_ARDUINO_HPP_
 
-#include "../../include/Arduino.h"
-#include"gmock/gmock.h"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include <Arduino.h>
 
 class ArduinoMock {
   public:
@@ -13,7 +13,6 @@ class ArduinoMock {
     MOCK_METHOD1(analogRead, int(int));
     MOCK_METHOD1(delay, void(int));
     MOCK_METHOD1(delayMicroseconds, void(int));
-    // MOCK_METHOD1(random, long(long));
     MOCK_METHOD1(randomSeed, void(unsigned int));
     MOCK_METHOD0(micros, unsigned long());
     MOCK_METHOD0(millis, unsigned long());
@@ -22,6 +21,7 @@ class ArduinoMock {
     MOCK_METHOD3(pulseIn, unsigned long(int pin, int state, unsigned long timeout));
     MOCK_METHOD5(map, long(long, long, long, long, long));
     MOCK_METHOD2(pinMode, void(int, int));
+    // MOCK_METHOD1(random, long(long));
 };
 
 /**

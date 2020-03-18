@@ -1,12 +1,12 @@
 #ifndef BOX_SYSTEMTEST_HPP_
 #define BOX_SYSTEMTEST_HPP_
 
-#include "../include/Serial.h"
 #include "box_button.hpp"
 #include "box_switch.hpp"
 #include "box_potentiometer.hpp"
 #include "box_sonar.hpp"
 #include "box_servomotor.hpp"
+#include <Serial.h>
 
 namespace box {
 
@@ -22,6 +22,7 @@ class Systemtest {
     void test_servomotor_2();
     void test_switch();
     void test_sonar();
+    void println(const char* str, int val);
     box::Potentiometer* box_potentiometer;
     box::Servomotor* box_servomotor_1;
     box::Servomotor* box_servomotor_2;
