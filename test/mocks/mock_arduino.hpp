@@ -21,6 +21,7 @@ class ArduinoMock {
     MOCK_METHOD3(attachInterrupt, void(int, void (*)(), int));
     MOCK_METHOD1(detachInterrupt, void(int));
     MOCK_METHOD3(pulseIn, unsigned long(int pin, int state, unsigned long timeout));
+    MOCK_METHOD5(map, long(long, long, long, long, long));
 };
 
 /**
@@ -32,6 +33,9 @@ class ArduinoMock {
 ::testing::NiceMock<ArduinoMock>* arduinoMock;
 
 extern "C" {
+  long map(long input, long min_input, long max_input, long min_output, long max_output) {
+    return arduinoMock->map(input, min_input, max_input, min_output, max_output);
+  }
   void pinMode(int pin, int mode)  {
     return arduinoMock->pinMode(pin, mode);
   }

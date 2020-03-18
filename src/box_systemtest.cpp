@@ -7,19 +7,24 @@
 #include "box_systemtest.hpp"
 #include "Arduino.h"
 
-#define PIN_SERVO_1 9
-#define PIN_SERVO_2 10
+#define PIN_RANDOM 0
+#define PIN_BUTTON 2
+#define PIN_SWITCH 3
+#define PIN_SERVOMOTOR_1 9
+#define PIN_SERVOMOTOR_2 10
+#define PIN_SONAR_TRIGGER 11
+#define PIN_SONAR_ECHO 12
 
 box::Systemtest::Systemtest() {
-    box_servo1 = new box::Servomotor(PIN_SERVO_1, 0, 200);
-    box_servo2 = new box::Servomotor(PIN_SERVO_2, 0, 200);
-    box_button = new box::Button(2, 50);
-    box_switch = new box::Switch(3);
-    // box_sonar = new box::Sonar();
-    systemtest_state = 0;
-    number_of_functions = 3;
+    box_servo1 = new box::Servomotor(PIN_SERVOMOTOR_1, 0, 200);
+    box_servo2 = new box::Servomotor(PIN_SERVOMOTOR_2, 0, 200);
+    box_button = new box::Button(PIN_BUTTON, 50);
+    box_switch = new box::Switch(PIN_SWITCH);
+    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
+    systemtest_state = 1;
+    number_of_functions = 4;
     pinMode(LED_BUILTIN, OUTPUT);
-    randomSeed(analogRead(0));
+    randomSeed(analogRead(PIN_RANDOM));
 }
 
 box::Systemtest::~Systemtest() {
@@ -28,17 +33,18 @@ box::Systemtest::~Systemtest() {
 void box::Systemtest::run() {
     update_systemtest_state();
     switch (systemtest_state) {
-        case 0: // Servomotor 1
-            test_servomotor_1();
-            break;
-        case 1:  // Servomotor 2
-            test_servomotor_2();
-            break;
-        case 2:  // Switch
+        case 1:  // Switch
             test_switch();
             break;
-        case 3: // Sonar
+        case 2: // Sonar
             test_sonar();
+            break;
+        case 3: // Servomotor 1
+            test_servomotor_1();
+            break;
+        case 4:  // Servomotor 2
+            test_servomotor_2();
+            break;
         default:
             break;
     }
@@ -47,10 +53,24 @@ void box::Systemtest::run() {
 void box::Systemtest::update_systemtest_state() {
     if(box_button->pressed()) {
         systemtest_state++;
-        if(systemtest_state >= number_of_functions) {
-            systemtest_state = 0;
+        if(systemtest_state > number_of_functions) {
+            systemtest_state = 1;
         }
     }
+}
+
+void box::Systemtest::test_switch() {
+    if(box_switch->get_state()) {
+        digitalWrite(LED_BUILTIN, HIGH);
+    } else {
+        digitalWrite(LED_BUILTIN, LOW);
+    }
+}
+
+void box::Systemtest::test_sonar() {
+    box_sonar->get_distance_cm();
+    delay(1000);
+    return;
 }
 
 void box::Systemtest::test_servomotor_1() {
@@ -66,17 +86,5 @@ void box::Systemtest::test_servomotor_2() {
     // while(servo1->get_angle() < 180 ) {
     //     servo1->move(SERVOMOTOR_DIRECTION_FORWARD);
     // }
-    return;
-}
-
-void box::Systemtest::test_switch() {
-    if(box_switch->get_state()) {
-        digitalWrite(LED_BUILTIN, HIGH);
-    } else {
-        digitalWrite(LED_BUILTIN, LOW);
-    }
-}
-
-void box::Systemtest::test_sonar() {
     return;
 }

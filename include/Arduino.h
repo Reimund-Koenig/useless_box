@@ -25,6 +25,7 @@ extern "C" {
     // long random(long);
     void randomSeed(unsigned int);
     unsigned long pulseIn(int pin, int state, unsigned long timeout = 1000000L);
+    long map(long, long, long, long, long);
 }
 
 #endif

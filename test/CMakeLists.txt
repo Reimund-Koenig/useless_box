@@ -62,6 +62,7 @@ add_library(uselessbox
     ${BOX_SRC}/box_main.cpp
     ${BOX_SRC}/box_gearmotor.cpp
     ${BOX_SRC}/box_switch.cpp
+    ${BOX_SRC}/box_potentiometer.cpp
     ${BOX_SRC}/box_servomotor.cpp
     ${BOX_SRC}/box_sonar.cpp
     ${BOX_SRC}/box_button.cpp
@@ -75,6 +76,7 @@ register_test(ut_box_main)
 register_test(ut_box_gearmotor)
 register_test(ut_box_servomotor)
 register_test(ut_box_switch)
+register_test(ut_box_potentiometer)
 register_test(ut_box_sonar)
 register_test(ut_box_button)
 
