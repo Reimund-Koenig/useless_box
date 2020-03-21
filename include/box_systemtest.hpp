@@ -6,14 +6,12 @@
 #include "box_potentiometer.hpp"
 #include "box_sonar.hpp"
 #include "box_servomotor.hpp"
-#include "Serial.h"
 
 namespace box {
 
 class Systemtest {
 
   private:
-    Serial serial;
     int systemtest_state;
     int number_of_functions;
     int servomotor_angle = -1;
@@ -29,6 +27,8 @@ class Systemtest {
     box::Button* box_button;
     box::Switch* box_switch;
     box::Sonar* box_sonar;
+    int last_switch_state;
+    unsigned long last_debounce_time;
 
   public:
     Systemtest();
