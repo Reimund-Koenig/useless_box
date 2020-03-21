@@ -13,9 +13,13 @@
 
 
 ## Install Arduino related stuff
-    sudo apt-get install gcc-avr avr-libc avrdude
-    sudo apt install arduino-mk
-    sudo apt install screen
+sudo apt-get install gcc-avr avr-libc avrdude &&
+sudo apt install arduino-mk &&
+sudo apt install screen &&
+sudo apt install cmake &&
+sudo apt install libgcc-8-dev
+### Download and install Arduino IDE: https://www.arduino.cc/en/Main/Software
+### Grant access to Serial_Port: sudo chmod a+rw /dev/ttyACM0
 
 ### Compile code
     cd ~/workspace/useless_box/arduino

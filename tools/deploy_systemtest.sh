@@ -14,10 +14,10 @@ rm Servo.h
 rm Serial.h
 rm box_gearmotor.cpp
 rm box_gearmotor.hpp
-rm main.cpp
-rm main.hpp
+rm box_main.cpp
+rm box_main.hpp
 cp /usr/share/arduino/libraries/Servo/Servo.h ./
 cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 make upload clean
 cd ..
-rm sketch -rf
+# rm sketch -rf

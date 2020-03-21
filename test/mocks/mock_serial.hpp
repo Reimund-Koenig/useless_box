@@ -3,7 +3,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include <Serial.h>
+#include "Serial.h"
 
 class SerialMock : public Serial {
   public:
