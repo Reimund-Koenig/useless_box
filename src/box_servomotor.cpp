@@ -2,11 +2,12 @@
 #include "Servo.h"
 #include <stdio.h>
 
-box::Servomotor::Servomotor(int pin_pwm_servomotor, int min_peak_angle, int max_peak_angle) {
+box::Servomotor::Servomotor(int pin_pwm_servomotor, bool clockwise, int start, int min_peak_angle, int max_peak_angle) {
     servo.attach(pin_pwm_servomotor);
     box::Servomotor::min_peak_angle = min_peak_angle;
     box::Servomotor::max_peak_angle = max_peak_angle;
     box::Servomotor::angle = min_peak_angle;
+    box::Servomotor::clockwise = clockwise;
     box::Servomotor::direction = SERVOMOTOR_DEFAULT_DIRECTION;
 }
 

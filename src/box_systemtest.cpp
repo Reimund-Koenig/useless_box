@@ -10,7 +10,7 @@
 #define PIN_RANDOM A0 //A0
 #define PIN_POTENTIOMETER A1 //A1
 #define PIN_BUTTON 2  
-#define PIN_SWITCH 3
+#define PIN_SWITCH 4
 #define PIN_SERVOMOTOR_1 9
 #define PIN_SERVOMOTOR_2 10
 #define PIN_SONAR_TRIGGER 11

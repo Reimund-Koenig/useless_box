@@ -20,6 +20,7 @@ class Servomotor {
     int min_peak_angle;
     int max_peak_angle;
     int speed_delay_ms;
+    bool clockwise;
     virtual void move_forward();
     virtual void move_backward();
     virtual void move_stop();
@@ -27,7 +28,7 @@ class Servomotor {
     virtual void set_angle(int);
 
   public:
-    Servomotor(int pin_pwm_servomotor, int min_peak_angle, int max_peak_angle);
+    Servomotor(int pin_pwm_servomotor, bool clockwise, int start, int min_peak_angle, int max_peak_angle);
     virtual ~Servomotor();
     virtual void move_to_percent(int percent);
     virtual void move_direction(int direction);
