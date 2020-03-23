@@ -37,6 +37,17 @@ class TestSonar : public ::testing::Test {
         delete sonar_under_test;
         delete arduino_mock;
     }
+    virtual void run_calculate_average_loop(int number_of_runs, int expected_result) {
+        for (int i = 1; i < number_of_runs; i++) {
+            EXPECT_CALL(*arduino_mock, pulseIn(_, _, _))
+                            .WillOnce(Return((i*2)/0.034));
+            sonar_under_test->get_average_distance_cm();
+        }
+
+        EXPECT_CALL(*arduino_mock, pulseIn(_, _, _))
+                        .WillOnce(Return((number_of_runs*2)/0.034));
+        EXPECT_EQ(sonar_under_test->get_average_distance_cm(), expected_result);
+    }
 };
 
 TEST_F(TestSonar, test_sonar_init) {EXPECT_TRUE(1); }
@@ -51,4 +62,21 @@ TEST_F(TestSonar, test_get_distance_cm) {
                                         .Times(1)
                                         .WillOnce(Return((expected_result*2)/0.034));
     EXPECT_EQ(sonar_under_test->get_distance_cm(), expected_result);
+}
+TEST_F(TestSonar, test_average_part_of_first_iteration) {
+    int number_of_runs = 10;
+    int expected_result = 5;
+    run_calculate_average_loop(number_of_runs, expected_result);
+}
+
+TEST_F(TestSonar, test_average_exactly_one_iteration) {
+    int number_of_runs = 100;
+    int expected_result = 50;
+    run_calculate_average_loop(number_of_runs, expected_result);
+}
+
+TEST_F(TestSonar, test_average_more_then_one_iteration) {
+    int number_of_runs = 300;
+    int expected_result = 252; // inaccuracy of formular
+    run_calculate_average_loop(number_of_runs, expected_result);
 }
