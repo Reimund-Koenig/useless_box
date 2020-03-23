@@ -15,6 +15,6 @@ box::Switch::~Switch() {
  * Public Methods
  *************************************************/
 
-int box::Switch::get_state() {
+int box::Switch::is_high() {
     return digitalRead(box::Switch::pin_switch);
 }

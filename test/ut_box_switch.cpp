@@ -35,10 +35,10 @@ TEST_F(TestSwitch, test_switch_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestSwitch, test_switch_state_high) {
     EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
-    EXPECT_EQ(switch_under_test->get_state(), HIGH);
+    EXPECT_EQ(switch_under_test->is_high(), HIGH);
 }
 
 TEST_F(TestSwitch, test_switch_state_low) {
     EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
-    EXPECT_EQ(switch_under_test->get_state(), LOW);
+    EXPECT_EQ(switch_under_test->is_high(), LOW);
 }

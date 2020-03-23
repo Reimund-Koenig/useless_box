@@ -10,11 +10,18 @@ namespace box {
 class Main {
 
   private:
-    int m_lastResult = -1;
+    int box_mode;
+    int run_mode_reset_step;
     box::Servomotor* box_lower_servo;
     box::Servomotor* box_upper_servo;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
+    void wait_ms(int wait_ms);
+    void run_mode_reset();
+    void run_mode_awareness(int distance);
+    void run_mode_normal();
+    unsigned long last_time;
+    int wait_delay;
 
   public:
     Main();

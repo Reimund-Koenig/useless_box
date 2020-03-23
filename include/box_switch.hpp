@@ -11,7 +11,7 @@ class Switch {
   public:
     Switch(int pin_switch);
     virtual ~Switch();
-    int get_state();
+    int is_high();
 };
 
 } // namespace box

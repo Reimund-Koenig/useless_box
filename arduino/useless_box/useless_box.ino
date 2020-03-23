@@ -1,12 +1,12 @@
 #include "box_main.hpp"
 
-#include "Servo.h"
-
-box::Main box_main;
+box::Main* box_main;
 
 void setup() {
+    box_main = new box::Main();
+
 }
 
 void loop() {
-    box_main.run();
+    box_main->run();
 }

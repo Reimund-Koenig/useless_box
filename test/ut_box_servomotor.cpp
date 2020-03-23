@@ -36,6 +36,12 @@ class TestServo : public ::testing::Test {
         delete servomotor_under_test;
         delete servomotor_mock;
     }
+    virtual void test_percentage(Servomotor_under_test* servo, int percentage,
+                                    int expected_result) {
+        EXPECT_CALL(*servomotor_mock, write(expected_result)).Times(1);
+        servo->move_to_percent(percentage);
+        EXPECT_EQ(expected_result, servo->get_angle());
+    }
 };
 
 TEST_F(TestServo, test_servomotor_init) { EXPECT_TRUE(true); }
@@ -63,15 +69,26 @@ TEST_F(TestServo, test_servomotor_move_to_angle) {
     EXPECT_EQ(expected_value_clockwise, servomotor_under_test_clockwise->get_angle());
 }
 
-TEST_F(TestServo, test_servomotor_move_percentage) {
+TEST_F(TestServo, test_servomotor_clockwise_move_percentage) {
+    int expected_angle_0_percent = 10;
     int expected_angle_50_percent = 15;
     int expected_angle_75_percent = 17;
-    EXPECT_CALL(*servomotor_mock, write(expected_angle_50_percent)).Times(1);
-    servomotor_under_test->move_to_percent(50);
-    EXPECT_EQ(expected_angle_50_percent, servomotor_under_test->get_angle());
-    EXPECT_CALL(*servomotor_mock, write(expected_angle_75_percent)).Times(1);
-    servomotor_under_test->move_to_percent(75);
-    EXPECT_EQ(expected_angle_75_percent, servomotor_under_test->get_angle());
+    int expected_angle_100_percent = 20;
+    test_percentage(servomotor_under_test, 0, expected_angle_0_percent);
+    test_percentage(servomotor_under_test, 50, expected_angle_50_percent);
+    test_percentage(servomotor_under_test, 75,expected_angle_75_percent);
+    test_percentage(servomotor_under_test, 100,expected_angle_100_percent);
+}
+
+TEST_F(TestServo, test_servomotor_anti_clockwise_move_percentage) {
+    int expected_angle_0_percent = 20;
+    int expected_angle_50_percent = 15;
+    int expected_angle_75_percent = 13;
+    int expected_angle_100_percent = 10;
+    test_percentage(servomotor_under_test_clockwise, 0,expected_angle_0_percent);
+    test_percentage(servomotor_under_test_clockwise, 50,expected_angle_50_percent);
+    test_percentage(servomotor_under_test_clockwise, 75,expected_angle_75_percent);
+    test_percentage(servomotor_under_test_clockwise, 100,expected_angle_100_percent);
 }
 
 TEST_F(TestServo, test_servomotor_move_percentage_clockwise) {

@@ -28,7 +28,7 @@ extern "C" {
     unsigned long millis();
     void attachInterrupt(int, void (*)(void), int mode);
     void detachInterrupt(int);
-    // long random(long);
+    long random(long);
     void randomSeed(unsigned int);
     unsigned long pulseIn(int pin, int state, unsigned long timeout = 1000000L);
     long map(long, long, long, long, long);
