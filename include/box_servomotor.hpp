@@ -21,7 +21,7 @@ class Servomotor {
                int min_peak_angle, int max_peak_angle);
     virtual ~Servomotor();
     virtual void move_to_percent(int percent);
-    virtual void move_angle(int angle);
+    virtual void move_to_angle(int angle);
     virtual int get_current_angle();
     virtual int get_angle();
 };

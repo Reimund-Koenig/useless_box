@@ -52,13 +52,13 @@ TEST_F(TestServo, test_servomotor_get_current_angle) {
     EXPECT_EQ(expected_angle, servomotor_under_test_clockwise->get_current_angle());
 }
 
-TEST_F(TestServo, test_servomotor_move_angle) {
+TEST_F(TestServo, test_servomotor_move_to_angle) {
     int expected_value = 13;
     int expected_value_clockwise = 17;
     EXPECT_CALL(*servomotor_mock, write(expected_value)).Times(1);
     EXPECT_CALL(*servomotor_mock, write(expected_value_clockwise)).Times(1);
-    servomotor_under_test->move_angle(expected_value);
-    servomotor_under_test_clockwise->move_angle(expected_value);
+    servomotor_under_test->move_to_angle(expected_value);
+    servomotor_under_test_clockwise->move_to_angle(expected_value);
     EXPECT_EQ(expected_value, servomotor_under_test->get_angle());
     EXPECT_EQ(expected_value_clockwise, servomotor_under_test_clockwise->get_angle());
 }

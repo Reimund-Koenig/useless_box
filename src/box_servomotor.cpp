@@ -28,7 +28,7 @@ void box::Servomotor::move_to_percent(int percentage) {
     servo.write(box::Servomotor::angle);
 }
 
-void box::Servomotor::move_angle(int angle) {
+void box::Servomotor::move_to_angle(int angle) {
     set_angle(angle);
     servo.write(box::Servomotor::angle);
 }

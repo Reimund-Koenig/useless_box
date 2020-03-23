@@ -9,7 +9,7 @@
 
 #define PIN_RANDOM A0 //A0
 #define PIN_POTENTIOMETER A1 //A1
-#define PIN_BUTTON 2  
+#define PIN_BUTTON 2
 #define PIN_SWITCH 4
 #define PIN_SERVOMOTOR_1 9
 #define PIN_SERVOMOTOR_2 10
@@ -110,7 +110,7 @@ void box::Systemtest::test_sonar() {
 
 void box::Systemtest::test_servomotor_1() {
     servomotor_angle = box_potentiometer->get_value();
-    box_servomotor_1->move_angle(servomotor_angle);
+    box_servomotor_1->move_to_angle(servomotor_angle);
     if ((millis() - last_debounce_time) > 1000) {
         println("Motorangle is  ", servomotor_angle);
         last_debounce_time = millis();
@@ -119,7 +119,7 @@ void box::Systemtest::test_servomotor_1() {
 
 void box::Systemtest::test_servomotor_2() {
     servomotor_angle = box_potentiometer->get_value();
-    box_servomotor_2->move_angle(servomotor_angle);
+    box_servomotor_2->move_to_angle(servomotor_angle);
     if ((millis() - last_debounce_time) > 1000) {
         println("Motorangle is  ", servomotor_angle);
         last_debounce_time = millis();
