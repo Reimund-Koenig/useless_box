@@ -49,7 +49,7 @@ void box::Sonar::calculate_average(int distance_in_cm){
     }
     average_summary += distance_in_cm;
     if(average_not_the_first_iteration) {
-        average_summary = average_summary - average_array[average_iter];
+        average_summary -= average_array[average_iter];
         average_array[average_iter] = distance_in_cm;
         average_distance_cm = (int)(average_summary/NUMBER_OF_AVERAGE_VALUES);
     } else {

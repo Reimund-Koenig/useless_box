@@ -12,7 +12,7 @@ class Sonar {
   private:
     int pin_trigger;
     int pin_echo;
-    unsigned int average_array[NUMBER_OF_AVERAGE_VALUES];
+    int average_array[NUMBER_OF_AVERAGE_VALUES];
     bool average_not_the_first_iteration;
     int average_iter;
     unsigned int average_summary;
