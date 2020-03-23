@@ -9,8 +9,8 @@ class Main {
 
   private:
     int m_lastResult = -1;
-    box::Servomotor* servo1;
-    int pin_servomotor_pwm = 9;
+    box::Servomotor* lower_servo;
+    box::Servomotor* upper_servo;
 
   public:
     Main();

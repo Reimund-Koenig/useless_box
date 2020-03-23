@@ -4,8 +4,21 @@
 #include <Arduino.h>
 #include <stdio.h>
 
+
+#define LOWER_SERVO_PWM 9
+#define LOWER_SERVO_MIN 0
+#define LOWER_SERVO_MAX 133
+#define LOWER_SERVO_CLOCKWISE true
+#define UPPER_SERVO_PWM 10
+#define UPPER_SERVO_MIN 42
+#define UPPER_SERVO_MAX 180
+#define UPPER_SERVO_CLOCKWISE true
+
 box::Main::Main() {
-    servo1 = new box::Servomotor(pin_servomotor_pwm, 0, 180);
+    lower_servo = new box::Servomotor(LOWER_SERVO_PWM, LOWER_SERVO_CLOCKWISE,
+                                      LOWER_SERVO_MIN, LOWER_SERVO_MAX);
+    upper_servo = new box::Servomotor(UPPER_SERVO_PWM, UPPER_SERVO_CLOCKWISE,
+                                      UPPER_SERVO_MIN, UPPER_SERVO_MAX);
     pinMode(LED_BUILTIN, OUTPUT);
     randomSeed(analogRead(0));
 }
@@ -20,11 +33,4 @@ void box::Main::run() {
     delay(1000);                       // wait for a second
     digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
     delay(1000);                       // wait for a second
-    while(servo1->get_angle() < 180 ) {
-        servo1->move_direction(SERVOMOTOR_DIRECTION_FORWARD);
-    }
-    delay(5000);
-    while(servo1->get_angle() > 0 ) {
-        servo1->move_direction(SERVOMOTOR_DIRECTION_BACKWARD);
-    }
 }

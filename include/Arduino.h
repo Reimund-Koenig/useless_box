@@ -10,6 +10,12 @@
 #define LOW 0
 #define HIGH 1
 
+#define A0 0
+#define A1 1
+#define A2 2
+#define A3 3
+#define A4 4
+
 extern "C" {
     void pinMode(int, int);
     void digitalWrite(int, int);
