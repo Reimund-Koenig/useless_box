@@ -21,7 +21,7 @@ class Main {
     void run_mode_awareness(int distance);
     void run_mode_normal();
     unsigned long last_time;
-    int wait_delay;
+    unsigned long wait_delay;
 
   public:
     Main();
