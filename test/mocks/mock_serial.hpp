@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "Serial.h"
 
-class SerialMock : public Serial {
+class SerialMock : public Serial_ {
   public:
     MOCK_METHOD1(print, size_t(int));
     MOCK_METHOD1(print, size_t(const char));
@@ -23,12 +23,14 @@ class SerialMock : public Serial {
  */
 ::testing::NiceMock<SerialMock>* serial_mock;
 
-Serial::Serial(){}
-size_t Serial::print(int i) { return serial_mock->print(i); }
-size_t Serial::print(const char c) { return serial_mock->print(c); }
-size_t Serial::print(const char* str) { return serial_mock->write(str); }
-size_t Serial::println(const char* str) { return serial_mock->println(str); }
-size_t Serial::write(const char* str) { return serial_mock->write(str); }
-int Serial::begin(int baut) { return serial_mock->begin(baut); }
+// size_t Serial_::print(int i) { return serial_mock->print(i); }
+// size_t Serial_::print(const char c) { return serial_mock->print(c); }
+// size_t Serial_::print(const char* str) { return serial_mock->write(str); }
+// size_t Serial_::println(const char* str) { return serial_mock->println(str); }
+// size_t Serial_::write(const char* str) { return serial_mock->write(str); }
+int Serial_::begin(int baut) { return serial_mock->begin(baut); }
+
+// Preinstantiate Objects
+Serial_ Serial;
 
 #endif // MOCK_SERIAL_HPP_

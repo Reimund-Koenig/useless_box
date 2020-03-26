@@ -7,7 +7,6 @@
 
 class ArduinoMock {
   public:
-    // MOCK_METHOD(long, random, (long), (const, override));
     MOCK_METHOD1(random, long(long));
     MOCK_METHOD2(digitalWrite, void(int, int));
     MOCK_METHOD1(digitalRead, int(int));
