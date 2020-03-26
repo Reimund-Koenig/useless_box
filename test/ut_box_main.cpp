@@ -32,14 +32,10 @@ class TestMain : public ::testing::Test {
     virtual void SetUp() {
         servomotor_mock = new NiceMock<ServomotorMock>;
         arduino_mock = new NiceMock<ArduinoMock>;
-        box_switch_mock = new BoxSwitchMock();
-        box_sonar_mock = new BoxSonarMock();
-        box_lower_servo_mock = new BoxServoMock();
-        box_upper_switch_mock = new BoxServoMock();
-        // box_switch_mock = new NiceMock<BoxSwitchMock>;
-        // box_sonar_mock = new NiceMock<BoxSonarMock>;
-        // box_lower_servo_mock = new NiceMock<BoxServoMock>;
-        // box_upper_switch_mock = new NiceMock<BoxServoMock>;
+        box_switch_mock = new NiceMock<BoxSwitchMock>;
+        box_sonar_mock = new NiceMock<BoxSonarMock>;
+        box_lower_servo_mock = new NiceMock<BoxServoMock>;
+        box_upper_switch_mock = new NiceMock<BoxServoMock>;
 
         main_under_test = new Main_under_test((box::Switch*) box_switch_mock,
                                               (box::Sonar*) box_sonar_mock,

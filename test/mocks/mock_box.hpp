@@ -24,12 +24,8 @@ class BoxSwitchMock : public box::Switch {
     BoxSwitchMock() : box::Switch(1) {}
     MOCK_METHOD0(is_high, int());
 };
-// ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
-// ::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
-// ::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
-// ::testing::NiceMock<BoxServoMock>* box_upper_switch_mock;
-BoxSwitchMock* box_switch_mock;
-BoxSonarMock* box_sonar_mock;
-BoxServoMock* box_lower_servo_mock;
-BoxServoMock* box_upper_switch_mock;
+::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
+::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
+::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
+::testing::NiceMock<BoxServoMock>* box_upper_switch_mock;
 #endif // MOCK_BOX_SWITCH_HPP_
