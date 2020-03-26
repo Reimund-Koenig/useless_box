@@ -48,7 +48,7 @@ box::Systemtest::Systemtest() {
     pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(9600);
     delay(1000);
-    // Serial.println("Systemtest Started");
+    Serial.println("Systemtest Started");
 }
 
 box::Systemtest::~Systemtest() {
@@ -78,11 +78,11 @@ void box::Systemtest::run() {
     }
 }
 void box::Systemtest::println(const char* str, int val=-1) {
-    // Serial.print(str);
-    // if(val != -1) {
-    //     Serial.print(val);
-    // }
-    // Serial.println(".");
+    Serial.print(str);
+    if(val != -1) {
+        Serial.print(val);
+    }
+    Serial.println(".");
 }
 
 void box::Systemtest::update_systemtest_state() {

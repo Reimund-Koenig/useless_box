@@ -7,11 +7,9 @@
 
 class SerialMock : public Serial_ {
   public:
-    MOCK_METHOD1(print, size_t(int));
-    MOCK_METHOD1(print, size_t(const char));
-    MOCK_METHOD1(print, size_t(const char*));
-    MOCK_METHOD1(println, size_t(const char*));
-    MOCK_METHOD1(write, size_t(const char*));
+    MOCK_METHOD0(print, size_t());
+    MOCK_METHOD0(println, size_t());
+    MOCK_METHOD0(write, size_t());
     MOCK_METHOD1(begin, int(int));
 };
 
@@ -23,14 +21,12 @@ class SerialMock : public Serial_ {
  */
 ::testing::NiceMock<SerialMock>* serial_mock;
 
-// size_t Serial_::print(int i) { return serial_mock->print(i); }
-// size_t Serial_::print(const char c) { return serial_mock->print(c); }
-// size_t Serial_::print(const char* str) { return serial_mock->write(str); }
-// size_t Serial_::println(const char* str) { return serial_mock->println(str); }
-// size_t Serial_::write(const char* str) { return serial_mock->write(str); }
+size_t Serial_::print(int i) { return serial_mock->print(); }
+size_t Serial_::print(const char* str) { return serial_mock->write(); }
+size_t Serial_::println(const char* str) { return serial_mock->println(); }
+size_t Serial_::write(const char* str) { return serial_mock->write(); }
 int Serial_::begin(int baut) { return serial_mock->begin(baut); }
 
-// Preinstantiate Objects
 Serial_ Serial;
 
 #endif // MOCK_SERIAL_HPP_

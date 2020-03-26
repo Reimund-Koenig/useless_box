@@ -6,31 +6,19 @@
 using namespace arduino;
 
 
-#define LOWER_SERVO_PWM 9
-#define LOWER_SERVO_MIN 0
-#define LOWER_SERVO_MAX 138
-#define LOWER_SERVO_CLOCKWISE false
-#define UPPER_SERVO_PWM 10
-#define UPPER_SERVO_MIN 42
-#define UPPER_SERVO_MAX 180
-#define UPPER_SERVO_CLOCKWISE true
-#define PIN_SONAR_TRIGGER 11
-#define PIN_SONAR_ECHO 12
-#define PIN_SWITCH 4
 
 #define MODE_RESET 0
 #define MODE_AWARENESS 1
 #define MODE_NORMAL 2
 
-box::Main::Main() {
-    box_lower_servo = new box::Servomotor(
-                        LOWER_SERVO_PWM, LOWER_SERVO_CLOCKWISE,
-                        LOWER_SERVO_MIN, LOWER_SERVO_MAX);
-    box_upper_servo = new box::Servomotor(
-                        UPPER_SERVO_PWM, UPPER_SERVO_CLOCKWISE,
-                        UPPER_SERVO_MIN, UPPER_SERVO_MAX);
-    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
-    box_switch = new box::Switch(PIN_SWITCH);
+box::Main::Main(box::Switch* box_switch,
+                box::Sonar* box_sonar,
+                box::Servomotor* box_lower_servo,
+                box::Servomotor* box_upper_servo) {
+    box::Main::box_switch = box_switch;
+    box::Main::box_sonar = box_sonar;
+    box::Main::box_lower_servo = box_lower_servo;
+    box::Main::box_upper_servo = box_upper_servo;
     randomSeed(analogRead(0));
     box_mode = MODE_RESET;
     run_mode_reset_step = 0;

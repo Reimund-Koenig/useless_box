@@ -24,7 +24,10 @@ class Main {
     unsigned long wait_delay;
 
   public:
-    Main();
+    Main(box::Switch* box_switch,
+         box::Sonar* box_sonar,
+         box::Servomotor* box_lower_servo,
+         box::Servomotor* box_upper_servo);
     virtual ~Main();
     virtual void run();
 
