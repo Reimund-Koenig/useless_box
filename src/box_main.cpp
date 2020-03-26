@@ -3,6 +3,7 @@
 #include "box_servomotor.hpp"
 #include <Arduino.h>
 #include <stdio.h>
+using namespace arduino;
 
 
 #define LOWER_SERVO_PWM 9

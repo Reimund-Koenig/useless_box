@@ -1,6 +1,7 @@
 #include "box_gearmotor.hpp"
 #include <Arduino.h>
 #include <stdio.h>
+using namespace arduino;
 
 box::Gearmotor::Gearmotor(int pin_pwm_speed, int pin_forward, int pin_backward) {
     box::Gearmotor::speed = GEARMOTOR_DEFAULT_SPEED;

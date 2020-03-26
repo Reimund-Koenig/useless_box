@@ -7,6 +7,8 @@
 
 class ArduinoMock {
   public:
+    // MOCK_METHOD(long, random, (long), (const, override));
+    MOCK_METHOD1(random, long(long));
     MOCK_METHOD2(digitalWrite, void(int, int));
     MOCK_METHOD1(digitalRead, int(int));
     MOCK_METHOD2(analogWrite, void(int, int));
@@ -21,7 +23,6 @@ class ArduinoMock {
     MOCK_METHOD3(pulseIn, unsigned long(int pin, int state, unsigned long timeout));
     MOCK_METHOD5(map, long(long, long, long, long, long));
     MOCK_METHOD2(pinMode, void(int, int));
-    // MOCK_METHOD1(random, long(long));
 };
 
 /**
@@ -33,6 +34,9 @@ class ArduinoMock {
 ::testing::NiceMock<ArduinoMock>* arduino_mock;
 
 extern "C" {
+  // long random(long range) {
+  //   return arduino_mock->random(range);
+  // }
   long map(long input, long min_input, long max_input, long min_output, long max_output) {
     return arduino_mock->map(input, min_input, max_input, min_output, max_output);
   }
@@ -57,9 +61,6 @@ extern "C" {
   void delayMicroseconds(int time_microseconds) {
     return arduino_mock->delayMicroseconds(time_microseconds);
   }
-  // long random(long range) {
-  //   return arduino_mock->random(range);
-  // }
   void randomSeed(unsigned int pin) {
     return arduino_mock->randomSeed(pin);
   }

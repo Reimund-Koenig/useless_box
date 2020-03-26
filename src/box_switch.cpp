@@ -1,6 +1,7 @@
 #include "box_switch.hpp"
 #include <Arduino.h>
 #include <stdio.h>
+using namespace arduino;
 
 
 box::Switch::Switch(int pin_switch) {

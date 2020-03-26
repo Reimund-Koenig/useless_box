@@ -1,6 +1,7 @@
 #include "box_potentiometer.hpp"
 #include <Arduino.h>
 #include <stdio.h>
+using namespace arduino;
 
 
 box::Potentiometer::Potentiometer(int pin_potentiometer, int min_peak, int max_peak) {

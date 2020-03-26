@@ -6,6 +6,7 @@
 #include "box_sonar.hpp"
 #include <Arduino.h>
 #include <stdio.h>
+using namespace arduino;
 
 #define PIN_RANDOM A0 //A0
 #define PIN_POTENTIOMETER A1 //A1
