@@ -71,12 +71,12 @@ TEST_F(TestSonar, test_average_part_of_first_iteration) {
 
 TEST_F(TestSonar, test_average_exactly_one_iteration) {
     int number_of_runs = 100;
-    int expected_result = 50;
+    int expected_result = 95;
     run_calculate_average_loop(number_of_runs, expected_result);
 }
 
 TEST_F(TestSonar, test_average_more_then_one_iteration) {
     int number_of_runs = 300;
-    int expected_result = 252; // inaccuracy of formular
+    int expected_result = 297; // inaccuracy of formular
     run_calculate_average_loop(number_of_runs, expected_result);
 }
