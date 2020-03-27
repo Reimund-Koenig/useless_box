@@ -23,6 +23,9 @@ box::Main::Main(box::Switch* box_switch,
     randomSeed(analogRead(0));
     box_mode = MODE_RESET;
     run_mode_reset_step = 0;
+    wait_delay = 0;
+    last_time = 0;
+    move_vice_versa = false;
 }
 
 box::Main::~Main() {
@@ -54,24 +57,44 @@ void box::Main::run() {
     }
 }
 
+void box::Main::move_servos(int percentage_lower,
+                            int percentage_upper) {
+    if(move_vice_versa) {
+        if(percentage_lower != -1) {
+            box_upper_servo->move_to_percent(percentage_lower);
+        }
+        if(percentage_upper != -1) {
+            box_lower_servo->move_to_percent(percentage_upper);
+        }
+    } else {
+        if(percentage_lower != -1) {
+            box_lower_servo->move_to_percent(percentage_lower);
+        }
+        if(percentage_upper != -1) {
+            box_upper_servo->move_to_percent(percentage_upper);
+        }
+    }
+}
+
 void box::Main::run_mode_reset() {
     switch (run_mode_reset_step) {
         case 0:
-            box_lower_servo->move_to_percent(0);
-            box_upper_servo->move_to_percent(100);
+            move_servos(0,100);
             box::Main::wait_ms(400);
             run_mode_reset_step = 1;
             return;
         case 1:
-            box_upper_servo->move_to_percent(0);
+            move_servos(-1,0);
             if(random(100) < 75) {
                 box_mode = MODE_AWARENESS;
             } else {
                 box_mode = MODE_NORMAL;
             }
             box::Main::wait_ms(400);
-            run_mode_reset_step = 0;
+            run_mode_reset_step = 2;
             return;
+        case 2:
+            // 50% of changing the behaviour to "vice versa"
         default:
             run_mode_reset_step = 0;
             break;
@@ -80,23 +103,23 @@ void box::Main::run_mode_reset() {
 
 void box::Main::run_mode_awareness(int distance) {
     if(distance > 30) {
-        box_lower_servo->move_to_percent(0);
+        move_servos(0,-1);
         box::Main::wait_ms(50);
         return;
     }
     if(distance > 20) {
         // random move 30-50%
-        box_lower_servo->move_to_percent(random(20)+30);
+        move_servos(random(20)+30,-1);
         box::Main::wait_ms(random(750)+250);
         return;
     }
     if(distance > 10) {
         // random move 50-70%
-        box_lower_servo->move_to_percent(random(20)+50);
+        move_servos(random(20)+50,-1);
         box::Main::wait_ms(random(750)+250);
         return;
     }
-    box_lower_servo->move_to_percent(100);
+    move_servos(100,-1);
     box::Main::wait_ms(250);
     return;
 }

@@ -7,11 +7,15 @@ class Switch {
 
   private:
     int pin_switch;
+    bool last_state;
+    bool m_has_changed;
+    bool check();
 
   public:
     Switch(int pin_switch);
     virtual ~Switch();
-    virtual int is_high();
+    virtual bool is_high();
+    virtual bool has_changed();
 };
 
 } // namespace box

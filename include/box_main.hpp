@@ -22,6 +22,9 @@ class Main {
     void run_mode_normal();
     unsigned long last_time;
     unsigned long wait_delay;
+    bool move_vice_versa;
+    void move_servos(int percentage_lower,
+                                int percentage_upper);
 
   public:
     Main(box::Switch* box_switch,

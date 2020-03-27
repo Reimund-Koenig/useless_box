@@ -22,7 +22,8 @@ class BoxSonarMock : public box::Sonar{
 class BoxSwitchMock : public box::Switch {
   public:
     BoxSwitchMock() : box::Switch(1) {}
-    MOCK_METHOD0(is_high, int());
+    MOCK_METHOD0(is_high, bool());
+    MOCK_METHOD0(has_changed, bool());
 };
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
 ::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
