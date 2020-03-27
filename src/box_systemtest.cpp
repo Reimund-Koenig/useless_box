@@ -1,3 +1,4 @@
+#include "ardunio_namespace.h" // needed for arduino build
 #include "box_systemtest.hpp"
 #include "box_servomotor.hpp"
 #include "box_button.hpp"

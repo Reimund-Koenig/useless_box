@@ -1,3 +1,4 @@
+#include "ardunio_namespace.h" // needed for arduino build
 #include "box_sonar.hpp"
 #include <Arduino.h>
 #include <stdio.h>

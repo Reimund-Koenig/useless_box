@@ -1,5 +1,3 @@
-// Copyright 2014 http://switchdevice.com
-
 #include "Serial.h"
 
 size_t Serial_::print(const char *s) {}
