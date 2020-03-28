@@ -33,7 +33,7 @@ box::Main::~Main() {
 
 void box::Main::run() {
     // User Action?
-    if(box_switch->has_changed() && box_servomanager->is_no_box_action()) {
+    if(box_switch->has_changed() && box_servomanager->is_user_action()) {
         box_mode = MODE_RESET;
         if(random(50) > 50) {
             should_change_to_vice_versa_mode = true;

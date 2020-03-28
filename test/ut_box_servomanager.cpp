@@ -43,10 +43,62 @@ class TestServomanager : public ::testing::Test {
     }
 };
 
-/**************************************************************************************************
- * If user gets close to the switch
- *    50% nothing happens
- *    50% useless box self switch
- *    0% useless box deke (antäuschen) self switch --> feature
- */
 TEST_F(TestServomanager, test_servomanager_init) { EXPECT_TRUE(true); }
+
+TEST_F(TestServomanager, test_servomanager_move_lower_servo_percentage) {
+    int expected_result = 50;
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
+    servomanager_under_test->move_lower_servo_to_percent(50);
+     // otherway arround
+    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
+    servomanager_under_test->move_lower_servo_to_percent(50);
+}
+
+TEST_F(TestServomanager, test_servomanager_move_upper_servo_percentage) {
+    int expected_result = 50;
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
+    servomanager_under_test->move_upper_servo_to_percent(50);
+     // otherway arround
+    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
+    servomanager_under_test->move_upper_servo_to_percent(50);
+}
+
+TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
+    int expected_result_lower = 42;
+    int expected_result_upper = 50;
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_lower)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_upper)).Times(1);
+    servomanager_under_test->move_servos_to_percent(42, 50);
+     // otherway arround
+    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_lower)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_upper)).Times(1);
+    servomanager_under_test->move_servos_to_percent(42, 50);
+    // otherway arround
+    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_lower)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_upper)).Times(1);
+    servomanager_under_test->move_servos_to_percent(42, 50);
+}
+
+TEST_F(TestServomanager, test_servomanager_is_user_action) {
+    int expected_result = 50;
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
+    EXPECT_FALSE(servomanager_under_test->is_user_action());
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_FALSE(servomanager_under_test->is_user_action());
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_FALSE(servomanager_under_test->is_user_action());
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(99));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(99));
+    EXPECT_TRUE(servomanager_under_test->is_user_action());
+}

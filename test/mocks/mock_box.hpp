@@ -12,6 +12,7 @@ class BoxServoMock : public box::Servomotor {
   public:
     BoxServoMock() : box::Servomotor(0,false,1,2) {}
     MOCK_METHOD1(move_to_percent, void(int));
+    MOCK_METHOD0(get_last_percentage, int());
 };
 
 class BoxServoManagerMock : public box::Servomanager {
@@ -20,7 +21,7 @@ class BoxServoManagerMock : public box::Servomanager {
     MOCK_METHOD1(move_lower_servo_to_percent, void(int));
     MOCK_METHOD1(move_upper_servo_to_percent, void(int));
     MOCK_METHOD2(move_servos_to_percent, void(int, int));
-    MOCK_METHOD0(is_no_box_action, bool());
+    MOCK_METHOD0(is_user_action, bool());
     MOCK_METHOD0(change_vise_versa_mode, bool());
 };
 

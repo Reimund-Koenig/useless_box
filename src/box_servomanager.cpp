@@ -47,11 +47,11 @@ void box::Servomanager::change_vise_versa_mode() {
         move_vice_versa = !move_vice_versa;
 }
 
-bool box::Servomanager::is_no_box_action() {
-    if(box_upper_servo->get_last_percentage() > 99) {
+bool box::Servomanager::is_user_action() {
+    if(box_upper_servo->get_last_percentage() >= 100) {
         return false;
     }
-    if(box_lower_servo->get_last_percentage() > 99) {
+    if(box_lower_servo->get_last_percentage() >= 100) {
         return false;
     }
     return true;

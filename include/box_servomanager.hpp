@@ -19,7 +19,7 @@ class Servomanager {
     void move_upper_servo_to_percent(int percentage);
     void move_servos_to_percent(int percentage_lower,
                                 int percentage_upper);
-    bool is_no_box_action();
+    bool is_user_action();
     void change_vise_versa_mode();
 };
 }
