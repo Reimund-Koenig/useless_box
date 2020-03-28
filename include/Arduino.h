@@ -35,5 +35,5 @@ extern "C" {
     long map(long, long, long, long, long);
     long random(long);
 }
-}
+} // namespace arduino
 #endif

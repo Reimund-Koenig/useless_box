@@ -32,10 +32,12 @@ class ArduinoMock {
  */
 ::testing::NiceMock<ArduinoMock>* arduino_mock;
 
+namespace arduino {
+
 extern "C" {
-  // long random(long range) {
-  //   return arduino_mock->random(range);
-  // }
+  long random(long range) {
+    return arduino_mock->random(range);
+  }
   long map(long input, long min_input, long max_input, long min_output, long max_output) {
     return arduino_mock->map(input, min_input, max_input, min_output, max_output);
   }
@@ -80,6 +82,6 @@ extern "C" {
   }
 }
 
-
+} // namespace arduino
 
 #endif // MOCK_ARDUINO_HPP_
