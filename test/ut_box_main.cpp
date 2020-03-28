@@ -62,6 +62,6 @@ class TestMain : public ::testing::Test {
 TEST_F(TestMain, test_main_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestMain, test_main_reset_on_switchchange) {
-    EXPECT_CALL(*box_switch_mock, is_high()).Times(1).WillOnce(Return(0));
+    EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(0));
     main_under_test->run();
 }

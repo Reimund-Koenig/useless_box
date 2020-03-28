@@ -26,18 +26,24 @@ box::Main::Main(box::Switch* box_switch,
     wait_delay = 0;
     last_time = 0;
     move_vice_versa = false;
+    change_vice_versa_mode = false;
 }
 
 box::Main::~Main() {
 }
 
-void box::Main::wait_ms(int wait_ms) {
-    last_time = millis();
-    wait_delay = wait_ms;
-}
+/*************************************************************************************************
+ * Private Methods
+ *************************************************/
 
 void box::Main::run() {
-    if(box_switch->is_high()) { box_mode = MODE_RESET; }
+    // User Action?
+    if(box_switch->has_changed()) {
+        box_mode = MODE_RESET;
+        if(random(50) > 50) {
+            change_vice_versa_mode = true;
+        }
+    }
     int distance = box_sonar->get_average_distance_cm();
     if ((millis() - last_time) < wait_delay) {
         return;
@@ -57,6 +63,78 @@ void box::Main::run() {
     }
 }
 
+void box::Main::run_mode_normal() {
+    box::Main::wait_ms(50);
+}
+
+void box::Main::run_mode_awareness(int distance) {
+    if(distance > 30) {
+        move_lower_servo(0);
+        box::Main::wait_ms(50);
+        return;
+    }
+    if(distance > 20) {
+        // random move 30-50%
+        move_lower_servo(random(20)+30);
+        box::Main::wait_ms(random(750)+250);
+        return;
+    }
+    if(distance > 10) {
+        // random move 50-70%
+        move_lower_servo(random(20)+50);
+        box::Main::wait_ms(random(750)+250);
+        return;
+    }
+    move_lower_servo(100);
+    box::Main::wait_ms(250);
+    return;
+}
+
+void box::Main::run_mode_reset() {
+    switch (run_mode_reset_step) {
+        case 0:
+            move_servos(0,100);
+            box::Main::wait_ms(400);
+            run_mode_reset_step = 1;
+            return;
+        case 1:
+            move_upper_servo(0);
+            if(random(100) < 75) {
+                box_mode = MODE_AWARENESS;
+            } else {
+                box_mode = MODE_NORMAL;
+            }
+            if(change_vice_versa_mode) {
+                run_mode_reset_step = 2;
+            } else {
+                run_mode_reset_step = 0;
+            }
+            box::Main::wait_ms(400);
+            return;
+        case 2:
+            move_vice_versa = !move_vice_versa;
+            change_vice_versa_mode = false;
+            run_mode_reset_step = 0;
+            return;
+        default:
+            run_mode_reset_step = 0;
+            break;
+    }
+}
+
+void box::Main::wait_ms(int wait_ms) {
+    last_time = millis();
+    wait_delay = wait_ms;
+}
+
+void box::Main::move_lower_servo(int percentage) {
+    move_servos(percentage, -1);
+}
+
+void box::Main::move_upper_servo(int percentage) {
+    move_servos(-1, percentage);
+}
+
 void box::Main::move_servos(int percentage_lower,
                             int percentage_upper) {
     if(move_vice_versa) {
@@ -74,57 +152,4 @@ void box::Main::move_servos(int percentage_lower,
             box_upper_servo->move_to_percent(percentage_upper);
         }
     }
-}
-
-void box::Main::run_mode_reset() {
-    switch (run_mode_reset_step) {
-        case 0:
-            move_servos(0,100);
-            box::Main::wait_ms(400);
-            run_mode_reset_step = 1;
-            return;
-        case 1:
-            move_servos(-1,0);
-            if(random(100) < 75) {
-                box_mode = MODE_AWARENESS;
-            } else {
-                box_mode = MODE_NORMAL;
-            }
-            box::Main::wait_ms(400);
-            run_mode_reset_step = 2;
-            return;
-        case 2:
-            // 50% of changing the behaviour to "vice versa"
-        default:
-            run_mode_reset_step = 0;
-            break;
-    }
-}
-
-void box::Main::run_mode_awareness(int distance) {
-    if(distance > 30) {
-        move_servos(0,-1);
-        box::Main::wait_ms(50);
-        return;
-    }
-    if(distance > 20) {
-        // random move 30-50%
-        move_servos(random(20)+30,-1);
-        box::Main::wait_ms(random(750)+250);
-        return;
-    }
-    if(distance > 10) {
-        // random move 50-70%
-        move_servos(random(20)+50,-1);
-        box::Main::wait_ms(random(750)+250);
-        return;
-    }
-    move_servos(100,-1);
-    box::Main::wait_ms(250);
-    return;
-}
-
-void box::Main::run_mode_normal() {
-
-    box::Main::wait_ms(50);
 }

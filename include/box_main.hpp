@@ -23,6 +23,9 @@ class Main {
     unsigned long last_time;
     unsigned long wait_delay;
     bool move_vice_versa;
+    bool change_vice_versa_mode;
+    void move_lower_servo(int percentage);
+    void move_upper_servo(int percentage);
     void move_servos(int percentage_lower,
                                 int percentage_upper);
 

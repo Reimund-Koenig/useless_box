@@ -26,21 +26,25 @@ class TestServo : public ::testing::Test {
   protected:
     Servomotor_under_test* servomotor_under_test_clockwise;
     Servomotor_under_test* servomotor_under_test;
+
     virtual void SetUp() {
         servomotor_mock = new NiceMock<ServomotorMock>;
         servomotor_under_test_clockwise = new Servomotor_under_test(TEST_CLOCKWISE);
         servomotor_under_test = new Servomotor_under_test(TEST_ANTI_CLOCKWISE);
     }
+
     virtual void TearDown() {
         delete servomotor_under_test_clockwise;
         delete servomotor_under_test;
         delete servomotor_mock;
     }
+
     virtual void test_percentage(Servomotor_under_test* servo, int percentage,
-                                    int expected_result) {
-        EXPECT_CALL(*servomotor_mock, write(expected_result)).Times(1);
+                                    int expected_angle, int expected_percentage) {
+        EXPECT_CALL(*servomotor_mock, write(expected_angle)).Times(1);
         servo->move_to_percent(percentage);
-        EXPECT_EQ(expected_result, servo->get_angle());
+        EXPECT_EQ(expected_angle, servo->get_angle());
+        EXPECT_EQ(expected_percentage, servo->get_last_percentage());
     }
 };
 
@@ -74,10 +78,10 @@ TEST_F(TestServo, test_servomotor_clockwise_move_percentage) {
     int expected_angle_50_percent = 15;
     int expected_angle_75_percent = 17;
     int expected_angle_100_percent = 20;
-    test_percentage(servomotor_under_test, 0, expected_angle_0_percent);
-    test_percentage(servomotor_under_test, 50, expected_angle_50_percent);
-    test_percentage(servomotor_under_test, 75,expected_angle_75_percent);
-    test_percentage(servomotor_under_test, 100,expected_angle_100_percent);
+    test_percentage(servomotor_under_test, 0, expected_angle_0_percent, 0);
+    test_percentage(servomotor_under_test, 50, expected_angle_50_percent, 50);
+    test_percentage(servomotor_under_test, 75,expected_angle_75_percent, 75);
+    test_percentage(servomotor_under_test, 100,expected_angle_100_percent, 100);
 }
 
 TEST_F(TestServo, test_servomotor_anti_clockwise_move_percentage) {
@@ -85,10 +89,10 @@ TEST_F(TestServo, test_servomotor_anti_clockwise_move_percentage) {
     int expected_angle_50_percent = 15;
     int expected_angle_75_percent = 13;
     int expected_angle_100_percent = 10;
-    test_percentage(servomotor_under_test_clockwise, 0,expected_angle_0_percent);
-    test_percentage(servomotor_under_test_clockwise, 50,expected_angle_50_percent);
-    test_percentage(servomotor_under_test_clockwise, 75,expected_angle_75_percent);
-    test_percentage(servomotor_under_test_clockwise, 100,expected_angle_100_percent);
+    test_percentage(servomotor_under_test_clockwise, 0,expected_angle_0_percent, 0);
+    test_percentage(servomotor_under_test_clockwise, 50,expected_angle_50_percent, 50);
+    test_percentage(servomotor_under_test_clockwise, 75,expected_angle_75_percent, 75);
+    test_percentage(servomotor_under_test_clockwise, 100,expected_angle_100_percent, 100);
 }
 
 TEST_F(TestServo, test_servomotor_move_percentage_clockwise) {

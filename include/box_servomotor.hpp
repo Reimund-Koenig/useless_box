@@ -10,6 +10,7 @@ class Servomotor {
   private:
     Servo servo;
     int angle;
+    int last_percentage;
     int min_peak_angle;
     int max_peak_angle;
     int speed_delay_ms;
@@ -24,6 +25,7 @@ class Servomotor {
     virtual void move_to_angle(int angle);
     virtual int get_current_angle();
     virtual int get_angle();
+    virtual int get_last_percentage();
 };
 
 } // namespace box
