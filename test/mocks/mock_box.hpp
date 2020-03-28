@@ -7,6 +7,7 @@
 #include <box_servomotor.hpp>
 #include <box_servomanager.hpp>
 #include <box_sonar.hpp>
+#include <box_wait.hpp>
 
 class BoxServoMock : public box::Servomotor {
   public:
@@ -38,9 +39,17 @@ class BoxSwitchMock : public box::Switch {
     MOCK_METHOD0(is_high, bool());
     MOCK_METHOD0(has_changed, bool());
 };
+
+class BoxWaitMock : public box::Wait {
+  public:
+    BoxWaitMock() : box::Wait() {}
+    MOCK_METHOD1(milliseconds, void(unsigned long));
+    MOCK_METHOD0(is_free, bool());
+};
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
 ::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
 ::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
 ::testing::NiceMock<BoxServoMock>* box_upper_servo_mock;
 ::testing::NiceMock<BoxServoManagerMock>* box_servomanager_mock;
+::testing::NiceMock<BoxWaitMock>* box_wait_mock;
 #endif // MOCK_BOX_SWITCH_HPP_

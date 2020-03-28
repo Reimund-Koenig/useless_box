@@ -1,10 +1,9 @@
 #include "ardunio_namespace.h" // needed for arduino build
 #include "box_main.hpp"
+#include "box_mode_awareness.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
-
-
 
 #define MODE_RESET 0
 #define MODE_AWARENESS 1
@@ -19,8 +18,8 @@ box::Main::Main(box::Switch* box_switch,
     randomSeed(analogRead(0));
     box_mode = MODE_RESET;
     run_mode_reset_step = 0;
-    wait_delay = 0;
-    last_time = 0;
+    box_wait = new box::Wait();
+    box_mode_awareness = new box::ModeAwareness(box_servomanager, box_wait);
 }
 
 box::Main::~Main() {
@@ -37,7 +36,7 @@ void box::Main::run() {
         box_servomanager->random_select_if_vice_versa_mode_should_be_changed();
     }
     int distance = box_sonar->get_average_distance_cm();
-    if ((millis() - last_time) < wait_delay) {
+    if (box_wait->is_free()) {
         return;
     }
     switch (box_mode) {
@@ -45,7 +44,7 @@ void box::Main::run() {
             run_mode_reset();
             break;
         case MODE_AWARENESS:
-            run_mode_awareness(distance);
+            box_mode_awareness->run(distance);
             break;
         case MODE_NORMAL:
             run_mode_normal();
@@ -56,43 +55,20 @@ void box::Main::run() {
 }
 
 void box::Main::run_mode_normal() {
-    box::Main::wait_ms(50);
-}
-
-void box::Main::run_mode_awareness(int distance) {
-    if(distance > 30) {
-        box_servomanager->move_lower_servo_to_percent(0);
-        box::Main::wait_ms(50);
-        return;
-    }
-    if(distance > 20) {
-        // random move 30-50%
-        box_servomanager->move_lower_servo_to_percent(random(20)+30);
-        box::Main::wait_ms(random(750)+250);
-        return;
-    }
-    if(distance > 10) {
-        // random move 50-70%
-        box_servomanager->move_lower_servo_to_percent(random(20)+50);
-        box::Main::wait_ms(random(750)+250);
-        return;
-    }
-    box_servomanager->move_lower_servo_to_percent(100);
-    box::Main::wait_ms(250);
-    return;
+    box_wait->milliseconds(50);
 }
 
 void box::Main::run_mode_reset() {
     switch (run_mode_reset_step) {
         case 0:
             box_servomanager->move_servos_to_percent(0,100);
-            box::Main::wait_ms(400);
+            box_wait->milliseconds(400);
             run_mode_reset_step = 1;
             return;
         case 1:
             box_servomanager->move_upper_servo_to_percent(0);
             run_mode_reset_step = 0;
-            box::Main::wait_ms(400);
+            box_wait->milliseconds(400);
             if(!box_servomanager->change_vise_versa_if_required_and_return_is_changed()) {
                 if(random(100) < 75) {
                     box_mode = MODE_AWARENESS;
@@ -106,9 +82,3 @@ void box::Main::run_mode_reset() {
             break;
     }
 }
-
-void box::Main::wait_ms(int wait_ms) {
-    last_time = millis();
-    wait_delay = wait_ms;
-}
-
