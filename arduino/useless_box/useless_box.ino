@@ -21,6 +21,7 @@
 box::Main* box_main;
 box::Switch* box_switch;
 box::Sonar* box_sonar;
+box::Servomanager* box_servomanager;
 box::Servomotor* box_lower_servo;
 box::Servomotor* box_upper_servo;
 
@@ -31,12 +32,13 @@ void setup() {
     box_upper_servo = new box::Servomotor(
                         UPPER_SERVO_PWM, UPPER_SERVO_CLOCKWISE,
                         UPPER_SERVO_MIN, UPPER_SERVO_MAX);
+    box_servomanager = new box::Servomanager(box_lower_servo, box_upper_servo);
     box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
     box_switch = new box::Switch(PIN_SWITCH);
 
 
-    box_main = new box::Main(box_switch, box_sonar, box_lower_servo, box_upper_servo);
-
+    box_main = new box::Main(box_switch, box_sonar,
+                             box_servomanager);
 }
 
 void loop() {

@@ -1,7 +1,7 @@
 #ifndef BOX_MAIN_HPP_
 #define BOX_MAIN_HPP_
 
-#include "box_servomotor.hpp"
+#include "box_servomanager.hpp"
 #include "box_sonar.hpp"
 #include "box_switch.hpp"
 
@@ -12,28 +12,21 @@ class Main {
   private:
     int box_mode;
     int run_mode_reset_step;
-    box::Servomotor* box_lower_servo;
-    box::Servomotor* box_upper_servo;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
+    box::Servomanager* box_servomanager;
     void wait_ms(int wait_ms);
     void run_mode_reset();
     void run_mode_awareness(int distance);
     void run_mode_normal();
     unsigned long last_time;
     unsigned long wait_delay;
-    bool move_vice_versa;
-    bool change_vice_versa_mode;
-    void move_lower_servo(int percentage);
-    void move_upper_servo(int percentage);
-    void move_servos(int percentage_lower,
-                                int percentage_upper);
+    bool should_change_to_vice_versa_mode;
 
   public:
     Main(box::Switch* box_switch,
          box::Sonar* box_sonar,
-         box::Servomotor* box_lower_servo,
-         box::Servomotor* box_upper_servo);
+         box::Servomanager* box_servomanager);
     virtual ~Main();
     virtual void run();
 

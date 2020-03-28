@@ -1,7 +1,5 @@
 #include "ardunio_namespace.h" // needed for arduino build
 #include "box_main.hpp"
-#include "Servo.h"
-#include "box_servomotor.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
@@ -14,19 +12,16 @@ using namespace arduino;
 
 box::Main::Main(box::Switch* box_switch,
                 box::Sonar* box_sonar,
-                box::Servomotor* box_lower_servo,
-                box::Servomotor* box_upper_servo) {
+                box::Servomanager* box_servomanager) {
     box::Main::box_switch = box_switch;
     box::Main::box_sonar = box_sonar;
-    box::Main::box_lower_servo = box_lower_servo;
-    box::Main::box_upper_servo = box_upper_servo;
+    box::Main::box_servomanager = box_servomanager;
     randomSeed(analogRead(0));
     box_mode = MODE_RESET;
     run_mode_reset_step = 0;
     wait_delay = 0;
     last_time = 0;
-    move_vice_versa = false;
-    change_vice_versa_mode = false;
+    should_change_to_vice_versa_mode = false;
 }
 
 box::Main::~Main() {
@@ -38,10 +33,10 @@ box::Main::~Main() {
 
 void box::Main::run() {
     // User Action?
-    if(box_switch->has_changed()) {
+    if(box_switch->has_changed() && box_servomanager->is_no_box_action()) {
         box_mode = MODE_RESET;
         if(random(50) > 50) {
-            change_vice_versa_mode = true;
+            should_change_to_vice_versa_mode = true;
         }
     }
     int distance = box_sonar->get_average_distance_cm();
@@ -69,23 +64,23 @@ void box::Main::run_mode_normal() {
 
 void box::Main::run_mode_awareness(int distance) {
     if(distance > 30) {
-        move_lower_servo(0);
+        box_servomanager->move_lower_servo_to_percent(0);
         box::Main::wait_ms(50);
         return;
     }
     if(distance > 20) {
         // random move 30-50%
-        move_lower_servo(random(20)+30);
+        box_servomanager->move_lower_servo_to_percent(random(20)+30);
         box::Main::wait_ms(random(750)+250);
         return;
     }
     if(distance > 10) {
         // random move 50-70%
-        move_lower_servo(random(20)+50);
+        box_servomanager->move_lower_servo_to_percent(random(20)+50);
         box::Main::wait_ms(random(750)+250);
         return;
     }
-    move_lower_servo(100);
+    box_servomanager->move_lower_servo_to_percent(100);
     box::Main::wait_ms(250);
     return;
 }
@@ -93,18 +88,18 @@ void box::Main::run_mode_awareness(int distance) {
 void box::Main::run_mode_reset() {
     switch (run_mode_reset_step) {
         case 0:
-            move_servos(0,100);
+            box_servomanager->move_servos_to_percent(0,100);
             box::Main::wait_ms(400);
             run_mode_reset_step = 1;
             return;
         case 1:
-            move_upper_servo(0);
+            box_servomanager->move_upper_servo_to_percent(0);
             if(random(100) < 75) {
                 box_mode = MODE_AWARENESS;
             } else {
                 box_mode = MODE_NORMAL;
             }
-            if(change_vice_versa_mode) {
+            if(should_change_to_vice_versa_mode) {
                 run_mode_reset_step = 2;
             } else {
                 run_mode_reset_step = 0;
@@ -112,8 +107,8 @@ void box::Main::run_mode_reset() {
             box::Main::wait_ms(400);
             return;
         case 2:
-            move_vice_versa = !move_vice_versa;
-            change_vice_versa_mode = false;
+            box_servomanager->change_vise_versa_mode();
+            should_change_to_vice_versa_mode = false;
             run_mode_reset_step = 0;
             return;
         default:
@@ -127,29 +122,3 @@ void box::Main::wait_ms(int wait_ms) {
     wait_delay = wait_ms;
 }
 
-void box::Main::move_lower_servo(int percentage) {
-    move_servos(percentage, -1);
-}
-
-void box::Main::move_upper_servo(int percentage) {
-    move_servos(-1, percentage);
-}
-
-void box::Main::move_servos(int percentage_lower,
-                            int percentage_upper) {
-    if(move_vice_versa) {
-        if(percentage_lower != -1) {
-            box_upper_servo->move_to_percent(percentage_lower);
-        }
-        if(percentage_upper != -1) {
-            box_lower_servo->move_to_percent(percentage_upper);
-        }
-    } else {
-        if(percentage_lower != -1) {
-            box_lower_servo->move_to_percent(percentage_lower);
-        }
-        if(percentage_upper != -1) {
-            box_upper_servo->move_to_percent(percentage_upper);
-        }
-    }
-}

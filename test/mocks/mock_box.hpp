@@ -5,12 +5,23 @@
 #include "gtest/gtest.h"
 #include <box_switch.hpp>
 #include <box_servomotor.hpp>
+#include <box_servomanager.hpp>
 #include <box_sonar.hpp>
 
-class BoxServoMock : public box::Servomotor{
+class BoxServoMock : public box::Servomotor {
   public:
     BoxServoMock() : box::Servomotor(0,false,1,2) {}
     MOCK_METHOD1(move_to_percent, void(int));
+};
+
+class BoxServoManagerMock : public box::Servomanager {
+  public:
+    BoxServoManagerMock() : box::Servomanager(NULL,NULL) {}
+    MOCK_METHOD1(move_lower_servo_to_percent, void(int));
+    MOCK_METHOD1(move_upper_servo_to_percent, void(int));
+    MOCK_METHOD2(move_servos_to_percent, void(int, int));
+    MOCK_METHOD0(is_no_box_action, bool());
+    MOCK_METHOD0(change_vise_versa_mode, bool());
 };
 
 class BoxSonarMock : public box::Sonar{
@@ -28,5 +39,6 @@ class BoxSwitchMock : public box::Switch {
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
 ::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
 ::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
-::testing::NiceMock<BoxServoMock>* box_upper_switch_mock;
+::testing::NiceMock<BoxServoMock>* box_upper_servo_mock;
+::testing::NiceMock<BoxServoManagerMock>* box_servomanager;
 #endif // MOCK_BOX_SWITCH_HPP_
