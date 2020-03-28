@@ -15,7 +15,7 @@ class Servomotor {
     int max_peak_angle;
     int speed_delay_ms;
     bool clockwise;
-    virtual void set_angle(int);
+    void set_angle(int);
 
   public:
     Servomotor(int pin_pwm_servomotor, bool clockwise,

@@ -42,6 +42,12 @@ class TestMain : public ::testing::Test {
         delete box_switch_mock;
         delete arduino_mock;
     }
+
+    virtual void simulate_user_action() {
+        EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(true));
+        EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).Times(AtLeast(1)).WillRepeatedly(Return(true));
+        EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed()).Times(1);
+    }
 };
 
 /**************************************************************************************************
@@ -52,8 +58,9 @@ class TestMain : public ::testing::Test {
  */
 TEST_F(TestMain, test_main_init) { EXPECT_TRUE(true); }
 
-// TEST_F(TestMain, test_main_reset_on_switchchange) {
-//     EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(0));
-//     EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).Times(1).WillOnce(Return(false));
-//     main_under_test->run();
-// }
+TEST_F(TestMain, test_main_reset_on_useraction) {
+    EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(true));
+    EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).WillRepeatedly(Return(true));
+    EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed()).Times(1);
+    main_under_test->run();
+}

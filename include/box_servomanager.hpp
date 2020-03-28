@@ -16,13 +16,13 @@ class Servomanager {
     Servomanager(box::Servomotor* box_lower_servo,
                  box::Servomotor* box_upper_servo);
     virtual ~Servomanager();
-    void move_lower_servo_to_percent(int percentage);
-    void move_upper_servo_to_percent(int percentage);
-    void move_servos_to_percent(int percentage_lower,
+    virtual void move_lower_servo_to_percent(int percentage);
+    virtual void move_upper_servo_to_percent(int percentage);
+    virtual void move_servos_to_percent(int percentage_lower,
                                 int percentage_upper);
-    bool is_no_box_action();
-    bool change_vise_versa_if_required_and_return_is_changed();
-    void random_select_if_vice_versa_mode_should_be_changed();
+    virtual bool is_no_box_action();
+    virtual bool change_vise_versa_if_required_and_return_is_changed();
+    virtual void random_select_if_vice_versa_mode_should_be_changed();
 };
 }
 
