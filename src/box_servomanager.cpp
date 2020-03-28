@@ -12,6 +12,7 @@ box::Servomanager::Servomanager(box::Servomotor* box_lower_servo,
     box::Servomanager::box_lower_servo = box_lower_servo;
     box::Servomanager::box_upper_servo = box_upper_servo;
     move_vice_versa = false;
+    should_change_to_vice_versa_mode = false;
 }
 box::Servomanager::~Servomanager() {
 }
@@ -43,11 +44,22 @@ void box::Servomanager::move_servos_to_percent(int percentage_lower,
     }
 }
 
-void box::Servomanager::change_vise_versa_mode() {
+bool box::Servomanager::change_vise_versa_if_required_and_return_is_changed() {
+    if(should_change_to_vice_versa_mode) {
         move_vice_versa = !move_vice_versa;
+        should_change_to_vice_versa_mode = false;
+        return true;
+    }
+    return false;
 }
 
-bool box::Servomanager::is_user_action() {
+void box::Servomanager::random_select_if_vice_versa_mode_should_be_changed() {
+    if(random(50) > 50) {
+        should_change_to_vice_versa_mode = true;
+    }
+}
+
+bool box::Servomanager::is_no_box_action() {
     if(box_upper_servo->get_last_percentage() >= 100) {
         return false;
     }

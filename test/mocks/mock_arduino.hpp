@@ -7,7 +7,6 @@
 
 class ArduinoMock {
   public:
-    MOCK_METHOD1(random, long(long));
     MOCK_METHOD2(digitalWrite, void(int, int));
     MOCK_METHOD1(digitalRead, int(int));
     MOCK_METHOD2(analogWrite, void(int, int));
@@ -22,6 +21,7 @@ class ArduinoMock {
     MOCK_METHOD3(pulseIn, unsigned long(int pin, int state, unsigned long timeout));
     MOCK_METHOD5(map, long(long, long, long, long, long));
     MOCK_METHOD2(pinMode, void(int, int));
+    MOCK_METHOD1(random, long(long));
 };
 
 /**
@@ -79,5 +79,7 @@ extern "C" {
     return arduino_mock->pulseIn(pin, state, timeout);
   }
 }
+
+
 
 #endif // MOCK_ARDUINO_HPP_

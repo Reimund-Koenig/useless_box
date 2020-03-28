@@ -51,7 +51,9 @@ TEST_F(TestServomanager, test_servomanager_move_lower_servo_percentage) {
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
     servomanager_under_test->move_lower_servo_to_percent(50);
      // otherway arround
-    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(49));
+    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
+    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result)).Times(1);
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
     servomanager_under_test->move_lower_servo_to_percent(50);
@@ -63,7 +65,9 @@ TEST_F(TestServomanager, test_servomanager_move_upper_servo_percentage) {
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
     servomanager_under_test->move_upper_servo_to_percent(50);
      // otherway arround
-    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(49));
+    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
+    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result)).Times(1);
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
     servomanager_under_test->move_upper_servo_to_percent(50);
@@ -76,29 +80,33 @@ TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_upper)).Times(1);
     servomanager_under_test->move_servos_to_percent(42, 50);
      // otherway arround
-    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(49));
+    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
+    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_lower)).Times(1);
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_upper)).Times(1);
     servomanager_under_test->move_servos_to_percent(42, 50);
     // otherway arround
-    servomanager_under_test->change_vise_versa_mode();
+    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(49));
+    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
+    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_lower)).Times(1);
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_upper)).Times(1);
     servomanager_under_test->move_servos_to_percent(42, 50);
 }
 
-TEST_F(TestServomanager, test_servomanager_is_user_action) {
+TEST_F(TestServomanager, test_servomanager_is_no_box_action) {
     int expected_result = 50;
     EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
     EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
-    EXPECT_FALSE(servomanager_under_test->is_user_action());
+    EXPECT_FALSE(servomanager_under_test->is_no_box_action());
     EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
     EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
-    EXPECT_FALSE(servomanager_under_test->is_user_action());
+    EXPECT_FALSE(servomanager_under_test->is_no_box_action());
     EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
     EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
-    EXPECT_FALSE(servomanager_under_test->is_user_action());
+    EXPECT_FALSE(servomanager_under_test->is_no_box_action());
     EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(99));
     EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(99));
-    EXPECT_TRUE(servomanager_under_test->is_user_action());
+    EXPECT_TRUE(servomanager_under_test->is_no_box_action());
 }

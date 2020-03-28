@@ -21,7 +21,6 @@ class Main {
     void run_mode_normal();
     unsigned long last_time;
     unsigned long wait_delay;
-    bool should_change_to_vice_versa_mode;
 
   public:
     Main(box::Switch* box_switch,

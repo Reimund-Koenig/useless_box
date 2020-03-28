@@ -21,7 +21,7 @@ class BoxServoManagerMock : public box::Servomanager {
     MOCK_METHOD1(move_lower_servo_to_percent, void(int));
     MOCK_METHOD1(move_upper_servo_to_percent, void(int));
     MOCK_METHOD2(move_servos_to_percent, void(int, int));
-    MOCK_METHOD0(is_user_action, bool());
+    MOCK_METHOD0(is_no_box_action, bool());
     MOCK_METHOD0(change_vise_versa_mode, bool());
 };
 
@@ -41,5 +41,5 @@ class BoxSwitchMock : public box::Switch {
 ::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
 ::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
 ::testing::NiceMock<BoxServoMock>* box_upper_servo_mock;
-::testing::NiceMock<BoxServoManagerMock>* box_servomanager;
+::testing::NiceMock<BoxServoManagerMock>* box_servomanager_mock;
 #endif // MOCK_BOX_SWITCH_HPP_

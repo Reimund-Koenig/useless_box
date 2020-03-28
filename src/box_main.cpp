@@ -21,7 +21,6 @@ box::Main::Main(box::Switch* box_switch,
     run_mode_reset_step = 0;
     wait_delay = 0;
     last_time = 0;
-    should_change_to_vice_versa_mode = false;
 }
 
 box::Main::~Main() {
@@ -32,12 +31,10 @@ box::Main::~Main() {
  *************************************************/
 
 void box::Main::run() {
-    // User Action?
-    if(box_switch->has_changed() && box_servomanager->is_user_action()) {
+    if(box_switch->has_changed() &&
+            box_servomanager->is_no_box_action()) {
         box_mode = MODE_RESET;
-        if(random(50) > 50) {
-            should_change_to_vice_versa_mode = true;
-        }
+        box_servomanager->random_select_if_vice_versa_mode_should_be_changed();
     }
     int distance = box_sonar->get_average_distance_cm();
     if ((millis() - last_time) < wait_delay) {
@@ -94,22 +91,15 @@ void box::Main::run_mode_reset() {
             return;
         case 1:
             box_servomanager->move_upper_servo_to_percent(0);
-            if(random(100) < 75) {
-                box_mode = MODE_AWARENESS;
-            } else {
-                box_mode = MODE_NORMAL;
-            }
-            if(should_change_to_vice_versa_mode) {
-                run_mode_reset_step = 2;
-            } else {
-                run_mode_reset_step = 0;
-            }
-            box::Main::wait_ms(400);
-            return;
-        case 2:
-            box_servomanager->change_vise_versa_mode();
-            should_change_to_vice_versa_mode = false;
             run_mode_reset_step = 0;
+            box::Main::wait_ms(400);
+            if(!box_servomanager->change_vise_versa_if_required_and_return_is_changed()) {
+                if(random(100) < 75) {
+                    box_mode = MODE_AWARENESS;
+                } else {
+                    box_mode = MODE_NORMAL;
+                }
+            }
             return;
         default:
             run_mode_reset_step = 0;
