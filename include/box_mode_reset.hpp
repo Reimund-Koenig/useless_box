@@ -20,7 +20,7 @@ class ModeReset {
     ModeReset(box::Servomanager* box_servomanager,
                   box::Wait* box_wait);
     virtual ~ModeReset();
-    virtual void run();
+    virtual bool run();
 
 };
 

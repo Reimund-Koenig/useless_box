@@ -15,7 +15,7 @@ class Main {
 
   private:
     int box_mode;
-    int run_mode_reset_step;
+    bool is_reset_finished;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomanager* box_servomanager;
@@ -23,9 +23,7 @@ class Main {
     box::ModeAwareness* box_mode_awareness;
     box::ModeNormal* box_mode_normal;
     box::ModeReset* box_mode_reset;
-    void run_mode_reset();
-    void run_mode_awareness(int distance);
-    void run_mode_normal();
+    void select_new_box_mode();
 
   public:
     Main(box::Switch* box_switch,

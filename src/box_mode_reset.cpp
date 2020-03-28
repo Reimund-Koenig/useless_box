@@ -17,27 +17,20 @@ box::ModeReset::~ModeReset() {
  * Public Methods
  *************************************************/
 
-void box::ModeReset::run() {
+bool box::ModeReset::run() {
     switch (run_mode_reset_step) {
         case 0:
             box_servomanager->move_servos_to_percent(0,100);
             box_wait->milliseconds(400);
             run_mode_reset_step = 1;
-            return;
+            return false; // not finished
         case 1:
             box_servomanager->move_upper_servo_to_percent(0);
             run_mode_reset_step = 0;
             box_wait->milliseconds(400);
-            if(!box_servomanager->change_vise_versa_if_required_and_return_is_changed()) {
-                // if(random(100) < 75) {
-                    // box_mode = MODE_AWARENESS;
-                // } else {
-                    // box_mode = MODE_NORMAL;
-                // }
-            }
-            return;
+            return true; // finished
         default:
             run_mode_reset_step = 0;
-            break;
+            return true; // finished
     }
 }
