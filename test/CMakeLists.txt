@@ -69,6 +69,8 @@ add_library(uselessbox
     ${BOX_SRC}/box_button.cpp
     ${BOX_SRC}/box_systemtest.cpp
     ${BOX_SRC}/box_mode_awareness.cpp
+    ${BOX_SRC}/box_mode_normal.cpp
+    ${BOX_SRC}/box_mode_reset.cpp
     ${BOX_SRC}/box_wait.cpp
 )
 target_include_directories(uselessbox PRIVATE ${BOX_INCLUDE})
@@ -86,5 +88,7 @@ register_test(ut_box_sonar)
 register_test(ut_box_button)
 register_test(ut_box_systemtest)
 register_test(ut_box_mode_awareness)
+register_test(ut_box_mode_normal)
+register_test(ut_box_mode_reset)
 register_test(ut_box_wait)
 

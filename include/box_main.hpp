@@ -6,6 +6,8 @@
 #include "box_switch.hpp"
 #include "box_wait.hpp"
 #include "box_mode_awareness.hpp"
+#include "box_mode_normal.hpp"
+#include "box_mode_reset.hpp"
 
 namespace box {
 
@@ -19,6 +21,8 @@ class Main {
     box::Servomanager* box_servomanager;
     box::Wait* box_wait;
     box::ModeAwareness* box_mode_awareness;
+    box::ModeNormal* box_mode_normal;
+    box::ModeReset* box_mode_reset;
     void run_mode_reset();
     void run_mode_awareness(int distance);
     void run_mode_normal();

@@ -1,6 +1,8 @@
 #include "ardunio_namespace.h" // needed for arduino build
 #include "box_main.hpp"
 #include "box_mode_awareness.hpp"
+#include "box_mode_reset.hpp"
+#include "box_mode_normal.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
@@ -20,6 +22,8 @@ box::Main::Main(box::Switch* box_switch,
     run_mode_reset_step = 0;
     box_wait = new box::Wait();
     box_mode_awareness = new box::ModeAwareness(box_servomanager, box_wait);
+    box_mode_reset = new box::ModeReset(box_servomanager, box_wait);
+    box_mode_normal = new box::ModeNormal(box_servomanager, box_wait);
 }
 
 box::Main::~Main() {
@@ -41,13 +45,13 @@ void box::Main::run() {
     }
     switch (box_mode) {
         case MODE_RESET:
-            run_mode_reset();
+            box_mode_reset->run();
             break;
         case MODE_AWARENESS:
             box_mode_awareness->run(distance);
             break;
         case MODE_NORMAL:
-            run_mode_normal();
+            box_mode_normal->run();
             break;
         default:
             break;
@@ -55,30 +59,4 @@ void box::Main::run() {
 }
 
 void box::Main::run_mode_normal() {
-    box_wait->milliseconds(50);
-}
-
-void box::Main::run_mode_reset() {
-    switch (run_mode_reset_step) {
-        case 0:
-            box_servomanager->move_servos_to_percent(0,100);
-            box_wait->milliseconds(400);
-            run_mode_reset_step = 1;
-            return;
-        case 1:
-            box_servomanager->move_upper_servo_to_percent(0);
-            run_mode_reset_step = 0;
-            box_wait->milliseconds(400);
-            if(!box_servomanager->change_vise_versa_if_required_and_return_is_changed()) {
-                if(random(100) < 75) {
-                    box_mode = MODE_AWARENESS;
-                } else {
-                    box_mode = MODE_NORMAL;
-                }
-            }
-            return;
-        default:
-            run_mode_reset_step = 0;
-            break;
-    }
 }

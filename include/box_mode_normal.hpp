@@ -1,5 +1,5 @@
-#ifndef BOX_AWARENESS_HPP_
-#define BOX_AWARENESS_HPP_
+#ifndef BOX_NORMAL_HPP_
+#define BOX_NORMAL_HPP_
 
 #include "box_servomanager.hpp"
 #include "box_sonar.hpp"
@@ -8,20 +8,21 @@
 
 namespace box {
 
-class ModeAwareness {
+class ModeNormal {
 
   private:
     box::Servomanager* box_servomanager;
     box::Wait* box_wait;
+    void run_mode_reset();
 
   public:
-    ModeAwareness(box::Servomanager* box_servomanager,
+    ModeNormal(box::Servomanager* box_servomanager,
                   box::Wait* box_wait);
-    virtual ~ModeAwareness();
-    virtual void run(int distance);
+    virtual ~ModeNormal();
+    virtual void run();
 
 };
 
 } // namespace box
 
-#endif // BOX_AWARENESS_HPP_
+#endif // BOX_NORMAL_HPP_
