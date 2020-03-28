@@ -59,8 +59,6 @@ class TestMain : public ::testing::Test {
 TEST_F(TestMain, test_main_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestMain, test_main_reset_on_useraction) {
-    EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).WillRepeatedly(Return(true));
-    EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed()).Times(1);
+    simulate_user_action();
     main_under_test->run();
 }
