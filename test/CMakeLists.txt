@@ -59,6 +59,7 @@ enable_testing()
 # Add sources to library to reduce build times
 #************************************************
 add_library(uselessbox
+    ${BOX_SRC}/box_main.cpp
     ${BOX_SRC}/box_controller.cpp
     ${BOX_SRC}/box_gearmotor.cpp
     ${BOX_SRC}/box_switch.cpp
