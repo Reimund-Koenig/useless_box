@@ -9,7 +9,7 @@ box::Switch::Switch(int pin_switch) {
     box::Switch::pin_switch = pin_switch;
     pinMode(pin_switch, INPUT_PULLUP);
     last_state = digitalRead(box::Switch::pin_switch);
-    m_has_changed = is_high();
+    m_has_changed = false;
 }
 
 box::Switch::~Switch() {

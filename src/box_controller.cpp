@@ -20,7 +20,7 @@ box::Controller::Controller(box::Switch* box_switch,
     box::Controller::box_wait = box_wait;
     box::Controller::box_mode_manager = box_mode_manager;
     randomSeed(analogRead(0));
-    box_mode = MODE_RESET;
+    box_mode = MODE_STARTUP;
     is_reset_finished = false;
 }
 

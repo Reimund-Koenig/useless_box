@@ -94,15 +94,15 @@ class TestController : public ::testing::Test {
 
 TEST_F(TestController, test_controller_init) { EXPECT_TRUE(true); }
 
-// TEST_F(TestController, test_controller_startup_switch_high) {
-//     get_average_distance_cm_is_called(1,70);
-//     move_steps_is_called(1);
-//     startup_switch_high_is_called(1);
-//     is_free_is_called(1, true);
-//     select_new_box_mode_is_called(0);
-//     mode_reset_is_called(1,true);
-//     controller_under_test->run();
-// }
+TEST_F(TestController, test_controller_startup_switch_high) {
+    get_average_distance_cm_is_called(1,70);
+    move_steps_is_called(1);
+    startup_switch_high_is_called(1);
+    is_free_is_called(1, true);
+    select_new_box_mode_is_called(0);
+    mode_reset_is_called(1,true);
+    controller_under_test->run();
+}
 
 // TEST_F(TestController, test_controller_startup_switch_low) {
 //     get_average_distance_cm_is_called(1,70);
