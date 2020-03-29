@@ -23,8 +23,8 @@ class Sonar {
   public:
     Sonar(int trigger, int echo);
     virtual ~Sonar();
-    unsigned int  get_distance_cm();
-    unsigned int  get_average_distance_cm();
+    virtual unsigned int  get_distance_cm();
+    virtual unsigned int  get_average_distance_cm();
 };
 
 } // namespace box

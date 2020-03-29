@@ -14,8 +14,13 @@ box::Servomanager::Servomanager(box::Servomotor* box_lower_servo,
     move_vice_versa = false;
     should_change_to_vice_versa_mode = false;
 }
+
 box::Servomanager::~Servomanager() {
 }
+
+/*************************************************************************************************
+ * Public Methods
+ *************************************************/
 
 void box::Servomanager::move_lower_servo_to_percent(int percentage) {
     move_servos_to_percent(percentage, -1);
@@ -57,6 +62,12 @@ void box::Servomanager::random_select_if_vice_versa_mode_should_be_changed() {
     if(random(50) > 50) {
         should_change_to_vice_versa_mode = true;
     }
+}
+
+void box::Servomanager::move_steps(int speed) {
+    // ToDo Implement Servomotor speed and
+    //      call it here for both motors
+    return;
 }
 
 bool box::Servomanager::is_no_box_action() {

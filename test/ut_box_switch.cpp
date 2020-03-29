@@ -33,13 +33,17 @@ class TestSwitch : public ::testing::Test {
 
 TEST_F(TestSwitch, test_switch_init) { EXPECT_TRUE(true); }
 
-TEST_F(TestSwitch, test_switch_state_high) {
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
+TEST_F(TestSwitch, test_switch_test_startup_high) {
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(3).WillRepeatedly(Return(HIGH));
+    EXPECT_TRUE(switch_under_test->has_changed());
+    EXPECT_FALSE(switch_under_test->has_changed());
     EXPECT_TRUE(switch_under_test->is_high());
 }
 
-TEST_F(TestSwitch, test_switch_state_low) {
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
+TEST_F(TestSwitch, test_switch_test_startup_low) {
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(3).WillRepeatedly(Return(LOW));
+    EXPECT_FALSE(switch_under_test->has_changed());
+    EXPECT_FALSE(switch_under_test->has_changed());
     EXPECT_FALSE(switch_under_test->is_high());
 }
 

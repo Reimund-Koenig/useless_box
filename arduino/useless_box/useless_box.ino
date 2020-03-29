@@ -3,6 +3,10 @@
 #include "box_switch.hpp"
 #include "box_sonar.hpp"
 #include "box_servomotor.hpp"
+#include "box_wait.hpp"
+#include "box_mode_normal.hpp"
+#include "box_mode_awareness.hpp"
+#include "box_mode_reset.hpp"
 
 
 #define LOWER_SERVO_PWM 9
@@ -25,6 +29,11 @@ box::Servomanager* box_servomanager;
 box::Servomotor* box_lower_servo;
 box::Servomotor* box_upper_servo;
 
+box::Wait* box_wait;
+box::ModeAwareness box_mode_awareness;
+box::ModeReset box_mode_reset;
+box::ModeNormal box_mode_normal;
+
 void setup() {
     box_lower_servo = new box::Servomotor(
                         LOWER_SERVO_PWM, LOWER_SERVO_CLOCKWISE,
@@ -36,6 +45,10 @@ void setup() {
     box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
     box_switch = new box::Switch(PIN_SWITCH);
 
+    box_wait = new box::Wait();
+    box_mode_awareness = new box::ModeAwareness(box_servomanager, box_wait);
+    box_mode_reset = new box::ModeReset(box_servomanager, box_wait);
+    box_mode_normal = new box::ModeNormal(box_servomanager, box_wait);
 
     box_main = new box::Main(box_switch, box_sonar,
                              box_servomanager);

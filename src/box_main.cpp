@@ -13,17 +13,21 @@ using namespace arduino;
 
 box::Main::Main(box::Switch* box_switch,
                 box::Sonar* box_sonar,
-                box::Servomanager* box_servomanager) {
+                box::Servomanager* box_servomanager,
+                box::Wait* box_wait,
+                box::ModeReset* box_mode_reset,
+                box::ModeNormal* box_mode_normal,
+                box::ModeAwareness* box_mode_awareness) {
     box::Main::box_switch = box_switch;
     box::Main::box_sonar = box_sonar;
     box::Main::box_servomanager = box_servomanager;
+    box::Main::box_wait = box_wait;
+    box::Main::box_mode_reset = box_mode_reset;
+    box::Main::box_mode_awareness = box_mode_awareness;
+    box::Main::box_mode_normal = box_mode_normal;
     randomSeed(analogRead(0));
     box_mode = MODE_RESET;
     is_reset_finished = false;
-    box_wait = new box::Wait();
-    box_mode_awareness = new box::ModeAwareness(box_servomanager, box_wait);
-    box_mode_reset = new box::ModeReset(box_servomanager, box_wait);
-    box_mode_normal = new box::ModeNormal(box_servomanager, box_wait);
 }
 
 box::Main::~Main() {
@@ -35,13 +39,14 @@ box::Main::~Main() {
 
 void box::Main::run() {
     int distance = box_sonar->get_average_distance_cm();
+    box_servomanager->move_steps(5);
     if(box_switch->has_changed()) {
         box_mode = MODE_RESET;
         if(box_servomanager->is_no_box_action()){
             box_servomanager->random_select_if_vice_versa_mode_should_be_changed();
         }
     }
-    if (box_wait->is_free()) { return; }
+    if (!box_wait->is_free()) { return; }
     if (is_reset_finished) { select_new_box_mode(); }
     switch (box_mode) {
         case MODE_RESET:        is_reset_finished = box_mode_reset->run();  return;

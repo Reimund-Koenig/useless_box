@@ -16,6 +16,7 @@ class Servomanager {
     Servomanager(box::Servomotor* box_lower_servo,
                  box::Servomotor* box_upper_servo);
     virtual ~Servomanager();
+    virtual void move_steps(int speed);
     virtual void move_lower_servo_to_percent(int percentage);
     virtual void move_upper_servo_to_percent(int percentage);
     virtual void move_servos_to_percent(int percentage_lower,

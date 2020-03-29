@@ -28,7 +28,11 @@ class Main {
   public:
     Main(box::Switch* box_switch,
          box::Sonar* box_sonar,
-         box::Servomanager* box_servomanager);
+         box::Servomanager* box_servomanager,
+         box::Wait* box_wait,
+         box::ModeReset* box_mode_reset,
+         box::ModeNormal* box_mode_normal,
+         box::ModeAwareness* box_mode_awareness);
     virtual ~Main();
     virtual void run();
 
