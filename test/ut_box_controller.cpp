@@ -24,11 +24,11 @@ struct Controller_under_test : public box::Controller {
                     box::ModeAwareness* box_mode_awareness)
                     : Controller(box_switch,
                             box_sonar,
-                           box_servomanager,
-                           box_wait,
-                           box_mode_reset,
-                           box_mode_normal,
-                           box_mode_awareness) {}
+                            box_servomanager,
+                            box_wait,
+                            box_mode_reset,
+                            box_mode_normal,
+                            box_mode_awareness) {}
 };
 
 
@@ -63,31 +63,37 @@ class TestController : public ::testing::Test {
         delete box_mode_awareness_mock;
         delete controller_under_test;
     }
+    virtual void select_new_box_mode_is_called(const int n_times) {
+        EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).Times(n_times);
+    }
+    virtual void startup_switch_high_is_called(const int n_times) {
+               EXPECT_CALL(*box_switch_mock, has_changed()).Times(n_times).WillOnce(Return(true));
+        EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).Times(n_times).WillOnce(Return(true));
+        EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed()).Times(n_times);
+    }
+    virtual void get_average_distance_cm_is_called(const int n_times, const int returns) {
+        EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).Times(n_times).WillOnce(Return(returns));
+    }
+    virtual void move_steps_is_called(const int n_times) {
+        EXPECT_CALL(*box_servomanager_mock, move_steps(_)).Times(n_times);
+    }
+    virtual void is_free_is_called(const int n_times, const bool returns) {
+        EXPECT_CALL(*box_wait_mock, is_free()).Times(n_times).WillOnce(Return(returns));
+    }
+    virtual void mode_reset_is_called(const int n_times, const bool returns) {
+        EXPECT_CALL(*box_mode_reset_mock, run()).Times(n_times).WillOnce(Return(returns));
+    }
 };
 
 TEST_F(TestController, test_controller_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestController, test_controller_startup_switch_high) {
-    EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).Times(1).WillOnce(Return(70));
-    EXPECT_CALL(*box_servomanager_mock, move_steps(_)).Times(1);
-    EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed()).Times(1);
-    EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).Times(0);
-    EXPECT_CALL(*box_wait_mock, is_free()).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(*box_mode_reset_mock, run()).Times(1).WillOnce(Return(true));
+    get_average_distance_cm_is_called(1,70);
+    move_steps_is_called(1);
+    startup_switch_high_is_called(1);
+    is_free_is_called(1, true);
+    select_new_box_mode_is_called(0);
+    mode_reset_is_called(1,true);
     controller_under_test->run();
 }
-
-// TEST_F(TestController, test_controller_startup_switch_low) {
-//     EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).Times(1).WillOnce(Return(70));
-//     EXPECT_CALL(*box_servomanager_mock, move_steps(_)).Times(1);
-//     EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(false));
-//     EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).Times(0);
-//     EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed()).Times(0);
-//     EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).Times(1);
-//     EXPECT_CALL(*box_wait_mock, is_free()).Times(1).WillOnce(Return(true));
-//     EXPECT_CALL(*box_mode_reset_mock, run()).Times(1).WillOnce(Return(true));
-//     controller_under_test->run();
-// }
 
