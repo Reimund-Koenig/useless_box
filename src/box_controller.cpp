@@ -21,7 +21,7 @@ box::Controller::Controller(box::Switch* box_switch,
     box::Controller::box_mode_manager = box_mode_manager;
     randomSeed(analogRead(0));
     box_mode = MODE_STARTUP;
-    is_reset_finished = false;
+    is_mode_finished = false;
 }
 
 box::Controller::~Controller() {
@@ -35,24 +35,30 @@ void box::Controller::run() {
     int distance = box_sonar->get_average_distance_cm();
     box_servomanager->move_steps(5);
     if(box_switch->has_changed()) {
+        if(box_mode == MODE_STARTUP) { return; }
         box_mode = MODE_RESET;
         if(box_servomanager->is_no_box_action()){
             box_servomanager->random_select_if_vice_versa_mode_should_be_changed();
         }
     }
     if (!box_wait->is_free()) { return; }
-    if (is_reset_finished) { select_new_box_mode(); }
+    if (is_mode_finished) { select_new_box_mode(); }
     switch (box_mode) {
-        case MODE_RESET:        is_reset_finished = box_mode_manager->run_mode_reset();  return;
-        case MODE_AWARENESS:    box_mode_manager->run_mode_awareness(distance);          return;
-        case MODE_NORMAL:       box_mode_manager->run_mode_normal();                     return;
-        case MODE_STARTUP:      box_mode_manager->run_mode_startup();                     return;
-        default:                box_mode = MODE_RESET;                      return;
+        case MODE_RESET:
+            is_mode_finished = box_mode_manager->run_mode_reset(); return;
+        case MODE_AWARENESS:
+            is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
+        case MODE_NORMAL:
+            is_mode_finished = box_mode_manager->run_mode_normal(); return;
+        case MODE_STARTUP:
+            is_mode_finished = box_mode_manager->run_mode_startup(); return;
+        default:
+            box_mode = MODE_RESET; return;
     }
 }
 
 void box::Controller::select_new_box_mode() {
-    is_reset_finished = false;
+    is_mode_finished = false;
     if(box_servomanager->change_vise_versa_if_required_and_return_is_changed()) {
         box_mode = MODE_RESET;
         return;

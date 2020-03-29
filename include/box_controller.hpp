@@ -13,7 +13,7 @@ class Controller {
 
   private:
     int box_mode;
-    bool is_reset_finished;
+    bool is_mode_finished;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomanager* box_servomanager;

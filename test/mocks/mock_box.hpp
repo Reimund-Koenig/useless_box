@@ -52,10 +52,10 @@ class BoxWaitMock : public box::Wait {
 class BoxModeManagerMock : public box::ModeManager {
   public:
     BoxModeManagerMock() : box::ModeManager(NULL,NULL) {}
-    MOCK_METHOD1(run_mode_awareness, void(int));
-    MOCK_METHOD0(run_mode_normal, void());
+    MOCK_METHOD1(run_mode_awareness, bool(int));
+    MOCK_METHOD0(run_mode_normal, bool());
     MOCK_METHOD0(run_mode_reset, bool());
-    MOCK_METHOD0(run_mode_startup, void());
+    MOCK_METHOD0(run_mode_startup, bool());
 };
 
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;

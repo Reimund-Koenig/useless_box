@@ -17,6 +17,7 @@ box::ModeStartup::~ModeStartup() {
  * Public Methods
  *************************************************/
 
-void box::ModeStartup::run() {
+bool box::ModeStartup::run() {
     box_wait->milliseconds(50);
+    return false; // TODO change run ... currently endless mode
 }

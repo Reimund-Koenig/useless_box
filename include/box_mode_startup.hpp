@@ -19,7 +19,7 @@ class ModeStartup {
     ModeStartup(box::Servomanager* box_servomanager,
                   box::Wait* box_wait);
     virtual ~ModeStartup();
-    virtual void run();
+    virtual bool run();
 
 };
 
