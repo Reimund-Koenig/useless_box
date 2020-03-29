@@ -25,19 +25,13 @@ box::Main::Main() {
     box_switch = new box::Switch(PIN_SWITCH);
 
     box_wait = new box::Wait();
-    box_mode_awareness = new box::ModeAwareness(box_servomanager, box_wait);
-    box_mode_reset = new box::ModeReset(box_servomanager, box_wait);
-    box_mode_normal = new box::ModeNormal(box_servomanager, box_wait);
-    box_mode_startup = new box::ModeStartup(box_servomanager, box_wait);
+    box_mode_manager = new box::ModeManager(box_servomanager, box_wait);
 
     box_controller = new box::Controller(box_switch,
                                             box_sonar,
                                             box_servomanager,
                                             box_wait,
-                                            box_mode_reset,
-                                            box_mode_normal,
-                                            box_mode_awareness,
-                                            box_mode_startup);
+                                            box_mode_manager);
     randomSeed(analogRead(0));
 }
 

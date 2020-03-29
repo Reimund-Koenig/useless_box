@@ -73,6 +73,7 @@ add_library(uselessbox
     ${BOX_SRC}/box_mode_normal.cpp
     ${BOX_SRC}/box_mode_reset.cpp
     ${BOX_SRC}/box_mode_startup.cpp
+    ${BOX_SRC}/box_mode_manager.cpp
     ${BOX_SRC}/box_wait.cpp
 )
 target_include_directories(uselessbox PRIVATE ${BOX_INCLUDE})

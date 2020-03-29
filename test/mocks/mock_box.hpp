@@ -8,10 +8,7 @@
 #include <box_servomanager.hpp>
 #include <box_sonar.hpp>
 #include <box_wait.hpp>
-#include <box_mode_reset.hpp>
-#include <box_mode_awareness.hpp>
-#include <box_mode_normal.hpp>
-#include <box_mode_startup.hpp>
+#include <box_mode_manager.hpp>
 
 class BoxServoMock : public box::Servomotor {
   public:
@@ -52,28 +49,13 @@ class BoxWaitMock : public box::Wait {
     MOCK_METHOD0(is_free, bool());
 };
 
-class BoxModeResetMock : public box::ModeReset {
+class BoxModeManagerMock : public box::ModeManager {
   public:
-    BoxModeResetMock() : box::ModeReset(NULL,NULL) {}
-    MOCK_METHOD0(run, bool());
-};
-
-class BoxModeAwarenessMock : public box::ModeAwareness {
-  public:
-    BoxModeAwarenessMock() : box::ModeAwareness(NULL,NULL) {}
-    MOCK_METHOD0(run, void());
-};
-
-class BoxModeNormalMock : public box::ModeNormal {
-  public:
-    BoxModeNormalMock() : box::ModeNormal(NULL,NULL) {}
-    MOCK_METHOD0(run, void());
-};
-
-class BoxModeStartupMock : public box::ModeStartup {
-  public:
-    BoxModeStartupMock() : box::ModeStartup(NULL,NULL) {}
-    MOCK_METHOD0(run, void());
+    BoxModeManagerMock() : box::ModeManager(NULL,NULL) {}
+    MOCK_METHOD1(run_mode_awareness, void(int));
+    MOCK_METHOD0(run_mode_normal, void());
+    MOCK_METHOD0(run_mode_reset, bool());
+    MOCK_METHOD0(run_mode_startup, void());
 };
 
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
@@ -82,9 +64,6 @@ class BoxModeStartupMock : public box::ModeStartup {
 ::testing::NiceMock<BoxServoMock>* box_upper_servo_mock;
 ::testing::NiceMock<BoxServoManagerMock>* box_servomanager_mock;
 ::testing::NiceMock<BoxWaitMock>* box_wait_mock;
-::testing::NiceMock<BoxModeResetMock>* box_mode_reset_mock;
-::testing::NiceMock<BoxModeAwarenessMock>* box_mode_awareness_mock;
-::testing::NiceMock<BoxModeNormalMock>* box_mode_normal_mock;
-::testing::NiceMock<BoxModeStartupMock>* box_mode_startup_mock;
+::testing::NiceMock<BoxModeManagerMock>* box_mode_manager_mock;
 
 #endif // MOCK_BOX_SWITCH_HPP_

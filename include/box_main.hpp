@@ -6,10 +6,7 @@
 #include "box_sonar.hpp"
 #include "box_switch.hpp"
 #include "box_wait.hpp"
-#include "box_mode_awareness.hpp"
-#include "box_mode_normal.hpp"
-#include "box_mode_reset.hpp"
-#include "box_mode_startup.hpp"
+#include "box_mode_manager.hpp"
 
 namespace box {
 
@@ -23,10 +20,7 @@ class Main {
     box::Servomotor* box_upper_servo;
     box::Servomanager* box_servomanager;
     box::Wait* box_wait;
-    box::ModeAwareness* box_mode_awareness;
-    box::ModeNormal* box_mode_normal;
-    box::ModeReset* box_mode_reset;
-    box::ModeStartup* box_mode_startup;
+    box::ModeManager* box_mode_manager;
     box::Controller* box_controller;
 };
 

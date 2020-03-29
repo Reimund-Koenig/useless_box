@@ -5,10 +5,7 @@
 #include "box_sonar.hpp"
 #include "box_switch.hpp"
 #include "box_wait.hpp"
-#include "box_mode_awareness.hpp"
-#include "box_mode_normal.hpp"
-#include "box_mode_reset.hpp"
-#include "box_mode_startup.hpp"
+#include "box_mode_manager.hpp"
 
 namespace box {
 
@@ -21,10 +18,7 @@ class Controller {
     box::Switch* box_switch;
     box::Servomanager* box_servomanager;
     box::Wait* box_wait;
-    box::ModeAwareness* box_mode_awareness;
-    box::ModeNormal* box_mode_normal;
-    box::ModeReset* box_mode_reset;
-    box::ModeStartup* box_mode_startup;
+    box::ModeManager* box_mode_manager;
     void select_new_box_mode();
 
   public:
@@ -32,10 +26,7 @@ class Controller {
          box::Sonar* box_sonar,
          box::Servomanager* box_servomanager,
          box::Wait* box_wait,
-         box::ModeReset* box_mode_reset,
-         box::ModeNormal* box_mode_normal,
-         box::ModeAwareness* box_mode_awareness,
-         box::ModeStartup* box_mode_startup);
+         box::ModeManager* box_mode_manager);
     virtual ~Controller();
     virtual void run();
 
