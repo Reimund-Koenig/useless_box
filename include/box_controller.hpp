@@ -8,6 +8,7 @@
 #include "box_mode_awareness.hpp"
 #include "box_mode_normal.hpp"
 #include "box_mode_reset.hpp"
+#include "box_mode_startup.hpp"
 
 namespace box {
 
@@ -23,6 +24,7 @@ class Controller {
     box::ModeAwareness* box_mode_awareness;
     box::ModeNormal* box_mode_normal;
     box::ModeReset* box_mode_reset;
+    box::ModeStartup* box_mode_startup;
     void select_new_box_mode();
 
   public:
@@ -32,7 +34,8 @@ class Controller {
          box::Wait* box_wait,
          box::ModeReset* box_mode_reset,
          box::ModeNormal* box_mode_normal,
-         box::ModeAwareness* box_mode_awareness);
+         box::ModeAwareness* box_mode_awareness,
+         box::ModeStartup* box_mode_startup);
     virtual ~Controller();
     virtual void run();
 

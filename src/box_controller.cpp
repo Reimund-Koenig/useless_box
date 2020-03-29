@@ -2,14 +2,15 @@
 #include "box_controller.hpp"
 #include "box_mode_awareness.hpp"
 #include "box_mode_reset.hpp"
-#include "box_mode_normal.hpp"
+#include "box_mode_startup.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
 
-#define MODE_RESET 0
-#define MODE_AWARENESS 1
-#define MODE_NORMAL 2
+#define MODE_STARTUP 0
+#define MODE_RESET 1
+#define MODE_AWARENESS 2
+#define MODE_NORMAL 3
 
 box::Controller::Controller(box::Switch* box_switch,
                 box::Sonar* box_sonar,
@@ -17,14 +18,16 @@ box::Controller::Controller(box::Switch* box_switch,
                 box::Wait* box_wait,
                 box::ModeReset* box_mode_reset,
                 box::ModeNormal* box_mode_normal,
-                box::ModeAwareness* box_mode_awareness) {
+                box::ModeAwareness* box_mode_awareness,
+                box::ModeStartup* box_mode_startup) {
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servomanager = box_servomanager;
     box::Controller::box_wait = box_wait;
     box::Controller::box_mode_reset = box_mode_reset;
-    box::Controller::box_mode_awareness = box_mode_awareness;
     box::Controller::box_mode_normal = box_mode_normal;
+    box::Controller::box_mode_awareness = box_mode_awareness;
+    box::Controller::box_mode_startup = box_mode_startup;
     randomSeed(analogRead(0));
     box_mode = MODE_RESET;
     is_reset_finished = false;
@@ -51,7 +54,8 @@ void box::Controller::run() {
     switch (box_mode) {
         case MODE_RESET:        is_reset_finished = box_mode_reset->run();  return;
         case MODE_AWARENESS:    box_mode_awareness->run(distance);          return;
-        case MODE_NORMAL:       box_mode_normal->run();                     return;
+        case MODE_NORMAL:       box_mode_startup->run();                     return;
+        case MODE_STARTUP:       box_mode_startup->run();                     return;
         default:                box_mode = MODE_RESET;                      return;
     }
 }

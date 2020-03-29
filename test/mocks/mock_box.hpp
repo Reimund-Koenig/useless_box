@@ -11,6 +11,7 @@
 #include <box_mode_reset.hpp>
 #include <box_mode_awareness.hpp>
 #include <box_mode_normal.hpp>
+#include <box_mode_startup.hpp>
 
 class BoxServoMock : public box::Servomotor {
   public:
@@ -69,6 +70,12 @@ class BoxModeNormalMock : public box::ModeNormal {
     MOCK_METHOD0(run, void());
 };
 
+class BoxModeStartupMock : public box::ModeStartup {
+  public:
+    BoxModeStartupMock() : box::ModeStartup(NULL,NULL) {}
+    MOCK_METHOD0(run, void());
+};
+
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
 ::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
 ::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
@@ -78,5 +85,6 @@ class BoxModeNormalMock : public box::ModeNormal {
 ::testing::NiceMock<BoxModeResetMock>* box_mode_reset_mock;
 ::testing::NiceMock<BoxModeAwarenessMock>* box_mode_awareness_mock;
 ::testing::NiceMock<BoxModeNormalMock>* box_mode_normal_mock;
+::testing::NiceMock<BoxModeStartupMock>* box_mode_startup_mock;
 
 #endif // MOCK_BOX_SWITCH_HPP_
