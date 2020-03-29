@@ -1,5 +1,5 @@
 #include "ardunio_namespace.h" // needed for arduino build
-#include "box_main.hpp"
+#include "box_controller.hpp"
 #include "box_mode_awareness.hpp"
 #include "box_mode_reset.hpp"
 #include "box_mode_normal.hpp"
@@ -11,33 +11,33 @@ using namespace arduino;
 #define MODE_AWARENESS 1
 #define MODE_NORMAL 2
 
-box::Main::Main(box::Switch* box_switch,
+box::Controller::Controller(box::Switch* box_switch,
                 box::Sonar* box_sonar,
                 box::Servomanager* box_servomanager,
                 box::Wait* box_wait,
                 box::ModeReset* box_mode_reset,
                 box::ModeNormal* box_mode_normal,
                 box::ModeAwareness* box_mode_awareness) {
-    box::Main::box_switch = box_switch;
-    box::Main::box_sonar = box_sonar;
-    box::Main::box_servomanager = box_servomanager;
-    box::Main::box_wait = box_wait;
-    box::Main::box_mode_reset = box_mode_reset;
-    box::Main::box_mode_awareness = box_mode_awareness;
-    box::Main::box_mode_normal = box_mode_normal;
+    box::Controller::box_switch = box_switch;
+    box::Controller::box_sonar = box_sonar;
+    box::Controller::box_servomanager = box_servomanager;
+    box::Controller::box_wait = box_wait;
+    box::Controller::box_mode_reset = box_mode_reset;
+    box::Controller::box_mode_awareness = box_mode_awareness;
+    box::Controller::box_mode_normal = box_mode_normal;
     randomSeed(analogRead(0));
     box_mode = MODE_RESET;
     is_reset_finished = false;
 }
 
-box::Main::~Main() {
+box::Controller::~Controller() {
 }
 
 /*************************************************************************************************
  * Private Methods
  *************************************************/
 
-void box::Main::run() {
+void box::Controller::run() {
     int distance = box_sonar->get_average_distance_cm();
     box_servomanager->move_steps(5);
     if(box_switch->has_changed()) {
@@ -56,7 +56,7 @@ void box::Main::run() {
     }
 }
 
-void box::Main::select_new_box_mode() {
+void box::Controller::select_new_box_mode() {
     is_reset_finished = false;
     if(box_servomanager->change_vise_versa_if_required_and_return_is_changed()) {
         box_mode = MODE_RESET;

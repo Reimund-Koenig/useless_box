@@ -20,7 +20,7 @@ struct Gearmotor_under_test : public box::Gearmotor {
                                      TEST_PIN_BACKWARD) {}
 };
 
-class TestMain : public ::testing::Test {
+class TestController : public ::testing::Test {
   protected:
     Gearmotor_under_test* gearmotor_under_test;
     virtual void SetUp() {
@@ -33,14 +33,14 @@ class TestMain : public ::testing::Test {
     }
 };
 
-TEST_F(TestMain, test_gearmotor_init) { EXPECT_TRUE(true); }
+TEST_F(TestController, test_gearmotor_init) { EXPECT_TRUE(true); }
 
-TEST_F(TestMain, test_gearmotor_defaults) {
+TEST_F(TestController, test_gearmotor_defaults) {
     EXPECT_EQ(gearmotor_under_test->get_direction(), GEARMOTOR_DEFAULT_DIRECTION);
     EXPECT_EQ(gearmotor_under_test->get_speed(), GEARMOTOR_DEFAULT_SPEED);
 }
 
-TEST_F(TestMain, test_gearmotor_speed) {
+TEST_F(TestController, test_gearmotor_speed) {
     EXPECT_CALL(*arduino_mock, analogWrite(TEST_PIN_PWM_SPEED,_)).Times(3);
     gearmotor_under_test->move(GEARMOTOR_DIRECTION_STOP, 142);
     EXPECT_EQ(gearmotor_under_test->get_speed(), 142);
@@ -50,21 +50,21 @@ TEST_F(TestMain, test_gearmotor_speed) {
     EXPECT_EQ(gearmotor_under_test->get_speed(), 255);
 }
 
-TEST_F(TestMain, test_gearmotor_direction_forward) {
+TEST_F(TestController, test_gearmotor_direction_forward) {
     EXPECT_CALL(*arduino_mock, digitalWrite(TEST_PIN_FORWARD,HIGH)).Times(1);
     EXPECT_CALL(*arduino_mock, digitalWrite(TEST_PIN_BACKWARD,LOW)).Times(1);
     gearmotor_under_test->move(GEARMOTOR_DIRECTION_FORWARD, 200);
     EXPECT_EQ(gearmotor_under_test->get_direction(), GEARMOTOR_DIRECTION_FORWARD);
 }
 
-TEST_F(TestMain, test_gearmotor_direction_backward) {
+TEST_F(TestController, test_gearmotor_direction_backward) {
     EXPECT_CALL(*arduino_mock, digitalWrite(TEST_PIN_FORWARD,LOW)).Times(1);
     EXPECT_CALL(*arduino_mock, digitalWrite(TEST_PIN_BACKWARD,HIGH)).Times(1);
     gearmotor_under_test->move(GEARMOTOR_DIRECTION_BACKWARD, 200);
     EXPECT_EQ(gearmotor_under_test->get_direction(), GEARMOTOR_DIRECTION_BACKWARD);
 }
 
-TEST_F(TestMain, test_gearmotor_direction_stop) {
+TEST_F(TestController, test_gearmotor_direction_stop) {
     int possitiv_non_direction_value = 42;
     int negative_non_direction_value = -42;
     EXPECT_CALL(*arduino_mock, digitalWrite(TEST_PIN_FORWARD,LOW)).Times(3);

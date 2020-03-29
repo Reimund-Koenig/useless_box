@@ -6,7 +6,7 @@
 #include "mocks/mock_serial.hpp"
 #include "mocks/mock_box.hpp"
 
-#include "box_main.hpp"
+#include "box_controller.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;
@@ -14,15 +14,15 @@ using ::testing::Eq;
 using ::testing::Return;
 using ::testing::NiceMock;
 
-struct Main_under_test : public box::Main {
-    Main_under_test(box::Switch* box_switch,
+struct Controller_under_test : public box::Controller {
+    Controller_under_test(box::Switch* box_switch,
                     box::Sonar* box_sonar,
                     box::Servomanager* box_servomanager,
                     box::Wait* box_wait,
                     box::ModeReset* box_mode_reset,
                     box::ModeNormal* box_mode_normal,
                     box::ModeAwareness* box_mode_awareness)
-                    : Main(box_switch,
+                    : Controller(box_switch,
                             box_sonar,
                            box_servomanager,
                            box_wait,
@@ -32,9 +32,9 @@ struct Main_under_test : public box::Main {
 };
 
 
-class TestMain : public ::testing::Test {
+class TestController : public ::testing::Test {
       protected:
-    Main_under_test* main_under_test;
+    Controller_under_test* controller_under_test;
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_switch_mock = new NiceMock<BoxSwitchMock>;
@@ -44,7 +44,7 @@ class TestMain : public ::testing::Test {
         box_mode_reset_mock = new NiceMock<BoxModeResetMock>;
         box_mode_normal_mock = new NiceMock<BoxModeNormalMock>;
         box_mode_awareness_mock = new NiceMock<BoxModeAwarenessMock>;
-        main_under_test = new Main_under_test((box::Switch*) box_switch_mock,
+        controller_under_test = new Controller_under_test((box::Switch*) box_switch_mock,
                                               (box::Sonar*) box_sonar_mock,
                                               (box::Servomanager*) box_servomanager_mock,
                                               (box::Wait*) box_wait_mock,
@@ -61,13 +61,13 @@ class TestMain : public ::testing::Test {
         delete box_mode_reset_mock;
         delete box_mode_normal_mock;
         delete box_mode_awareness_mock;
-        delete main_under_test;
+        delete controller_under_test;
     }
 };
 
-TEST_F(TestMain, test_main_init) { EXPECT_TRUE(true); }
+TEST_F(TestController, test_controller_init) { EXPECT_TRUE(true); }
 
-TEST_F(TestMain, test_main_startup_switch_high) {
+TEST_F(TestController, test_controller_startup_switch_high) {
     EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).Times(1).WillOnce(Return(70));
     EXPECT_CALL(*box_servomanager_mock, move_steps(_)).Times(1);
     EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(true));
@@ -76,10 +76,10 @@ TEST_F(TestMain, test_main_startup_switch_high) {
     EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).Times(0);
     EXPECT_CALL(*box_wait_mock, is_free()).Times(1).WillOnce(Return(true));
     EXPECT_CALL(*box_mode_reset_mock, run()).Times(1).WillOnce(Return(true));
-    main_under_test->run();
+    controller_under_test->run();
 }
 
-// TEST_F(TestMain, test_main_startup_switch_low) {
+// TEST_F(TestController, test_controller_startup_switch_low) {
 //     EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).Times(1).WillOnce(Return(70));
 //     EXPECT_CALL(*box_servomanager_mock, move_steps(_)).Times(1);
 //     EXPECT_CALL(*box_switch_mock, has_changed()).Times(1).WillOnce(Return(false));
@@ -88,6 +88,6 @@ TEST_F(TestMain, test_main_startup_switch_high) {
 //     EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).Times(1);
 //     EXPECT_CALL(*box_wait_mock, is_free()).Times(1).WillOnce(Return(true));
 //     EXPECT_CALL(*box_mode_reset_mock, run()).Times(1).WillOnce(Return(true));
-//     main_under_test->run();
+//     controller_under_test->run();
 // }
 

@@ -1,5 +1,5 @@
-#ifndef BOX_MAIN_HPP_
-#define BOX_MAIN_HPP_
+#ifndef BOX_CONTROLLER_HPP_
+#define BOX_CONTROLLER_HPP_
 
 #include "box_servomanager.hpp"
 #include "box_sonar.hpp"
@@ -11,7 +11,7 @@
 
 namespace box {
 
-class Main {
+class Controller {
 
   private:
     int box_mode;
@@ -26,18 +26,18 @@ class Main {
     void select_new_box_mode();
 
   public:
-    Main(box::Switch* box_switch,
+    Controller(box::Switch* box_switch,
          box::Sonar* box_sonar,
          box::Servomanager* box_servomanager,
          box::Wait* box_wait,
          box::ModeReset* box_mode_reset,
          box::ModeNormal* box_mode_normal,
          box::ModeAwareness* box_mode_awareness);
-    virtual ~Main();
+    virtual ~Controller();
     virtual void run();
 
 };
 
 } // namespace box
 
-#endif // BOX_MAIN_HPP_
+#endif // BOX_CONTROLLER_HPP_

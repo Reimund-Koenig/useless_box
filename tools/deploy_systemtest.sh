@@ -14,8 +14,8 @@ rm Servo.h
 rm Serial.h
 rm box_gearmotor.cpp
 rm box_gearmotor.hpp
-rm box_main.cpp
-rm box_main.hpp
+rm box_controller.cpp
+rm box_controller.hpp
 cp /usr/share/arduino/libraries/Servo/Servo.h ./
 cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 make upload clean

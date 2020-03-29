@@ -1,5 +1,5 @@
 #include "ardunio_namespace.h"
-#include "box_main.hpp"
+#include "box_controller.hpp"
 #include "box_switch.hpp"
 #include "box_sonar.hpp"
 #include "box_servomotor.hpp"
@@ -22,7 +22,7 @@
 #define PIN_SWITCH 4
 
 
-box::Main* box_main;
+box::Controller* box_controller;
 box::Switch* box_switch;
 box::Sonar* box_sonar;
 box::Servomanager* box_servomanager;
@@ -50,10 +50,15 @@ void setup() {
     box_mode_reset = new box::ModeReset(box_servomanager, box_wait);
     box_mode_normal = new box::ModeNormal(box_servomanager, box_wait);
 
-    box_main = new box::Main(box_switch, box_sonar,
-                             box_servomanager);
+    box_controller = new box::Controller(box_switch,
+                                         box_sonar,
+                                         box_servomanager,
+                                         box_wait,
+                                         box_mode_reset,
+                                         box_mode_normal,
+                                         box_mode_awareness);
 }
 
 void loop() {
-    box_main->run();
+    box_controller->run();
 }

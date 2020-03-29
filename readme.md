@@ -21,7 +21,7 @@ sudo apt install libgcc-8-dev &&
 sudo apt-get install build-essential &&
 sudo apt-get install g++
 ### Download and install Arduino IDE: https://www.arduino.cc/en/Main/Software
-### Grant access to Serial_Port: 
+### Grant access to Serial_Port:
 * sudo chmod a+rw /dev/ttyACM0
 
 ### Compile code

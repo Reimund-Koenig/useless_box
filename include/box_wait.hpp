@@ -20,4 +20,4 @@ class Wait {
 
 } // namespace box
 
-#endif // BOX_MAIN_HPP_
+#endif // BOX_CONTROLLER_HPP_
