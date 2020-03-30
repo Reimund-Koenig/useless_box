@@ -34,26 +34,21 @@ box::Controller::~Controller() {
 void box::Controller::run() {
     int distance = box_sonar->get_average_distance_cm();
     box_servomanager->move_steps(5);
-    if(box_switch->has_changed()) {
-        if(box_mode == MODE_STARTUP) { return; }
+    bool is_user_switch_interrupt_action = box_switch->has_changed() &&
+                                           box_servomanager->is_no_box_action();
+    if(is_user_switch_interrupt_action) {
         box_mode = MODE_RESET;
-        if(box_servomanager->is_no_box_action()){
-            box_servomanager->random_select_if_vice_versa_mode_should_be_changed();
-        }
+        is_mode_finished = false;
+        box_servomanager->random_select_if_vice_versa_mode_should_be_changed();
     }
     if (!box_wait->is_free()) { return; }
     if (is_mode_finished) { select_new_box_mode(); }
     switch (box_mode) {
-        case MODE_RESET:
-            is_mode_finished = box_mode_manager->run_mode_reset(); return;
-        case MODE_AWARENESS:
-            is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
-        case MODE_NORMAL:
-            is_mode_finished = box_mode_manager->run_mode_normal(); return;
-        case MODE_STARTUP:
-            is_mode_finished = box_mode_manager->run_mode_startup(); return;
-        default:
-            box_mode = MODE_RESET; return;
+    case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;
+    case MODE_AWARENESS:    is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
+    case MODE_NORMAL:       is_mode_finished = box_mode_manager->run_mode_normal(); return;
+    case MODE_STARTUP:      is_mode_finished = box_mode_manager->run_mode_startup(); return;
+    default:                box_mode = MODE_RESET; return;
     }
 }
 
