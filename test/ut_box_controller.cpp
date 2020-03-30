@@ -166,6 +166,24 @@ TEST_F(TestController, test_controller_run) {
     controller_under_test->run();
 }
 
+TEST_F(TestController, test_controller_run_sequence) {
+    InSequence seq;
+    //Startup
+    EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillOnce(Return(70));
+    EXPECT_CALL(*box_servomanager_mock, move_steps(_));
+    EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(70));
+    EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
+    EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).WillOnce(Return(true));
+    controller_under_test->run();
+    EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillOnce(Return(70));
+    EXPECT_CALL(*box_servomanager_mock, move_steps(_));
+    EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(70));
+    EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(75));
+    EXPECT_CALL(*box_mode_manager_mock, run_mode_normal()).Times(1);
+    controller_under_test->run();
+}
+
 TEST_F(TestController, test_controller_run_modes_until_user_interrupt) {
 
 }
