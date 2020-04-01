@@ -40,8 +40,8 @@ struct Controller_under_test : public box::Controller {
 class TestController : public ::testing::Test {
       protected:
     Controller_under_test* controller_under_test;
-    bool do_vice_versa_switch_in_next_interation = false;
-    bool do_change_mode_in_next_interation = false;
+    bool execute_vice_versa = false;
+    int do_change_mode_in_next_interation = -1;
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_switch_mock = new NiceMock<BoxSwitchMock>;
@@ -70,44 +70,32 @@ class TestController : public ::testing::Test {
         EXPECT_CALL(*box_servomanager_mock, move_steps(_));
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(false));
         EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
-        EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed()).Times(0);
-        bool will_switch_mode_in_next_run = (next_mode>=0);
-        if(will_switch_mode_in_next_run) {
+        if(do_change_mode_in_next_interation >= 0) {
             EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).WillOnce(Return(false));
-            EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(next_mode));
+            EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(do_change_mode_in_next_interation));
         }
-        // do_change_mode_in_next_interation = will_switch_mode_in_next_run;
+        do_change_mode_in_next_interation = next_mode;
     }
 
     /* User interrupt always lead to reset */
-    virtual void RunMode_UserInterrupt(const bool will_switch_mode_in_next_run, const bool switch_vice_versa) {
+    virtual void RunMode_UserInterrupt(const bool switch_vice_versa) {
         EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillOnce(Return(42));
         EXPECT_CALL(*box_servomanager_mock, move_steps(_));
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(true));
         EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).WillOnce(Return(true));
         EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
         EXPECT_CALL(*box_servomanager_mock, random_select_if_vice_versa_mode_should_be_changed());
-        EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).Times(0);
-        EXPECT_CALL(*arduino_mock, random(_)).Times(0);
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(will_switch_mode_in_next_run));
+        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(true));
         controller_under_test->run();
-        printf("----------------------------------------------\n");
-        printf("---%d-------------------------\n", switch_vice_versa);
-        printf("----------------------------------------------\n");
-        do_vice_versa_switch_in_next_interation = switch_vice_versa;
+        execute_vice_versa = switch_vice_versa; // Will execute in the next iteration
     }
 
     virtual bool RunUserInterrupt() {
-        printf("A---%d-------------------------\n", do_vice_versa_switch_in_next_interation);
-        printf("----------------------------------------------\n");
-        if(!do_vice_versa_switch_in_next_interation) {
-            return false;
-        }
+        if(!execute_vice_versa) { return false; }
         EXPECT_CALL(*box_servomanager_mock, change_vise_versa_if_required_and_return_is_changed()).WillOnce(Return(true));
-        EXPECT_CALL(*arduino_mock, random(_)).Times(0);
         EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(true));
         controller_under_test->run();
-        do_vice_versa_switch_in_next_interation = false;
+        execute_vice_versa = false;
         return true;
     }
 
@@ -138,36 +126,42 @@ class TestController : public ::testing::Test {
 
 TEST_F(TestController, test_controller_init) { EXPECT_TRUE(true); }
 
+TEST_F(TestController, test_controller_run_with_user_interrupt) {
+    RunStartupMode(         NO_MODE_CHANGE);
+    RunStartupMode(         MODE_NORMAL);
+    RunNormalMode(          NO_MODE_CHANGE);
+    RunMode_UserInterrupt(  SWITCH_VICE_VERSA_MODE);
+    RunNormalMode(          NO_MODE_CHANGE);
+    RunMode_UserInterrupt(  NO_SWITCH_VICE_VERSA_MODE);
+    // RunNormalMode(          NO_MODE_CHANGE);
+}
+
 // TEST_F(TestController, test_controller_startup_switch_with_user_interrupt) {
-//     RunMode_UserInterrupt(  STAY_IN_CURRENT_MODE,   NO_SWITCH_VICE_VERSA_MODE);
-//     RunMode_UserInterrupt(  SWITCH_TO_NEXT_MODE,    NO_SWITCH_VICE_VERSA_MODE);
-//     RunNormalMode(          STAY_IN_CURRENT_MODE,   MODE_NORMAL);
+//     RunMode_UserInterrupt(  NO_MODE_CHANGE,   NO_SWITCH_VICE_VERSA_MODE);
+//     RunMode_UserInterrupt(  NO_MODE_CHANGE,   NO_SWITCH_VICE_VERSA_MODE);
+//     RunNormalMode(          MODE_NORMAL);
 // }
 
 // TEST_F(TestController, test_controller_startup_switch_with_user_interrupt_switch_mode_to_normal) {
-//     RunStartupMode( SWITCH_TO_NEXT_MODE,    NO_MODE_CHANGE);
-//     RunNormalMode(  STAY_IN_CURRENT_MODE,   MODE_NORMAL);
+//     RunStartupMode( MODE_NORMAL);
+//     RunNormalMode(  NO_MODE_CHANGE);
 // }
 
-TEST_F(TestController, test_controller_run_no_user_interrupts) {
-    RunStartupMode(     NO_MODE_CHANGE);
-    RunStartupMode(     MODE_NORMAL);
-    RunNormalMode(      NO_MODE_CHANGE);
-    RunNormalMode(      NO_MODE_CHANGE);
-    RunNormalMode(      MODE_AWARENESS);
-    RunAwarenessMode(   NO_MODE_CHANGE, 66);
-    RunAwarenessMode(   NO_MODE_CHANGE, 45);
-    RunAwarenessMode(   NO_MODE_CHANGE, 50);
-}
+// TEST_F(TestController, test_controller_startup_switch_with_user_interrupt_switch_mode_to_awareness) {
+//     RunStartupMode( MODE_AWARENESS);
+//     RunAwarenessMode(  NO_MODE_CHANGE, 50);
+// }
 
-// TEST_F(TestController, test_controller_run_with_user_interrupt) {
-//     RunStartupMode(         STAY_IN_CURRENT_MODE,   NO_MODE_CHANGE);
-//     RunStartupMode(         SWITCH_TO_NEXT_MODE,    NO_MODE_CHANGE);
-//     RunNormalMode(          STAY_IN_CURRENT_MODE,   MODE_NORMAL);
-//     RunMode_UserInterrupt(  SWITCH_TO_NEXT_MODE,    SWITCH_VICE_VERSA_MODE);
-//     RunNormalMode(          SWITCH_TO_NEXT_MODE,    NO_MODE_CHANGE);
-//     // TODO
-//     // RunAwarenessMode(       SWITCH_TO_NEXT_MODE,    MODE_AWARENESS, 50);
+// TEST_F(TestController, test_controller_run_no_user_interrupts) {
+//     RunStartupMode(     NO_MODE_CHANGE);
+//     RunStartupMode(     MODE_NORMAL);
+//     RunNormalMode(      NO_MODE_CHANGE);
+//     RunNormalMode(      NO_MODE_CHANGE);
+//     RunNormalMode(      NO_MODE_CHANGE);
+//     RunNormalMode(      MODE_AWARENESS);
+//     RunAwarenessMode(   NO_MODE_CHANGE, 66);
+//     RunAwarenessMode(   NO_MODE_CHANGE, 45);
+//     RunAwarenessMode(   NO_MODE_CHANGE, 50);
 // }
 
 // TEST_F(TestController, test_controller_test_is_free) {
