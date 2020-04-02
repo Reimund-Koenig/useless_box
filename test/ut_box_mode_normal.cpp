@@ -37,3 +37,8 @@ class TestModeNormal : public ::testing::Test {
 };
 
 TEST_F(TestModeNormal, test_wait_init) { EXPECT_TRUE(true); }
+
+TEST_F(TestModeNormal, test_sleep) {
+    EXPECT_CALL(*box_wait_mock, milliseconds(50)).Times(1);
+    mode_normal_under_test->run();
+}

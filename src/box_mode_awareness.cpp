@@ -18,18 +18,18 @@ box::ModeAwareness::~ModeAwareness() {
  *************************************************/
 
 void box::ModeAwareness::run(int distance) {
-    if(distance > 30) {
+    if(distance >= 30) {
         box_servomanager->move_lower_servo_to_percent(0);
         box_wait->milliseconds(50);
         return;
     }
-    if(distance > 20) {
+    if(distance >= 20) {
         // random move 30-50%
         box_servomanager->move_lower_servo_to_percent(random(20)+30);
         box_wait->milliseconds(random(750)+250);
         return;
     }
-    if(distance > 10) {
+    if(distance >= 10) {
         // random move 50-70%
         box_servomanager->move_lower_servo_to_percent(random(20)+50);
         box_wait->milliseconds(random(750)+250);

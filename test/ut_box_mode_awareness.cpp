@@ -37,3 +37,31 @@ class TestModeAwareness : public ::testing::Test {
 };
 
 TEST_F(TestModeAwareness, test_wait_init) { EXPECT_TRUE(true); }
+
+TEST_F(TestModeAwareness, test_awareness_distance_greater_30) {
+    EXPECT_CALL(*box_servomanager_mock, move_lower_servo_to_percent(0)).Times(1);
+    EXPECT_CALL(*box_wait_mock, milliseconds(50)).Times(1);
+    mode_awareness_under_test->run(30);
+}
+
+TEST_F(TestModeAwareness, test_awareness_distance_between_20_and_30) {
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(12))
+                                         .WillOnce(Return(250));
+    EXPECT_CALL(*box_servomanager_mock, move_lower_servo_to_percent(42)).Times(1);
+    EXPECT_CALL(*box_wait_mock, milliseconds(500)).Times(1);
+    mode_awareness_under_test->run(24);
+}
+
+TEST_F(TestModeAwareness, test_awareness_distance_between_10_and_20) {
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(10))
+                                         .WillOnce(Return(500));
+    EXPECT_CALL(*box_servomanager_mock, move_lower_servo_to_percent(60)).Times(1);
+    EXPECT_CALL(*box_wait_mock, milliseconds(750)).Times(1);
+    mode_awareness_under_test->run(11);
+}
+
+TEST_F(TestModeAwareness, test_awareness_distance_between_0_and_10) {
+    EXPECT_CALL(*box_servomanager_mock, move_lower_servo_to_percent(100)).Times(1);
+    EXPECT_CALL(*box_wait_mock, milliseconds(250)).Times(1);
+    mode_awareness_under_test->run(9);
+}

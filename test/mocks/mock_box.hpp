@@ -24,6 +24,7 @@ class BoxServoManagerMock : public box::Servomanager {
     MOCK_METHOD1(move_upper_servo_to_percent, void(int));
     MOCK_METHOD2(move_servos_to_percent, void(int, int));
     MOCK_METHOD0(is_no_box_action, bool());
+    MOCK_METHOD0(is_vice_versa_mode_activated, bool());
     MOCK_METHOD1(move_steps, void(int));
     MOCK_METHOD0(random_select_if_vice_versa_mode_should_be_changed, void());
     MOCK_METHOD0(change_vise_versa_if_required_and_return_is_changed, bool());
@@ -51,7 +52,7 @@ class BoxWaitMock : public box::Wait {
 
 class BoxModeManagerMock : public box::ModeManager {
   public:
-    BoxModeManagerMock() : box::ModeManager(NULL,NULL) {}
+    BoxModeManagerMock() : box::ModeManager(NULL,NULL,NULL) {}
     MOCK_METHOD1(run_mode_awareness, bool(int));
     MOCK_METHOD0(run_mode_normal, bool());
     MOCK_METHOD0(run_mode_reset, bool());

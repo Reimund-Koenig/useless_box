@@ -5,11 +5,11 @@
 using namespace arduino;
 
 box::ModeManager::ModeManager(box::Servomanager* box_servomanager,
-                                  box::Wait* box_wait) {
+                                  box::Wait* box_wait, box::Switch* box_switch) {
     box::ModeManager::box_mode_awareness = new box::ModeAwareness(box_servomanager, box_wait);
-    box::ModeManager::box_mode_reset = new box::ModeReset(box_servomanager, box_wait);
+    box::ModeManager::box_mode_reset = new box::ModeReset(box_servomanager, box_wait, box_switch);
     box::ModeManager::box_mode_normal = new box::ModeNormal(box_servomanager, box_wait);
-    box::ModeManager::box_mode_startup = new box::ModeStartup(box_servomanager, box_wait);
+    box::ModeManager::box_mode_startup = new box::ModeStartup(box_servomanager, box_wait, box_switch);
 }
 
 box::ModeManager::~ModeManager() {

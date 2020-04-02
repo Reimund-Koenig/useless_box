@@ -49,6 +49,10 @@ void box::Servomanager::move_servos_to_percent(int percentage_lower,
     }
 }
 
+bool box::Servomanager::is_vice_versa_mode_activated() {
+    return move_vice_versa;
+}
+
 bool box::Servomanager::change_vise_versa_if_required_and_return_is_changed() {
     if(should_change_to_vice_versa_mode) {
         move_vice_versa = !move_vice_versa;

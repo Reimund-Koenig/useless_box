@@ -25,7 +25,7 @@ box::Main::Main() {
     box_switch = new box::Switch(PIN_SWITCH);
 
     box_wait = new box::Wait();
-    box_mode_manager = new box::ModeManager(box_servomanager, box_wait);
+    box_mode_manager = new box::ModeManager(box_servomanager, box_wait, box_switch);
 
     box_controller = new box::Controller(box_switch,
                                             box_sonar,

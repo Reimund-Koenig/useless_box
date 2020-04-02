@@ -13,11 +13,15 @@ class ModeStartup {
   private:
     box::Servomanager* box_servomanager;
     box::Wait* box_wait;
+    box::Switch* box_switch;
+    int box_mode_state;
+    int counter;
+    bool switch_start_state_is_high;
     void run_mode_reset();
 
   public:
     ModeStartup(box::Servomanager* box_servomanager,
-                  box::Wait* box_wait);
+                  box::Wait* box_wait, box::Switch* box_switch);
     virtual ~ModeStartup();
     virtual bool run();
 

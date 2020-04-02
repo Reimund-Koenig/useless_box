@@ -45,6 +45,19 @@ class TestServomanager : public ::testing::Test {
 
 TEST_F(TestServomanager, test_servomanager_init) { EXPECT_TRUE(true); }
 
+TEST_F(TestServomanager, test_servomanager_test_change_vice_versa) {
+    EXPECT_FALSE(servomanager_under_test->is_vice_versa_mode_activated());
+    int change_vise_versa = 51;
+    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
+    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
+    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
+    EXPECT_TRUE(servomanager_under_test->is_vice_versa_mode_activated());
+    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
+    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
+    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
+    EXPECT_FALSE(servomanager_under_test->is_vice_versa_mode_activated());
+}
+
 TEST_F(TestServomanager, test_servomanager_move_lower_servo_percentage) {
     int expected_result = 50;
     int change_vise_versa = 51;
