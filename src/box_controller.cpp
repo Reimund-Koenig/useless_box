@@ -33,8 +33,10 @@ box::Controller::~Controller() {
 void box::Controller::run() {
     int distance = box_sonar->get_average_distance_cm();
     box_servomanager->move_steps(5);
-    bool is_user_switch_interrupt_action = box_switch->has_changed() &&
-                                           box_servomanager->is_no_box_action();
+    // bool is_user_switch_interrupt_action = box_switch->has_changed() &&
+    //                                        box_servomanager->is_no_box_action();
+
+    bool is_user_switch_interrupt_action = box_switch->has_changed();
     if(is_user_switch_interrupt_action) {
         box_mode = MODE_RESET;
         is_mode_finished = false;

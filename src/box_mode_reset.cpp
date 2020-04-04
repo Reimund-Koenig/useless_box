@@ -21,11 +21,16 @@ box::ModeReset::~ModeReset() {
 bool box::ModeReset::run() {
     switch (run_mode_reset_step) {
         case 0:
+            run_mode_reset_step++;
+            box_servomanager->move_servos_to_percent(0,0);
+            box_wait->milliseconds(400);
+            return false; // not finished
+        case 1:
             box_servomanager->move_servos_to_percent(100,0);
             box_wait->milliseconds(400);
             run_mode_reset_step++;
             return false; // not finished
-        case 1:
+        case 2:
             box_servomanager->move_servos_to_percent(0,0);
             box_wait->milliseconds(400);
             if(random(100) > 50) {
@@ -34,14 +39,15 @@ bool box::ModeReset::run() {
             }
             run_mode_reset_step = 0;
             return true; // finished
-        case 2:
+        case 3:
             box_servomanager->move_servos_to_percent(100,0);
             box_wait->milliseconds(400);
             run_mode_reset_step++;
             return false; // not finished
-        case 3:
+        case 4:
             box_servomanager->move_servos_to_percent(0,0);
             box_wait->milliseconds(400);
+            run_mode_reset_step = 0;
             return true; //finished
         default:
             run_mode_reset_step = 0;

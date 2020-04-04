@@ -41,6 +41,9 @@ class TestModeReset : public ::testing::Test {
 TEST_F(TestModeReset, test_wait_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestModeReset, test_switchsate_high_no_change) {
+    EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);
+    EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
+    EXPECT_FALSE(mode_reset_under_test->run());
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_FALSE(mode_reset_under_test->run());
@@ -51,6 +54,9 @@ TEST_F(TestModeReset, test_switchsate_high_no_change) {
 }
 
 TEST_F(TestModeReset, test_switchsate_high_change_direction) {
+    EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);
+    EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
+    EXPECT_FALSE(mode_reset_under_test->run());
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_FALSE(mode_reset_under_test->run());
