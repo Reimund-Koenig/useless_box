@@ -19,7 +19,6 @@ box::Controller::Controller(box::Switch* box_switch,
     box::Controller::box_servomanager = box_servomanager;
     box::Controller::box_wait = box_wait;
     box::Controller::box_mode_manager = box_mode_manager;
-    randomSeed(analogRead(0));
     box_mode = MODE_STARTUP;
     is_mode_finished = false;
 }
@@ -41,7 +40,7 @@ void box::Controller::run() {
         is_mode_finished = false;
     }
     if (!box_wait->is_free()) { return; }
-    if (is_mode_finished) { select_new_box_mode(); }
+    if (is_mode_finished) { switch_box_mode(); }
     switch (box_mode) {
     case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;
     case MODE_AWARENESS:    is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
@@ -51,8 +50,16 @@ void box::Controller::run() {
     }
 }
 
-void box::Controller::select_new_box_mode() {
+void box::Controller::switch_box_mode() {
     is_mode_finished = false;
+    if(box_mode == MODE_RESET || box_mode == MODE_STARTUP) {
+        select_new_box_mode();
+        return;
+    }
+    box_mode = MODE_RESET;
+}
+
+void box::Controller::select_new_box_mode() {
     if(random(100) < 75) {
         box_mode = MODE_AWARENESS;
         return;

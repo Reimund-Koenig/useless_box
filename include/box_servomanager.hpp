@@ -2,6 +2,7 @@
 #define BOX_SERVOMANAGER_HPP_
 
 #include "box_servomotor.hpp"
+#include "box_switch.hpp"
 
 namespace box {
 

@@ -20,6 +20,7 @@ class Controller {
     box::Wait* box_wait;
     box::ModeManager* box_mode_manager;
     void select_new_box_mode();
+    void switch_box_mode();
 
   public:
     Controller(box::Switch* box_switch,

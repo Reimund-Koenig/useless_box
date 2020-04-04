@@ -49,25 +49,6 @@ void box::Servomanager::move_servos_to_percent(int percentage_pilot,
     }
 }
 
-// bool box::Servomanager::is_vice_versa_mode_activated() {
-//     return move_vice_versa;
-// }
-
-// bool box::Servomanager::change_vise_versa_if_required_and_return_is_changed() {
-//     if(should_change_to_vice_versa_mode) {
-//         move_vice_versa = !move_vice_versa;
-//         should_change_to_vice_versa_mode = false;
-//         return true;
-//     }
-//     return false;
-// }
-
-// void box::Servomanager::random_select_if_vice_versa_mode_should_be_changed() {
-//     if(random(100) > 50) {
-//         should_change_to_vice_versa_mode = true;
-//     }
-// }
-
 void box::Servomanager::move_steps(int speed) {
     // ToDo Implement Servomotor speed and
     //      call it here for both motors
