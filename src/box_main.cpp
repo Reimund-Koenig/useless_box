@@ -14,19 +14,17 @@ using namespace arduino;
 #define PIN_SWITCH 4
 
 box::Main::Main() {
+    box_wait = new box::Wait();
+    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
+    box_switch = new box::Switch(PIN_SWITCH);
     box_lower_servo = new box::Servomotor(
                         LOWER_SERVO_PWM, LOWER_SERVO_CLOCKWISE,
                         LOWER_SERVO_MIN, LOWER_SERVO_MAX);
     box_upper_servo = new box::Servomotor(
                         UPPER_SERVO_PWM, UPPER_SERVO_CLOCKWISE,
                         UPPER_SERVO_MIN, UPPER_SERVO_MAX);
-    box_servomanager = new box::Servomanager(box_lower_servo, box_upper_servo);
-    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
-    box_switch = new box::Switch(PIN_SWITCH);
-
-    box_wait = new box::Wait();
+    box_servomanager = new box::Servomanager(box_lower_servo, box_upper_servo, box_switch);
     box_mode_manager = new box::ModeManager(box_servomanager, box_wait, box_switch);
-
     box_controller = new box::Controller(box_switch,
                                             box_sonar,
                                             box_servomanager,

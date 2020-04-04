@@ -39,7 +39,6 @@ void box::Controller::run() {
     if(is_user_switch_interrupt_action) {
         box_mode = MODE_RESET;
         is_mode_finished = false;
-        box_servomanager->random_select_if_vice_versa_mode_should_be_changed();
     }
     if (!box_wait->is_free()) { return; }
     if (is_mode_finished) { select_new_box_mode(); }
@@ -54,10 +53,6 @@ void box::Controller::run() {
 
 void box::Controller::select_new_box_mode() {
     is_mode_finished = false;
-    if(box_servomanager->change_vise_versa_if_required_and_return_is_changed()) {
-        box_mode = MODE_RESET;
-        return;
-    }
     if(random(100) < 75) {
         box_mode = MODE_AWARENESS;
         return;

@@ -19,9 +19,9 @@ class BoxServoMock : public box::Servomotor {
 
 class BoxServoManagerMock : public box::Servomanager {
   public:
-    BoxServoManagerMock() : box::Servomanager(NULL,NULL) {}
-    MOCK_METHOD1(move_lower_servo_to_percent, void(int));
-    MOCK_METHOD1(move_upper_servo_to_percent, void(int));
+    BoxServoManagerMock() : box::Servomanager(NULL,NULL,NULL) {}
+    MOCK_METHOD1(move_pilot_servo_to_percent, void(int));
+    MOCK_METHOD1(move_copilot_servo_to_percent, void(int));
     MOCK_METHOD2(move_servos_to_percent, void(int, int));
     MOCK_METHOD0(is_no_box_action, bool());
     MOCK_METHOD0(is_vice_versa_mode_activated, bool());

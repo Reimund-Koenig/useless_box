@@ -17,8 +17,9 @@ using ::testing::NiceMock;
 
 struct Servomanager_under_test : public box::Servomanager {
     Servomanager_under_test(box::Servomotor* box_lower_servo,
-                            box::Servomotor* box_upper_servo)
-                    : Servomanager(box_lower_servo, box_upper_servo) {}
+                            box::Servomotor* box_upper_servo,
+                            box::Switch* box_switch)
+                    : Servomanager(box_lower_servo, box_upper_servo, box_switch) {}
 };
 
 
@@ -30,92 +31,71 @@ class TestServomanager : public ::testing::Test {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_lower_servo_mock = new NiceMock<BoxServoMock>;
         box_upper_servo_mock = new NiceMock<BoxServoMock>;
+        box_switch_mock = new NiceMock<BoxSwitchMock>;
         servomanager_under_test = new Servomanager_under_test(
                                             (box::Servomotor*) box_lower_servo_mock,
-                                            (box::Servomotor*) box_upper_servo_mock);
+                                            (box::Servomotor*) box_upper_servo_mock,
+                                            (box::Switch*) box_switch_mock);
     }
     virtual void TearDown() {
         delete servomanager_under_test;
+        delete box_switch_mock;
         delete box_upper_servo_mock;
         delete box_lower_servo_mock;
-        delete servomotor_mock;
         delete arduino_mock;
+        delete servomotor_mock;
     }
 };
 
 TEST_F(TestServomanager, test_servomanager_init) { EXPECT_TRUE(true); }
 
-TEST_F(TestServomanager, test_servomanager_test_change_vice_versa) {
-    EXPECT_FALSE(servomanager_under_test->is_vice_versa_mode_activated());
-    int change_vise_versa = 51;
-    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
-    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
-    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
-    EXPECT_TRUE(servomanager_under_test->is_vice_versa_mode_activated());
-    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
-    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
-    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
-    EXPECT_FALSE(servomanager_under_test->is_vice_versa_mode_activated());
-}
-
-TEST_F(TestServomanager, test_servomanager_move_lower_servo_percentage) {
+TEST_F(TestServomanager, test_servomanager_move_driver_servo_percentage) {
     int expected_result = 50;
-    int change_vise_versa = 51;
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result)).Times(1);
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_lower_servo_to_percent(50);
+    servomanager_under_test->move_pilot_servo_to_percent(50);
      // otherway arround
-    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
-    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
-    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result)).Times(1);
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_lower_servo_to_percent(50);
+    servomanager_under_test->move_pilot_servo_to_percent(50);
 }
 
-TEST_F(TestServomanager, test_servomanager_move_upper_servo_percentage) {
+TEST_F(TestServomanager, test_servomanager_move_codriver_servo_percentage) {
     int expected_result = 50;
-    int change_vise_versa = 51;
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result)).Times(1);
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_upper_servo_to_percent(50);
+    servomanager_under_test->move_copilot_servo_to_percent(50);
      // otherway arround
-    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
-    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
-    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result)).Times(1);
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_upper_servo_to_percent(50);
+    servomanager_under_test->move_copilot_servo_to_percent(50);
 }
 
 TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
-    int expected_result_lower = 42;
-    int expected_result_upper = 50;
-    int change_vise_versa = 51;
-    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_lower)).Times(1);
-    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_upper)).Times(1);
+    int expected_result_driver = 42;
+    int expected_result_codriver = 50;
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_driver)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_codriver)).Times(1);
     servomanager_under_test->move_servos_to_percent(42, 50);
      // otherway arround
-    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
-    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
-    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
-    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_lower)).Times(1);
-    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_upper)).Times(1);
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_driver)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_codriver)).Times(1);
     servomanager_under_test->move_servos_to_percent(42, 50);
     // otherway arround
-    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(change_vise_versa));
-    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
-    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
-    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_lower)).Times(1);
-    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_upper)).Times(1);
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_driver)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_codriver)).Times(1);
     servomanager_under_test->move_servos_to_percent(42, 50);
     // same way arround
-    int NOT_change_vise_versa = 50;
-    EXPECT_CALL(*arduino_mock, random(_)).Times(1).WillOnce(Return(NOT_change_vise_versa));
-    servomanager_under_test->random_select_if_vice_versa_mode_should_be_changed();
-    servomanager_under_test->change_vise_versa_if_required_and_return_is_changed();
-    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_lower)).Times(1);
-    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_upper)).Times(1);
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
+    EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_driver)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_codriver)).Times(1);
     servomanager_under_test->move_servos_to_percent(42, 50);
 }
 

@@ -51,7 +51,7 @@ TEST_F(TestModeReset, test_switchsate_high_no_vice_versa) {
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,100)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_FALSE(mode_reset_under_test->run());
-    EXPECT_CALL(*box_servomanager_mock, move_upper_servo_to_percent(0)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_TRUE(mode_reset_under_test->run());
 }
@@ -63,7 +63,7 @@ TEST_F(TestModeReset, test_switchsate_low_no_vice_versa) {
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_FALSE(mode_reset_under_test->run());
-    EXPECT_CALL(*box_servomanager_mock, move_lower_servo_to_percent(0)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_TRUE(mode_reset_under_test->run());
 }
@@ -75,7 +75,7 @@ TEST_F(TestModeReset, test_switchsate_high_with_vice_versa) {
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_FALSE(mode_reset_under_test->run());
-    EXPECT_CALL(*box_servomanager_mock, move_lower_servo_to_percent(0)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_TRUE(mode_reset_under_test->run());
 }
@@ -87,7 +87,7 @@ TEST_F(TestModeReset, test_switchsate_low_with_vice_versa) {
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,100)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_FALSE(mode_reset_under_test->run());
-    EXPECT_CALL(*box_servomanager_mock, move_upper_servo_to_percent(0)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
     EXPECT_TRUE(mode_reset_under_test->run());
 }
