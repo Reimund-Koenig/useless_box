@@ -49,6 +49,12 @@ class TestServomanager : public ::testing::Test {
 
 TEST_F(TestServomanager, test_servomanager_init) { EXPECT_TRUE(true); }
 
+TEST_F(TestServomanager, test_servomanager_test_move_steps) {
+    EXPECT_CALL(*box_lower_servo_mock, move_step());
+    EXPECT_CALL(*box_upper_servo_mock, move_step());
+    servomanager_under_test->move_steps();
+}
+
 TEST_F(TestServomanager, test_servomanager_move_pilot_servo_percentage) {
     int expected_result = 50;
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
@@ -116,17 +122,43 @@ TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
 }
 
 TEST_F(TestServomanager, test_servomanager_is_no_box_action) {
-    int expected_result = 50;
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(false));
     EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
     EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
     EXPECT_FALSE(servomanager_under_test->is_no_box_action());
+
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(true));
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
+    EXPECT_TRUE(servomanager_under_test->is_no_box_action());
+
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_TRUE(servomanager_under_test->is_no_box_action());
+
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(0));
     EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
     EXPECT_FALSE(servomanager_under_test->is_no_box_action());
+
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
     EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
     EXPECT_FALSE(servomanager_under_test->is_no_box_action());
-    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(99));
-    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(99));
+
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(100));
+    EXPECT_FALSE(servomanager_under_test->is_no_box_action());
+
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(true));
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(95));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(95));
+    EXPECT_TRUE(servomanager_under_test->is_no_box_action());
+
+    EXPECT_CALL(*box_switch_mock, is_high()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_upper_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(95));
+    EXPECT_CALL(*box_lower_servo_mock, get_last_percentage()).Times(AtLeast(0)).WillOnce(Return(95));
     EXPECT_TRUE(servomanager_under_test->is_no_box_action());
 }

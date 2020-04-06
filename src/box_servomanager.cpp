@@ -59,10 +59,12 @@ void box::Servomanager::move_steps() {
 }
 
 bool box::Servomanager::is_no_box_action() {
-    if(box_upper_servo->get_last_percentage() >= 100) {
+    if(box_upper_servo->get_last_percentage() > 95 &&
+                            !box_switch->is_high()) {
         return false;
     }
-    if(box_lower_servo->get_last_percentage() >= 100) {
+    if(box_lower_servo->get_last_percentage() > 95 &&
+                            box_switch->is_high()) {
         return false;
     }
     return true;

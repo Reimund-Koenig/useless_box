@@ -25,7 +25,7 @@ box::Servomotor::~Servomotor() {
  *************************************************/
 
 void box::Servomotor::move_to_percent(int percentage) {
-    if(percentage > 100) { percentage = 100; }
+    if(percentage > 100) { percentage = 100;}
     if(percentage < 0) { percentage = 0; }
     last_percentage = percentage;
     int angle = (int)(((box::Servomotor::max_peak_angle -  box::Servomotor::min_peak_angle) *

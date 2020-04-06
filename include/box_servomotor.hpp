@@ -15,6 +15,7 @@ class Servomotor {
     int last_percentage;
     int min_peak_angle;
     int max_peak_angle;
+    bool hit_switch;
     unsigned long speed_in_milliseconds;
     bool clockwise;
     void set_angle(int);
