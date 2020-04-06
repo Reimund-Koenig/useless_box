@@ -20,21 +20,21 @@ box::ModeStartup::~ModeStartup() {
  * Public Methods
  *************************************************/
 
-bool box::ModeStartup::run(int* speed) {
+bool box::ModeStartup::run() {
     switch (box_mode_state) {
         case 0: // Move switch up if it is down
             box_mode_state++;
             counter++;
             if(box_switch->is_high()) { return false; }
-            do_move(100,0, speed);
+            do_move(100,0);
             return false;
         case 1: // Move pilot to 100 which changes pilot and copilot
-            do_move(100,0, speed);
+            do_move(100,0);
             counter++;
             if(counter == 10) {  box_mode_state++; }
             return false;
         case 2: // Everything done -> reset and exit
-            do_move(0,0, speed);
+            do_move(0,0);
             box_mode_state = 0;
             counter = 0;
             return true;
@@ -49,8 +49,8 @@ bool box::ModeStartup::run(int* speed) {
  * Private Methods
  *************************************************/
 
-void box::ModeStartup::do_move(int percent_pilot, int percent_copilot, int* speed) {
-    box_servomanager->move_servos_to_percent(percent_pilot, percent_copilot);
-    *speed = random(4) + 3; // Speed = 3-6
+void box::ModeStartup::do_move(int percent_pilot, int percent_copilot) {
+    int box_speed = random(4) + 3; // Speed = 3-6
+    box_servomanager->move_servos_to_percent(percent_pilot, box_speed, percent_copilot, box_speed);
     box_wait->milliseconds(400);
 }

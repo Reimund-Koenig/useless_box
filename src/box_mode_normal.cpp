@@ -17,7 +17,6 @@ box::ModeNormal::~ModeNormal() {
  * Public Methods
  *************************************************/
 
-void box::ModeNormal::run(int* speed) {
-    *speed = 3;
+void box::ModeNormal::run() {
     box_wait->milliseconds(50);
 }

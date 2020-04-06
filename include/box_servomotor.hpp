@@ -15,7 +15,7 @@ class Servomotor {
     int last_percentage;
     int min_peak_angle;
     int max_peak_angle;
-    int speed_delay_ms;
+    unsigned long speed_in_milliseconds;
     bool clockwise;
     void set_angle(int);
     box::Wait* box_wait;
@@ -26,7 +26,8 @@ class Servomotor {
                int min_peak_angle, int max_peak_angle,
                box::Wait* box_wait);
     virtual ~Servomotor();
-    virtual void move_step(int speed);
+    virtual void move_step();
+    virtual void set_speed(int speed);
     virtual void move_to_percent(int percent);
     virtual void move_to_angle(int angle);
     virtual int get_current_angle();

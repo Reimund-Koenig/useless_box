@@ -53,26 +53,34 @@ TEST_F(TestServomanager, test_servomanager_move_pilot_servo_percentage) {
     int expected_result = 50;
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(2));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_pilot_servo_to_percent(50);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(_)).Times(0);
+    servomanager_under_test->move_pilot_servo_to_percent(50,2);
      // otherway arround
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(4));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_pilot_servo_to_percent(50);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(_)).Times(0);
+    servomanager_under_test->move_pilot_servo_to_percent(50,4);
 }
 
 TEST_F(TestServomanager, test_servomanager_move_copilot_servo_percentage) {
     int expected_result = 50;
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(5));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_copilot_servo_to_percent(50);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(_)).Times(0);
+    servomanager_under_test->move_copilot_servo_to_percent(50,5);
      // otherway arround
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(6));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(_)).Times(0);
-    servomanager_under_test->move_copilot_servo_to_percent(50);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(_)).Times(0);
+    servomanager_under_test->move_copilot_servo_to_percent(50,6);
 }
 
 TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
@@ -80,23 +88,31 @@ TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
     int expected_result_copilot = 50;
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_pilot)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(4));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_copilot)).Times(1);
-    servomanager_under_test->move_servos_to_percent(42, 50);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(5));
+    servomanager_under_test->move_servos_to_percent(42, 4, 50, 5);
      // otherway arround
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_pilot)).Times(1);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(3));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_copilot)).Times(1);
-    servomanager_under_test->move_servos_to_percent(42, 50);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(2));
+    servomanager_under_test->move_servos_to_percent(42, 3, 50, 2);
     // otherway arround
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_pilot)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(1));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_copilot)).Times(1);
-    servomanager_under_test->move_servos_to_percent(42, 50);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(2));
+    servomanager_under_test->move_servos_to_percent(42, 1, 50, 2);
     // same way arround
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     EXPECT_CALL(*box_lower_servo_mock, move_to_percent(expected_result_pilot)).Times(1);
+    EXPECT_CALL(*box_lower_servo_mock, set_speed(5));
     EXPECT_CALL(*box_upper_servo_mock, move_to_percent(expected_result_copilot)).Times(1);
-    servomanager_under_test->move_servos_to_percent(42, 50);
+    EXPECT_CALL(*box_upper_servo_mock, set_speed(6));
+    servomanager_under_test->move_servos_to_percent(42, 5, 50, 6);
 }
 
 TEST_F(TestServomanager, test_servomanager_is_no_box_action) {

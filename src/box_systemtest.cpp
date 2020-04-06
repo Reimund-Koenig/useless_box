@@ -64,23 +64,17 @@ void box::Systemtest::run() {
     update_systemtest_state();
     switch (systemtest_state) {
         case 1:  // Switch
-            test_switch();
-            break;
+            test_switch(); return;
         case 2: // Sonar
-            test_sonar();
-            break;
-            break;
+            test_sonar(); return;
         case 3: // Sonar
-            test_sonar_avarage();
-            break;
+            test_sonar_avarage(); return;
         case 4: // Lower Servomotor
-            test_lower_servomotor();
-            break;
+            test_lower_servomotor(); return;
         case 5:  // Upper Servomotor
-            test_upper_servomotor();
-            break;
+            test_upper_servomotor(); return;
         default:
-            break;
+            systemtest_state = 1; return;
     }
 }
 void box::Systemtest::println(const char* str, int val=-1) {
@@ -104,7 +98,6 @@ void box::Systemtest::update_systemtest_state() {
 
 void box::Systemtest::test_switch() {
     bool switch_state = box_switch->is_high();
-    // TODO: SERIAL PRINT LINE switch_state
     if(switch_state) {
         if(last_switch_state != HIGH) {
             println("Switch State is  ", HIGH);

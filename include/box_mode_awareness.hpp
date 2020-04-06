@@ -18,7 +18,7 @@ class ModeAwareness {
     ModeAwareness(box::Servomanager* box_servomanager,
                   box::Wait* box_wait);
     virtual ~ModeAwareness();
-    virtual bool run(int distance, int* speed);
+    virtual bool run(int distance);
 
 };
 

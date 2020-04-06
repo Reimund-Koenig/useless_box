@@ -75,44 +75,44 @@ class TestController : public ::testing::Test {
 
     virtual void RunPreSteps(const int ultra_sonar_result) {
         EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillOnce(Return(ultra_sonar_result));
-        EXPECT_CALL(*box_servomanager_mock, move_steps(_));
+        EXPECT_CALL(*box_servomanager_mock, move_steps());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(false));
         EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
     }
 
     virtual void RunStartupMode(bool switch_mode) {
         RunPreSteps(55);
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_startup(_)).WillOnce(Return(switch_mode));
+        EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).WillOnce(Return(switch_mode));
         controller_under_test->run();
     }
 
     virtual void RunResetMode(const bool switch_mode) {
         RunPreSteps(42);
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset(_)).WillOnce(Return(switch_mode));
+        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(switch_mode));
         controller_under_test->run();
     }
 
     virtual void RunNormalMode(const bool switch_mode) {
         RunPreSteps(42);
         CheckCallSelectNewBoxMode(MODE_NORMAL);
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_normal(_)).WillOnce(Return(switch_mode));
+        EXPECT_CALL(*box_mode_manager_mock, run_mode_normal()).WillOnce(Return(switch_mode));
         controller_under_test->run();
     }
 
     virtual void RunAwarenessMode(const bool switch_mode, const int ultra_sonar_result) {
         RunPreSteps(ultra_sonar_result);
         CheckCallSelectNewBoxMode(MODE_AWARENESS);
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(ultra_sonar_result,_)).WillOnce(Return(switch_mode));
+        EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(ultra_sonar_result)).WillOnce(Return(switch_mode));
         controller_under_test->run();
     }
 
     virtual void RunUserInterrupt() {
         EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillOnce(Return(5));
-        EXPECT_CALL(*box_servomanager_mock, move_steps(_));
+        EXPECT_CALL(*box_servomanager_mock, move_steps());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(true));
         // TODO: FIX! EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).WillOnce(Return(true));
         EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset(_)).WillOnce(Return(true));
+        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(true));
         controller_under_test->run();
     }
 };
@@ -167,15 +167,15 @@ TEST_F(TestController, test_controller_startup_switch_with_user_interrupt) {
 
 TEST_F(TestController, test_controller_test_is_free) {
     EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillRepeatedly(Return(70));
-    EXPECT_CALL(*box_servomanager_mock, move_steps(_)).Times(AtLeast(1));
+    EXPECT_CALL(*box_servomanager_mock, move_steps()).Times(AtLeast(1));
     EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_servomanager_mock, is_no_box_action()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_wait_mock, is_free()).WillRepeatedly(Return(false));
     EXPECT_CALL(*arduino_mock, random(_)).Times(0);
-    EXPECT_CALL(*box_mode_manager_mock, run_mode_reset(_)).Times(0);
-    EXPECT_CALL(*box_mode_manager_mock, run_mode_normal(_)).Times(0);
-    EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(_,_)).Times(0);
-    EXPECT_CALL(*box_mode_manager_mock, run_mode_startup(_)).Times(0);
+    EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).Times(0);
+    EXPECT_CALL(*box_mode_manager_mock, run_mode_normal()).Times(0);
+    EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(_)).Times(0);
+    EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).Times(0);
     controller_under_test->run();
     controller_under_test->run();
     controller_under_test->run();

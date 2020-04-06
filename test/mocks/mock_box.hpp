@@ -13,18 +13,23 @@
 class BoxServoMock : public box::Servomotor {
   public:
     BoxServoMock() : box::Servomotor(0,false,1,2,NULL) {}
+    MOCK_METHOD1(move_to_angle, void(int));
     MOCK_METHOD1(move_to_percent, void(int));
+    MOCK_METHOD0(move_step, void());
     MOCK_METHOD0(get_last_percentage, int());
+    MOCK_METHOD1(set_speed, void(int));
+    MOCK_METHOD0(get_angle, int());
+    MOCK_METHOD0(get_current_angle, int());
 };
 
 class BoxServoManagerMock : public box::Servomanager {
   public:
     BoxServoManagerMock() : box::Servomanager(NULL,NULL,NULL) {}
-    MOCK_METHOD1(move_pilot_servo_to_percent, void(int));
-    MOCK_METHOD1(move_copilot_servo_to_percent, void(int));
-    MOCK_METHOD2(move_servos_to_percent, void(int, int));
+    MOCK_METHOD2(move_pilot_servo_to_percent, void(int,int));
+    MOCK_METHOD2(move_copilot_servo_to_percent, void(int,int));
+    MOCK_METHOD4(move_servos_to_percent, void(int, int, int, int));
     MOCK_METHOD0(is_no_box_action, bool());
-    MOCK_METHOD1(move_steps, void(int));
+    MOCK_METHOD0(move_steps, void());
 };
 
 class BoxSonarMock : public box::Sonar{
@@ -50,10 +55,10 @@ class BoxWaitMock : public box::Wait {
 class BoxModeManagerMock : public box::ModeManager {
   public:
     BoxModeManagerMock() : box::ModeManager(NULL,NULL,NULL) {}
-    MOCK_METHOD2(run_mode_awareness, bool(int, int*));
-    MOCK_METHOD1(run_mode_normal, bool(int*));
-    MOCK_METHOD1(run_mode_reset, bool(int*));
-    MOCK_METHOD1(run_mode_startup, bool(int*));
+    MOCK_METHOD1(run_mode_awareness, bool(int));
+    MOCK_METHOD0(run_mode_normal, bool());
+    MOCK_METHOD0(run_mode_reset, bool());
+    MOCK_METHOD0(run_mode_startup, bool());
 };
 
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;

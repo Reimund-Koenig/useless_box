@@ -35,7 +35,11 @@ void box::Servomotor::move_to_percent(int percentage) {
     set_angle(angle);
 }
 
-void box::Servomotor::move_step(int speed) {
+void box::Servomotor::set_speed(int speed) {
+    box::Servomotor::speed_in_milliseconds = speed_to_millseconds(speed);
+}
+
+void box::Servomotor::move_step() {
     if(angle == current_angle) { return; }
     if(!box_wait->is_free()) { return; }
     if(current_angle > angle) {
@@ -44,7 +48,7 @@ void box::Servomotor::move_step(int speed) {
         current_angle++;
     }
     servo.write(current_angle);
-    box_wait->milliseconds(speed_to_millseconds(speed));
+    box_wait->milliseconds(speed_in_milliseconds);
 }
 
 void box::Servomotor::move_to_angle(int angle) {

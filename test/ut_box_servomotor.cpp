@@ -51,7 +51,7 @@ class TestServo : public ::testing::Test {
         servo->move_to_percent(percentage);
         EXPECT_CALL(*box_wait_mock, is_free()).WillRepeatedly(Return(true));
         for(int i=0; i<11; i++) {
-            servo->move_step(0);
+            servo->move_step();
         }
         EXPECT_EQ(expected_angle, servo->get_angle());
         EXPECT_EQ(expected_percentage, servo->get_last_percentage());
@@ -59,19 +59,21 @@ class TestServo : public ::testing::Test {
 
     virtual void test_move_step(const int expected_angle, const int speed,
                                           const int expected_wait) {
+        servomotor_under_test->set_speed(speed);
         EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
         EXPECT_CALL(*servomotor_mock, write(expected_angle)).Times(1);
         EXPECT_CALL(*box_wait_mock, milliseconds(expected_wait)).Times(1);
-        servomotor_under_test->move_step(speed);
+        servomotor_under_test->move_step();
         EXPECT_EQ(expected_angle, servomotor_under_test->get_angle());
     }
 
     virtual void test_move_step_clockwise(const int expected_angle, const int speed,
                                           const int expected_wait) {
+        servomotor_under_test_clockwise->set_speed(speed);
         EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
         EXPECT_CALL(*servomotor_mock, write(expected_angle)).Times(1);
         EXPECT_CALL(*box_wait_mock, milliseconds(expected_wait)).Times(1);
-        servomotor_under_test_clockwise->move_step(speed);
+        servomotor_under_test_clockwise->move_step();
         EXPECT_EQ(expected_angle, servomotor_under_test_clockwise->get_angle());
     }
 };
@@ -93,14 +95,14 @@ TEST_F(TestServo, test_servomotor_get_current_angle) {
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_angle_reached) {
     EXPECT_CALL(*box_wait_mock, is_free()).Times(0);
     EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
-    servomotor_under_test->move_step(0);
+    servomotor_under_test->move_step();
 }
 
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
     servomotor_under_test->move_to_angle(15);
     EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(false));
     EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
-    servomotor_under_test->move_step(0);
+    servomotor_under_test->move_step();
 }
 
 TEST_F(TestServo, test_servomotor_move_to_angle) {
@@ -111,7 +113,7 @@ TEST_F(TestServo, test_servomotor_move_to_angle) {
     test_move_step(++start_angle, 4, 25); // 11
     test_move_step(++start_angle, 5, 10); // 12
     test_move_step(++start_angle, 6, 0); // 13
-    servomotor_under_test->move_step(0);
+    servomotor_under_test->move_step();
     EXPECT_EQ(expected_value, servomotor_under_test->get_angle());
 
 }
@@ -124,7 +126,7 @@ TEST_F(TestServo, test_servomotor_move_to_angle_clockwise) {
     test_move_step_clockwise(--start_angle_clockwise, 1, 200); // 19
     test_move_step_clockwise(--start_angle_clockwise, 2, 100); // 18
     test_move_step_clockwise(--start_angle_clockwise, 3, 50); // 17
-    servomotor_under_test_clockwise->move_step(0);
+    servomotor_under_test_clockwise->move_step();
     EXPECT_EQ(expected_value_clockwise, servomotor_under_test_clockwise->get_angle());
 }
 
