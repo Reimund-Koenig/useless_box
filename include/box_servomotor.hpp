@@ -2,6 +2,7 @@
 #define BOX_SERVOMOTOR_HPP_
 
 #include "Servo.h"
+#include "box_wait.hpp"
 
 namespace box {
 
@@ -10,17 +11,22 @@ class Servomotor {
   private:
     Servo servo;
     int angle;
+    int current_angle;
     int last_percentage;
     int min_peak_angle;
     int max_peak_angle;
     int speed_delay_ms;
     bool clockwise;
     void set_angle(int);
+    box::Wait* box_wait;
+    unsigned long speed_to_millseconds(int speed);
 
   public:
     Servomotor(int pin_pwm_servomotor, bool clockwise,
-               int min_peak_angle, int max_peak_angle);
+               int min_peak_angle, int max_peak_angle,
+               box::Wait* box_wait);
     virtual ~Servomotor();
+    virtual void move_step(int speed);
     virtual void move_to_percent(int percent);
     virtual void move_to_angle(int angle);
     virtual int get_current_angle();

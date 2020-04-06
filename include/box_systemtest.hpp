@@ -21,6 +21,8 @@ class Systemtest {
     void test_switch();
     void test_sonar();
     void test_sonar_avarage();
+    box::Wait* box_wait_lower_servo;
+    box::Wait* box_wait_upper_servo;
     void println(const char* str, int val);
     box::Potentiometer* box_potentiometer;
     box::Servomotor* box_lower_servomotor;

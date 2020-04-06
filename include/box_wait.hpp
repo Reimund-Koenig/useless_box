@@ -2,8 +2,6 @@
 #define BOX_WAIT_HPP_
 
 #include "ardunio_namespace.h" // needed for arduino build
-#include <Arduino.h>
-#include <stdio.h>
 
 namespace box {
 

@@ -7,6 +7,7 @@
 #include "box_sonar.hpp"
 #include <Serial.h>
 #include <Arduino.h>
+
 using namespace arduino;
 
 #define PIN_RANDOM A0 //A0
@@ -29,20 +30,24 @@ using namespace arduino;
 #define BOX_BUTTON_DEBOUNCE_DELAY 50
 
 box::Systemtest::Systemtest() {
+    box_wait_lower_servo = new box::Wait();
+    box_wait_upper_servo = new box::Wait();
+    box_switch = new box::Switch(PIN_SWITCH);
+    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
     box_potentiometer = new box::Potentiometer(PIN_POTENTIOMETER,
                                                BOX_MIN_RANGE,
                                                BOX_MAX_RANGE);
     box_lower_servomotor = new box::Servomotor(LOWER_SERVO_PWM,
                                             LOWER_SERVO_CLOCKWISE,
-                                           LOWER_SERVO_MIN,
-                                           LOWER_SERVO_MAX);
+                                            LOWER_SERVO_MIN,
+                                            LOWER_SERVO_MAX,
+                                            box_wait_lower_servo);
     box_upper_servomotor = new box::Servomotor(UPPER_SERVO_PWM,
                                             UPPER_SERVO_CLOCKWISE,
                                            UPPER_SERVO_MIN,
-                                           UPPER_SERVO_MAX);
+                                           UPPER_SERVO_MAX,
+                                           box_wait_upper_servo);
     box_button = new box::Button(PIN_BUTTON, BOX_BUTTON_DEBOUNCE_DELAY);
-    box_switch = new box::Switch(PIN_SWITCH);
-    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
     systemtest_state = 1;
     number_of_functions = 5;
     last_switch_state = -1;

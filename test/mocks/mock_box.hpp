@@ -12,7 +12,7 @@
 
 class BoxServoMock : public box::Servomotor {
   public:
-    BoxServoMock() : box::Servomotor(0,false,1,2) {}
+    BoxServoMock() : box::Servomotor(0,false,1,2,NULL) {}
     MOCK_METHOD1(move_to_percent, void(int));
     MOCK_METHOD0(get_last_percentage, int());
 };
