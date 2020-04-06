@@ -17,25 +17,29 @@ box::ModeAwareness::~ModeAwareness() {
  * Public Methods
  *************************************************/
 
-bool box::ModeAwareness::run(int distance) {
+bool box::ModeAwareness::run(int distance, int* speed) {
     if(distance >= 30) {
         box_servomanager->move_pilot_servo_to_percent(0);
         box_wait->milliseconds(50);
+        *speed = 6;
         return false;
     }
     if(distance >= 20) {
         // random move 30-50%
         box_servomanager->move_pilot_servo_to_percent(random(20)+30);
         box_wait->milliseconds(random(750)+250);
+        *speed = random(3) + 1; // Speed = 1-3
         return false;
     }
     if(distance >= 10) {
         // random move 50-70%
         box_servomanager->move_pilot_servo_to_percent(random(20)+50);
         box_wait->milliseconds(random(750)+250);
+        *speed = random(3) + 1; // Speed = 1-3
         return false;
     }
     box_servomanager->move_pilot_servo_to_percent(100);
     box_wait->milliseconds(250);
+    *speed = random(6) + 1; // Speed = 1-6
     return true;
 }

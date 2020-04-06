@@ -22,6 +22,7 @@ struct ModeReset_under_test : public box::ModeReset {
 class TestModeReset : public ::testing::Test {
   protected:
     ModeReset_under_test* mode_reset_under_test;
+    int box_speed_mock = 5;
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
@@ -43,31 +44,47 @@ TEST_F(TestModeReset, test_wait_init) { EXPECT_TRUE(true); }
 TEST_F(TestModeReset, test_switchsate_high_no_change) {
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_FALSE(mode_reset_under_test->run());
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(5));
+    EXPECT_FALSE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 5;
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_FALSE(mode_reset_under_test->run());
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(6));
+    EXPECT_FALSE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 6;
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3));
     EXPECT_CALL(*arduino_mock, random(100)).WillOnce(Return(40));
-    EXPECT_TRUE(mode_reset_under_test->run());
+    EXPECT_TRUE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 3;
 }
 
 TEST_F(TestModeReset, test_switchsate_high_change_direction) {
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_FALSE(mode_reset_under_test->run());
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3));
+    EXPECT_FALSE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 3;
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_FALSE(mode_reset_under_test->run());
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3));
+    EXPECT_FALSE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 3;
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3));
     EXPECT_CALL(*arduino_mock, random(100)).WillOnce(Return(51));
-    EXPECT_FALSE(mode_reset_under_test->run());
+    EXPECT_FALSE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 3;
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_FALSE(mode_reset_under_test->run());
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3));
+    EXPECT_FALSE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 3;
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_TRUE(mode_reset_under_test->run());
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3));
+    EXPECT_TRUE(mode_reset_under_test->run(&box_speed_mock));
+    box_speed_mock = 3;
 }

@@ -19,7 +19,7 @@ class ModeNormal {
     ModeNormal(box::Servomanager* box_servomanager,
                   box::Wait* box_wait);
     virtual ~ModeNormal();
-    virtual void run();
+    virtual void run(int* speed);
 
 };
 

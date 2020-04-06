@@ -20,6 +20,7 @@ struct ModeNormal_under_test : public box::ModeNormal {
 class TestModeNormal : public ::testing::Test {
   protected:
     ModeNormal_under_test* mode_normal_under_test;
+    int box_speed_stub = 5;
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
@@ -40,5 +41,6 @@ TEST_F(TestModeNormal, test_wait_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestModeNormal, test_sleep) {
     EXPECT_CALL(*box_wait_mock, milliseconds(50)).Times(1);
-    mode_normal_under_test->run();
+    mode_normal_under_test->run(&box_speed_stub);
+    EXPECT_EQ(3, box_speed_stub);
 }

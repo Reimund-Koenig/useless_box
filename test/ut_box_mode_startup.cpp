@@ -21,6 +21,7 @@ struct ModeStartup_under_test : public box::ModeStartup {
 class TestModeStartup : public ::testing::Test {
   protected:
     ModeStartup_under_test* mode_startup_under_test;
+    int box_speed_mock = 5;
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
@@ -43,14 +44,15 @@ class TestModeStartup : public ::testing::Test {
         //TODO: EXPECT_CALL(*box_servomanager_mock, set_speed(_)).Times(1);
         EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(100,0)).Times(1);
         EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-        EXPECT_FALSE(mode_startup_under_test->run());
+        EXPECT_CALL(*arduino_mock, random(_)).WillRepeatedly(Return(5));
+        EXPECT_FALSE(mode_startup_under_test->run(&box_speed_mock));
     }
 };
 
 TEST_F(TestModeStartup, test_wait_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestModeStartup, test_start_with_low_switchstate) {
-    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(LOW));
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
     // run 1
     test_switch_move_pilot_to_100_percent();
     test_switch_move_pilot_to_100_percent();
@@ -69,13 +71,13 @@ TEST_F(TestModeStartup, test_start_with_low_switchstate) {
 
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);;
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_TRUE(mode_startup_under_test->run());
+    EXPECT_TRUE(mode_startup_under_test->run(&box_speed_mock));
 }
 
 TEST_F(TestModeStartup, test_start_with_high_switchstate) {
-    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(HIGH));
+    EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
     // run 1
-    EXPECT_FALSE(mode_startup_under_test->run());
+    EXPECT_FALSE(mode_startup_under_test->run(&box_speed_mock));
     test_switch_move_pilot_to_100_percent();
     // run 2
     test_switch_move_pilot_to_100_percent();
@@ -92,5 +94,5 @@ TEST_F(TestModeStartup, test_start_with_high_switchstate) {
 
     EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,0)).Times(1);;
     EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
-    EXPECT_TRUE(mode_startup_under_test->run());
+    EXPECT_TRUE(mode_startup_under_test->run(&box_speed_mock));
 }

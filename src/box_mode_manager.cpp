@@ -15,20 +15,20 @@ box::ModeManager::ModeManager(box::Servomanager* box_servomanager,
 box::ModeManager::~ModeManager() {
 }
 
-bool box::ModeManager::run_mode_awareness(int distance){
-    box::ModeManager::box_mode_awareness->run(distance);
+bool box::ModeManager::run_mode_awareness(int distance, int* box_speed){
+    box::ModeManager::box_mode_awareness->run(distance, box_speed);
     return false; // endless mode
 }
 
-bool box::ModeManager::run_mode_normal(){
-    box::ModeManager::box_mode_normal->run();
+bool box::ModeManager::run_mode_normal(int* box_speed){
+    box::ModeManager::box_mode_normal->run(box_speed);
     return false; // endless mode
 }
 
-bool box::ModeManager::run_mode_reset(){
-    return box::ModeManager::box_mode_reset->run();
+bool box::ModeManager::run_mode_reset(int* box_speed){
+    return box::ModeManager::box_mode_reset->run(box_speed);
 }
 
-bool box::ModeManager::run_mode_startup(){
-    return box::ModeManager::box_mode_startup->run();
+bool box::ModeManager::run_mode_startup(int* box_speed){
+    return box::ModeManager::box_mode_startup->run(box_speed);
 }
