@@ -39,8 +39,8 @@ class TestModeNormal : public ::testing::Test {
 TEST_F(TestModeNormal, test_wait_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestModeNormal, test_sleep) {
-    EXPECT_CALL(*box_wait_mock, milliseconds(50)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_servos_to_percent(0,3,0,3)).Times(2);
+    EXPECT_CALL(*box_wait_mock, milliseconds(50)).Times(2);
+    mode_normal_under_test->run();
     mode_normal_under_test->run();
 }
-
-// TODO: TEST START SPEED = 4

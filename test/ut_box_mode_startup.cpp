@@ -41,7 +41,6 @@ class TestModeStartup : public ::testing::Test {
     }
 
     virtual void test_switch_move_pilot_to_100_percent() {
-        //TODO: EXPECT_CALL(*box_servomanager_mock, set_speed(_)).Times(1);
         int rnd_result = 2;
         const int expected_speed = rnd_result+3;
         EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(rnd_result));
