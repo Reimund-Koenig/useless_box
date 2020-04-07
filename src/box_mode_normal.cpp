@@ -23,6 +23,7 @@ void box::ModeNormal::run() {
         case 0:
             box_servomanager->move_pilot_servo_to_percent(0,6);
             box_servomanager->move_copilot_servo_to_percent(0,6);
+            box_wait->milliseconds(50);
             return;
         default:
             run_mode_normal_step = 0;

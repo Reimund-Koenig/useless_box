@@ -32,5 +32,4 @@ class Serial_ {
 };
 extern Serial_ Serial;
 
-// SerialMock* serialMockInstance();
 #endif // SERIAL_H

@@ -1,3 +1,4 @@
+#include "ardunio_namespace.h"
 #include "box_systemtest.hpp"
 
 box::Systemtest* box_systemtest;

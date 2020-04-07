@@ -22,6 +22,7 @@ bool box::ModeAwareness::run(int distance) {
     int box_percentage = 0;
     if(distance >= 30) {
         box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
+        box_servomanager->move_copilot_servo_to_percent(0, 6);
         return false;
     }
     if(distance >= 20) {
@@ -29,6 +30,7 @@ bool box::ModeAwareness::run(int distance) {
         box_speed = random(4) + 3; // Speed = 3-6
         box_percentage = random(20)+30;
         box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
+        box_servomanager->move_copilot_servo_to_percent(0, 6);
         box_wait->add_milliseconds(random(600));
         return false;
     }
@@ -37,11 +39,12 @@ bool box::ModeAwareness::run(int distance) {
         box_speed = random(4) + 3; // Speed = 3-6
         box_percentage = random(20)+50;
         box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
+        box_servomanager->move_copilot_servo_to_percent(0, 6);
         box_wait->add_milliseconds(random(600));
         return false;
     }
     box_speed = random(3) + 4; // Speed = 3-6
-    box_percentage = 100;
-    box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
+    box_servomanager->move_pilot_servo_to_percent(100, box_speed);
+    box_servomanager->move_copilot_servo_to_percent(0, 6);
     return true;
 }

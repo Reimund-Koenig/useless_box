@@ -31,6 +31,7 @@ class Systemtest {
     box::Switch* box_switch;
     box::Sonar* box_sonar;
     int last_switch_state;
+    int motor_speed;
     unsigned long last_debounce_time;
 
   public:

@@ -12,6 +12,9 @@ cp ../../../src/* ./
 rm Arduino.h
 rm Servo.h
 rm Serial.h
+rm Serial.cpp
+rm box_main.hpp
+rm box_main.cpp
 rm box_gearmotor.cpp
 rm box_gearmotor.hpp
 rm box_controller.cpp

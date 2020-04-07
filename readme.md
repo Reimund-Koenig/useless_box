@@ -25,7 +25,12 @@ sudo apt-get install g++
 * sudo chmod a+rw /dev/ttyACM0
 
 ### Compile code
-    cd ~/workspace/useless_box/arduino
+    cd ~/workspace/useless_box/arduino/useless_box
+    make
+
+### Compile code systemtest
+    // comment out every include of Serial.h
+    cd ~/workspace/useless_box/arduino/useless_box_systemtest
     make
 
 ### Compile and run code

@@ -5,7 +5,7 @@
 #include "box_switch.hpp"
 #include "box_potentiometer.hpp"
 #include "box_sonar.hpp"
-#include <Serial.h>
+// #include <Serial.h>
 #include <Arduino.h>
 
 using namespace arduino;
@@ -19,7 +19,7 @@ using namespace arduino;
 #define LOWER_SERVO_MAX 133
 #define LOWER_SERVO_CLOCKWISE false
 #define UPPER_SERVO_PWM 10
-#define UPPER_SERVO_MIN 42
+#define UPPER_SERVO_MIN 38
 #define UPPER_SERVO_MAX 180
 #define UPPER_SERVO_CLOCKWISE true
 #define PIN_SONAR_TRIGGER 11
@@ -51,6 +51,7 @@ box::Systemtest::Systemtest() {
     systemtest_state = 1;
     number_of_functions = 5;
     last_switch_state = -1;
+    motor_speed = 6;
     pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(9600);
     delay(1000);
@@ -128,19 +129,33 @@ void box::Systemtest::test_sonar_avarage() {
 }
 
 void box::Systemtest::test_lower_servomotor() {
+    if(box_switch->has_changed()){
+        motor_speed++;
+        if(motor_speed>6) {motor_speed=0;}
+        box_lower_servomotor->set_speed_and_get_sleeptime(motor_speed);
+        println("Motorspeed is  ", motor_speed);
+    }
     servomotor_angle = box_potentiometer->get_value();
     box_lower_servomotor->move_to_angle(servomotor_angle);
     if ((millis() - last_debounce_time) > 1000) {
         println("Motorangle is  ", servomotor_angle);
         last_debounce_time = millis();
     }
+    box_lower_servomotor->move_step();
 }
 
 void box::Systemtest::test_upper_servomotor() {
+    if(box_switch->has_changed()){
+        motor_speed++;
+        if(motor_speed>6) {motor_speed=0;}
+        box_upper_servomotor->set_speed_and_get_sleeptime(motor_speed);
+        println("Motorspeed is  ", motor_speed);
+    }
     servomotor_angle = box_potentiometer->get_value();
     box_upper_servomotor->move_to_angle(servomotor_angle);
     if ((millis() - last_debounce_time) > 1000) {
         println("Motorangle is  ", servomotor_angle);
         last_debounce_time = millis();
     }
+    box_upper_servomotor->move_step();
 }
