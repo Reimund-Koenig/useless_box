@@ -13,6 +13,7 @@ class ModeAwareness {
   private:
     box::Servomanager* box_servomanager;
     box::Wait* box_wait;
+    int last_distance;
 
   public:
     ModeAwareness(box::Servomanager* box_servomanager,

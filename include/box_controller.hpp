@@ -14,6 +14,7 @@ class Controller {
   private:
     int box_mode;
     int box_speed;
+    int distance;
     bool is_mode_finished;
     box::Sonar* box_sonar;
     box::Switch* box_switch;

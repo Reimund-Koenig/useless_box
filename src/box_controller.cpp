@@ -21,17 +21,18 @@ box::Controller::Controller(box::Switch* box_switch,
     box::Controller::box_mode_manager = box_mode_manager;
     box_mode = MODE_STARTUP;
     is_mode_finished = false;
+    distance = box_sonar->get_average_distance_cm();
 }
 
 box::Controller::~Controller() {
 }
 
 /*************************************************************************************************
- * Private Methods
+ * Public Methods
  *************************************************/
 
 void box::Controller::run() {
-    int distance = box_sonar->get_average_distance_cm();
+    distance = box_sonar->get_average_distance_cm();
     box_servomanager->move_steps();
     bool user_interrupt = box_switch->has_changed() && box_servomanager->box_servos_not_reached_switch();
     if(user_interrupt) {
@@ -48,6 +49,10 @@ void box::Controller::run() {
     default:                box_mode = MODE_RESET; return;
     }
 }
+
+/*************************************************************************************************
+ * Private Methods
+ *************************************************/
 
 void box::Controller::switch_box_mode() {
     is_mode_finished = false;
