@@ -11,7 +11,8 @@ box::Switch::Switch(int pin_switch) {
     box::Switch::debounce_delay_ms = 10;
     box::Switch::last_debounce_time = 0;
     pinMode(pin_switch, INPUT_PULLUP);
-    last_switch_state = digitalRead(box::Switch::pin_switch);
+    switch_state = digitalRead(box::Switch::pin_switch);
+    last_switch_state = switch_state;
     m_has_changed = false;
 }
 
@@ -19,7 +20,7 @@ box::Switch::~Switch() {
 }
 
 bool box::Switch::check() {
-    int reading = digitalRead(box::Switch::pin_switch);
+    bool reading = (bool) digitalRead(box::Switch::pin_switch);
     if (reading != last_switch_state) {
         last_debounce_time = millis();
     }

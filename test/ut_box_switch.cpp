@@ -98,6 +98,6 @@ TEST_F(TestSwitch, test_switch_debounce) {
     EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
     EXPECT_CALL(*arduino_mock, millis())
                             .WillOnce(Return(100))
-                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY));
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 3));
     EXPECT_FALSE(switch_under_test_high_start_state->has_changed());
 }
