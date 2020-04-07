@@ -53,10 +53,9 @@ void box::Servomotor::move_step() {
 }
 
 bool box::Servomotor::current_angle_smaller_than_95_percent(){
-    if(max_peak_angle == 0) { return false; }
-    double calc_angle = current_angle;
+    double calc_angle = (double) current_angle;
     if(box::Servomotor::clockwise) {
-        calc_angle = min_peak_angle - calc_angle + max_peak_angle;
+        calc_angle = max_peak_angle + min_peak_angle - calc_angle;
     }
     double percent_95 = (((double)max_peak_angle/100.0)*95.0);
     return calc_angle < percent_95;
