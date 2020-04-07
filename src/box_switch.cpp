@@ -7,8 +7,11 @@ using namespace arduino;
 
 box::Switch::Switch(int pin_switch) {
     box::Switch::pin_switch = pin_switch;
+    box::Switch::box_wait_switch_debounce = new box::Wait();
+    box::Switch::debounce_delay_ms = 10;
+    box::Switch::last_debounce_time = 0;
     pinMode(pin_switch, INPUT_PULLUP);
-    last_state = digitalRead(box::Switch::pin_switch);
+    last_switch_state = digitalRead(box::Switch::pin_switch);
     m_has_changed = false;
 }
 
@@ -16,12 +19,18 @@ box::Switch::~Switch() {
 }
 
 bool box::Switch::check() {
-    bool current_state = digitalRead(box::Switch::pin_switch);
-    if(last_state != current_state && !m_has_changed) {
-        m_has_changed = true;
+    int reading = digitalRead(box::Switch::pin_switch);
+    if (reading != last_switch_state) {
+        last_debounce_time = millis();
     }
-    last_state = current_state;
-    return current_state;
+    if ((millis() - last_debounce_time) > debounce_delay_ms) {
+        if (reading != switch_state) {
+            switch_state = (bool) reading;
+            m_has_changed = true;
+        }
+    }
+    last_switch_state = (bool) reading;
+    return switch_state;
 }
 /*************************************************************************************************
  * Public Methods
