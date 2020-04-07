@@ -29,6 +29,7 @@ class Servomotor {
                box::Wait* box_wait);
     virtual ~Servomotor();
     virtual void move_step();
+    virtual bool current_angle_smaller_than_95_percent();
     virtual int set_speed_and_get_sleeptime(int speed);
     virtual void move_to_percent(int percent);
     virtual void move_to_angle(int angle);

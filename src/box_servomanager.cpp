@@ -51,14 +51,7 @@ void box::Servomanager::move_steps() {
     box_lower_servo->move_step();
 }
 
-bool box::Servomanager::is_no_box_action() {
-    if(box_upper_servo->get_last_percentage() > 95 &&
-                            !box_switch->is_high()) {
-        return false;
-    }
-    if(box_lower_servo->get_last_percentage() > 95 &&
-                            box_switch->is_high()) {
-        return false;
-    }
-    return true;
+bool box::Servomanager::box_servos_not_reached_switch() {
+    return (box_upper_servo->current_angle_smaller_than_95_percent() ||
+            box_lower_servo->current_angle_smaller_than_95_percent());
 }

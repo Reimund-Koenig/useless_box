@@ -20,7 +20,7 @@ class Servomanager {
     virtual void move_steps();
     virtual int move_pilot_servo_to_percent(int percentage, int speed);
     virtual int move_copilot_servo_to_percent(int percentage, int speed);
-    virtual bool is_no_box_action();
+    virtual bool box_servos_not_reached_switch();
 };
 }
 
