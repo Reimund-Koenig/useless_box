@@ -27,11 +27,11 @@ bool box::ModeStartup::run() {
             box_mode_state++;
             counter++;
             if(!box_switch->is_high()) { return false; }
-            box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, speed));
+            box_servomanager->move_pilot_servo_to_percent(100, speed);
             return false; // not finished
         case 1: // Move pilot to 100 which changes pilot and copilot
             speed = random(4) + 3; // Speed = 3-6
-            box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, speed));
+            box_servomanager->move_pilot_servo_to_percent(100, speed);
             box_servomanager->move_copilot_servo_to_percent(0, 6);
             counter++;
             if(counter == 10) {  box_mode_state++; }
@@ -39,7 +39,6 @@ bool box::ModeStartup::run() {
         case 2: // Everything done -> reset and exit
             box_servomanager->move_pilot_servo_to_percent(0, speed);
             box_servomanager->move_copilot_servo_to_percent(0, speed);
-            box_wait->milliseconds(400);
             box_mode_state = 0;
             counter = 0;
             return true; // finished

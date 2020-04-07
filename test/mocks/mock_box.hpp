@@ -25,9 +25,9 @@ class BoxServoMock : public box::Servomotor {
 
 class BoxServoManagerMock : public box::Servomanager {
   public:
-    BoxServoManagerMock() : box::Servomanager(NULL,NULL,NULL) {}
-    MOCK_METHOD2(move_pilot_servo_to_percent, int(int,int));
-    MOCK_METHOD2(move_copilot_servo_to_percent, int(int,int));
+    BoxServoManagerMock() : box::Servomanager(NULL,NULL,NULL,NULL) {}
+    MOCK_METHOD2(move_pilot_servo_to_percent, void(int,int));
+    MOCK_METHOD2(move_copilot_servo_to_percent, void(int,int));
     MOCK_METHOD0(box_servos_not_reached_switch, bool());
     MOCK_METHOD0(move_steps, void());
 };
@@ -49,6 +49,7 @@ class BoxWaitMock : public box::Wait {
   public:
     BoxWaitMock() : box::Wait() {}
     MOCK_METHOD1(milliseconds, void(unsigned long));
+    MOCK_METHOD1(add_milliseconds, void(unsigned long));
     MOCK_METHOD0(is_free, bool());
 };
 

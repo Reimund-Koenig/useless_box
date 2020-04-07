@@ -19,23 +19,29 @@ box::ModeAwareness::~ModeAwareness() {
 
 bool box::ModeAwareness::run(int distance) {
     int box_speed = 6;
+    int box_percentage = 0;
     if(distance >= 30) {
-        box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(0, box_speed));
+        box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
         return false;
     }
     if(distance >= 20) {
         // random move 30-50%
         box_speed = random(4) + 3; // Speed = 3-6
-        box_wait->milliseconds(random(600)+box_servomanager->move_pilot_servo_to_percent(random(20)+30,box_speed));
+        box_percentage = random(20)+30;
+        box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
+        box_wait->add_milliseconds(random(600));
         return false;
     }
     if(distance >= 10) {
         // random move 50-70%
         box_speed = random(4) + 3; // Speed = 3-6
-        box_wait->milliseconds(random(600)+box_servomanager->move_pilot_servo_to_percent(random(20)+50, box_speed));
+        box_percentage = random(20)+50;
+        box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
+        box_wait->add_milliseconds(random(600));
         return false;
     }
     box_speed = random(3) + 4; // Speed = 3-6
-    box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, box_speed));
+    box_percentage = 100;
+    box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
     return true;
 }

@@ -24,18 +24,16 @@ bool box::ModeReset::run() {
         case 0:
             box_servomanager->move_pilot_servo_to_percent(0, speed);
             box_servomanager->move_copilot_servo_to_percent(0, speed);
-            box_wait->milliseconds(400);
             run_mode_reset_step++;
             return false; // not finished
         case 1:
             speed = random(4) + 3; // Speed = 3-6
-            box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, speed));
+            box_servomanager->move_pilot_servo_to_percent(100, speed);
             run_mode_reset_step++;
             return false; // not finished
         case 2:
             box_servomanager->move_pilot_servo_to_percent(0, speed);
             box_servomanager->move_copilot_servo_to_percent(0, speed);
-            box_wait->milliseconds(400);
             if(random(100) > 50) {
                 run_mode_reset_step++;
                 return false; // change direction
@@ -44,13 +42,12 @@ bool box::ModeReset::run() {
             return true; // finished
         case 3:
             speed = random(4) + 3; // Speed = 3-6
-            box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, speed));
+            box_servomanager->move_pilot_servo_to_percent(100, speed);
             run_mode_reset_step++;
             return false; // not finished
         case 4:
             box_servomanager->move_pilot_servo_to_percent(0, speed);
             box_servomanager->move_copilot_servo_to_percent(0, speed);
-            box_wait->milliseconds(400);
             run_mode_reset_step = 0;
             return true; //finished
         default:

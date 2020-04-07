@@ -44,11 +44,8 @@ class TestModeStartup : public ::testing::Test {
         int rnd_result = 3;
         const int expected_speed = rnd_result+3;
         EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(rnd_result));
-        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,expected_speed))
-                                            .WillOnce(Return(200));
-        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6))
-                                            .WillOnce(Return(20));
-        EXPECT_CALL(*box_wait_mock, milliseconds(200)).Times(1);
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,expected_speed));
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
         EXPECT_FALSE(mode_startup_under_test->run());
     }
 };
@@ -73,18 +70,14 @@ TEST_F(TestModeStartup, test_start_with_low_switchstate) {
     test_switch_move_pilot_to_100_percent();
     test_switch_move_pilot_to_100_percent();
 
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6)).WillOnce(Return(1));
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6)).WillOnce(Return(1));
-    EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
+    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
     EXPECT_TRUE(mode_startup_under_test->run());
 }
 
 TEST_F(TestModeStartup, test_start_with_high_switchstate) {
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,6))
-                                    .WillOnce(Return(200));
-
-    EXPECT_CALL(*box_wait_mock, milliseconds(200)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,6));
 
     // run 1
     EXPECT_FALSE(mode_startup_under_test->run());
@@ -102,8 +95,7 @@ TEST_F(TestModeStartup, test_start_with_high_switchstate) {
     test_switch_move_pilot_to_100_percent();
     test_switch_move_pilot_to_100_percent();
 
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6)).WillOnce(Return(1));
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6)).WillOnce(Return(1));
-    EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(1);
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
+    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
     EXPECT_TRUE(mode_startup_under_test->run());
 }

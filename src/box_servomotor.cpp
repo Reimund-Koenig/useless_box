@@ -9,7 +9,7 @@ box::Servomotor::Servomotor(int pin_pwm_servomotor, bool clockwise,
     box::Servomotor::min_peak_angle = min_peak_angle;
     box::Servomotor::max_peak_angle = max_peak_angle;
     box::Servomotor::clockwise = clockwise;
-    box::Servomotor::box_wait = box_wait;
+    box::Servomotor::box_wait_servo_speed = box_wait;
     set_angle(min_peak_angle);
     servo.write(box::Servomotor::angle);
     box::Servomotor::current_angle = box::Servomotor::angle;
@@ -42,14 +42,14 @@ int box::Servomotor::set_speed_and_get_sleeptime(int speed) {
 
 void box::Servomotor::move_step() {
     if(angle == current_angle) { return; }
-    if(!box_wait->is_free()) { return; }
+    if(!box_wait_servo_speed->is_free()) { return; }
     if(current_angle > angle) {
         current_angle--;
     } else {
         current_angle++;
     }
     servo.write(current_angle);
-    box_wait->milliseconds(speed_in_milliseconds);
+    box_wait_servo_speed->milliseconds(speed_in_milliseconds);
 }
 
 bool box::Servomotor::current_angle_smaller_than_95_percent(){

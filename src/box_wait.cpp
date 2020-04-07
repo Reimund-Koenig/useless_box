@@ -15,6 +15,10 @@ box::Wait::~Wait() {
 /*************************************************************************************************
  * Public Methods
  *************************************************/
+void box::Wait::add_milliseconds(unsigned long milliseconds) {
+    wait_delay +=  milliseconds;
+}
+
 void box::Wait::milliseconds(unsigned long milliseconds) {
     last_time = millis();
     wait_delay =  milliseconds;

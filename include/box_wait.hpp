@@ -12,6 +12,7 @@ class Wait {
   public:
     Wait();
     virtual ~Wait();
+    virtual void add_milliseconds(unsigned long milliseconds);
     virtual void milliseconds(unsigned long milliseconds);
     virtual bool is_free();
 };

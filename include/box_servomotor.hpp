@@ -19,7 +19,7 @@ class Servomotor {
     unsigned long speed_in_milliseconds;
     bool clockwise;
     void set_angle(int);
-    box::Wait* box_wait;
+    box::Wait* box_wait_servo_speed;
     unsigned long speed_to_millseconds(int speed);
     int calculate_sleep_time(int speed);
 

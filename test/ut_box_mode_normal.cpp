@@ -39,9 +39,7 @@ class TestModeNormal : public ::testing::Test {
 TEST_F(TestModeNormal, test_wait_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestModeNormal, test_sleep) {
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6)).WillRepeatedly(Return(200));
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6)).WillRepeatedly(Return(200));
-    EXPECT_CALL(*box_wait_mock, milliseconds(400)).Times(2);
-    mode_normal_under_test->run();
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
+    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
     mode_normal_under_test->run();
 }
