@@ -58,7 +58,7 @@ bool box::Servomotor::current_angle_smaller_than_95_percent(){
     if(box::Servomotor::clockwise) {
         calc_angle = min_peak_angle - calc_angle + max_peak_angle;
     }
-    double percent_95 = ((max_peak_angle/100.0)*95.0);
+    double percent_95 = (((double)max_peak_angle/100.0)*95.0);
     return calc_angle < percent_95;
 }
 
@@ -84,11 +84,11 @@ int box::Servomotor::get_current_angle() {
 
 unsigned long box::Servomotor::speed_to_millseconds(int speed) {
     if(speed > 5) { return (unsigned long) 0; }
-    if(speed > 4) { return (unsigned long) 10; }
-    if(speed > 3) { return (unsigned long) 15; }
-    if(speed > 2) { return (unsigned long) 20; }
-    if(speed > 1) { return (unsigned long) 25; }
-    return (unsigned long) 30;
+    if(speed > 4) { return (unsigned long) 1; }
+    if(speed > 3) { return (unsigned long) 2; }
+    if(speed > 2) { return (unsigned long) 4; }
+    if(speed > 1) { return (unsigned long) 6; }
+    return (unsigned long) 8;
 }
 
 void box::Servomotor::set_angle(int angle) {
@@ -101,10 +101,10 @@ void box::Servomotor::set_angle(int angle) {
 }
 
 int box::Servomotor::calculate_sleep_time(int speed) {
-    if(speed > 5) { return 400; }
-    if(speed > 4) { return 800; }
+    if(speed > 5) { return 500; }
+    if(speed > 4) { return 750; }
     if(speed > 3) { return 1000; }
-    if(speed > 2) { return 1200; }
-    if(speed > 1) { return 1400; }
-    return 1600;
+    if(speed > 2) { return 1500; }
+    if(speed > 1) { return 2000; }
+    return 2500;
 }
