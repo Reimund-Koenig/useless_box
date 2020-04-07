@@ -169,7 +169,7 @@ TEST_F(TestController, test_controller_test_is_free) {
     EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillRepeatedly(Return(70));
     EXPECT_CALL(*box_servomanager_mock, move_steps()).Times(AtLeast(1));
     EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(true));
-    // TODO - EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillRepeatedly(Return(true));
+    EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_wait_mock, is_free()).WillRepeatedly(Return(false));
     EXPECT_CALL(*arduino_mock, random(_)).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).Times(0);
