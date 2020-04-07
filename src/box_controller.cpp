@@ -37,7 +37,6 @@ void box::Controller::run() {
     if(user_interrupt) {
         box_mode = MODE_RESET;
         is_mode_finished = false;
-        // RESET box_wait
     }
     if (!box_wait->is_free()) { return; }
     if (is_mode_finished) { switch_box_mode(); }
