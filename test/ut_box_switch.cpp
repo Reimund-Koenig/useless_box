@@ -12,6 +12,7 @@ using ::testing::Return;
 using ::testing::NiceMock;
 
 #define TEST_PIN_SWITCH 1
+#define TEST_DEBOUNCE_DELAY 10
 
 struct Switch_under_test : public box::Switch {
     Switch_under_test() : Switch(TEST_PIN_SWITCH) {}
@@ -24,9 +25,8 @@ class TestSwitch : public ::testing::Test {
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         EXPECT_CALL(*arduino_mock, pinMode(TEST_PIN_SWITCH, INPUT_PULLUP)).Times(2);
-        EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(2)
-                                                                .WillOnce(Return(false))
-                                                                .WillOnce(Return(true));
+        EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).WillOnce(Return(false))
+                                                                .WillOnce(Return(false));
         switch_under_test_low_start_state = new Switch_under_test();
         switch_under_test_high_start_state = new Switch_under_test();
     }
@@ -39,44 +39,65 @@ class TestSwitch : public ::testing::Test {
 
 TEST_F(TestSwitch, test_switch_init) { EXPECT_TRUE(true); }
 
-TEST_F(TestSwitch, test_switch_test_startup_high) {
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(4).WillRepeatedly(Return(HIGH));
+TEST_F(TestSwitch, test_switch_has_changed) {
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100))
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1));
+    EXPECT_TRUE(switch_under_test_high_start_state->has_changed());
+
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 3));
     EXPECT_FALSE(switch_under_test_high_start_state->has_changed());
+
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100))
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1));
+    EXPECT_TRUE(switch_under_test_high_start_state->has_changed());
+
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 3));
     EXPECT_FALSE(switch_under_test_high_start_state->has_changed());
+}
+
+
+TEST_F(TestSwitch, test_switch_is_high) {
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100))
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1));
     EXPECT_TRUE(switch_under_test_high_start_state->is_high());
+
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 3));
+    EXPECT_TRUE(switch_under_test_high_start_state->is_high());
+
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100))
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 1));
+    EXPECT_FALSE(switch_under_test_high_start_state->is_high());
+
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY + 3));
+    EXPECT_FALSE(switch_under_test_high_start_state->is_high());
+}
+
+TEST_F(TestSwitch, test_switch_debounce) {
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100))
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY));
+    EXPECT_FALSE(switch_under_test_high_start_state->is_high());
+
+    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
+    EXPECT_CALL(*arduino_mock, millis())
+                            .WillOnce(Return(100))
+                            .WillOnce(Return(100 + TEST_DEBOUNCE_DELAY));
     EXPECT_FALSE(switch_under_test_high_start_state->has_changed());
-}
-
-TEST_F(TestSwitch, test_switch_test_startup_low) {
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(4).WillRepeatedly(Return(LOW));
-    EXPECT_FALSE(switch_under_test_low_start_state->has_changed());
-    EXPECT_FALSE(switch_under_test_low_start_state->has_changed());
-    EXPECT_FALSE(switch_under_test_low_start_state->is_high());
-    EXPECT_FALSE(switch_under_test_low_start_state->has_changed());
-}
-
-TEST_F(TestSwitch, test_switch_has_changed_high_start_state) {
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
-    EXPECT_TRUE(switch_under_test_high_start_state->has_changed());
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(2).WillOnce(Return(HIGH))
-                                                                     .WillOnce(Return(LOW));
-    switch_under_test_high_start_state->is_high();
-    EXPECT_TRUE(switch_under_test_high_start_state->has_changed());
-}
-
-TEST_F(TestSwitch, test_switch_has_changed_low_start_state) {
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
-    EXPECT_FALSE(switch_under_test_low_start_state->has_changed());
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
-    EXPECT_TRUE(switch_under_test_low_start_state->has_changed());
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(HIGH));
-    EXPECT_FALSE(switch_under_test_low_start_state->has_changed());
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
-    EXPECT_TRUE(switch_under_test_low_start_state->has_changed());
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(1).WillOnce(Return(LOW));
-    EXPECT_FALSE(switch_under_test_low_start_state->has_changed());
-    EXPECT_CALL(*arduino_mock, digitalRead(TEST_PIN_SWITCH)).Times(2).WillOnce(Return(HIGH))
-                                                                     .WillOnce(Return(LOW));
-    switch_under_test_low_start_state->is_high();
-    EXPECT_TRUE(switch_under_test_low_start_state->has_changed());
 }

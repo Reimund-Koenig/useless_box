@@ -144,13 +144,13 @@ TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
 
 TEST_F(TestServomanager, test_servomanager_box_servos_not_reached_switch) {
     EXPECT_CALL(*box_upper_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(true));
-    EXPECT_TRUE(servomanager_under_test->box_servos_not_reached_switch());
-
-    EXPECT_CALL(*box_upper_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(false));
     EXPECT_CALL(*box_lower_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(true));
     EXPECT_TRUE(servomanager_under_test->box_servos_not_reached_switch());
 
     EXPECT_CALL(*box_upper_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(false));
+    EXPECT_FALSE(servomanager_under_test->box_servos_not_reached_switch());
+
+    EXPECT_CALL(*box_upper_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(true));
     EXPECT_CALL(*box_lower_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(false));
     EXPECT_FALSE(servomanager_under_test->box_servos_not_reached_switch());
 }
