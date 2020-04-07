@@ -26,7 +26,7 @@ bool box::ModeStartup::run() {
         case 0: // Move switch up if it is down
             box_mode_state++;
             counter++;
-            if(box_switch->is_high()) { return false; }
+            if(!box_switch->is_high()) { return false; }
             box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, speed));
             return false; // not finished
         case 1: // Move pilot to 100 which changes pilot and copilot
