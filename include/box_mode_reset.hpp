@@ -16,7 +16,6 @@ class ModeReset {
     int run_mode_reset_step;
     bool switch_start_state_is_high;
     void run_mode_reset();
-    void do_move(int percent_pilot, int percent_copilot);
 
   public:
     ModeReset(box::Servomanager* box_servomanager, box::Wait* box_wait);

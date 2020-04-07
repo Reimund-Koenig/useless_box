@@ -13,7 +13,7 @@ class ModeNormal {
   private:
     box::Servomanager* box_servomanager;
     box::Wait* box_wait;
-    int run_mode_reset_step;
+    int run_mode_normal_step;
     void run_mode_reset();
 
   public:

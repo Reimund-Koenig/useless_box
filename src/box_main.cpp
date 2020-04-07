@@ -10,7 +10,7 @@ using namespace arduino;
 #define LOWER_SERVO_MAX 138
 #define LOWER_SERVO_CLOCKWISE false
 #define UPPER_SERVO_PWM 10
-#define UPPER_SERVO_MIN 42
+#define UPPER_SERVO_MIN 38
 #define UPPER_SERVO_MAX 180
 #define UPPER_SERVO_CLOCKWISE true
 #define PIN_SONAR_TRIGGER 11

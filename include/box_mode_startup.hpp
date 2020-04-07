@@ -18,7 +18,6 @@ class ModeStartup {
     int counter;
     bool switch_start_state_is_high;
     void run_mode_reset();
-    void do_move(int percent_pilot, int percent_copilot);
 
   public:
     ModeStartup(box::Servomanager* box_servomanager,

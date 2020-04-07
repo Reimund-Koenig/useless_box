@@ -22,35 +22,28 @@ box::Servomanager::~Servomanager() {
  * Public Methods
  *************************************************/
 
-void box::Servomanager::move_pilot_servo_to_percent(int percentage, int speed) {
-    move_servos_to_percent(percentage, speed, -1, -1);
-}
-
-void box::Servomanager::move_copilot_servo_to_percent(int percentage, int speed) {
-    move_servos_to_percent(-1, -1, percentage, speed);
-}
-
-void box::Servomanager::move_servos_to_percent(int percentage_pilot, int speed_pilot,
-                            int percentage_copilot, int speed_copilot) {
+int box::Servomanager::move_pilot_servo_to_percent(int percentage, int speed) {
+    int sleep_time_for_speed = 0;
     if(box_switch->is_high()) {
-        if(percentage_pilot != -1) {
-            box_upper_servo->move_to_percent(percentage_pilot);
-            box_upper_servo->set_speed(speed_pilot);
-        }
-        if(percentage_copilot != -1) {
-            box_lower_servo->move_to_percent(percentage_copilot);
-            box_lower_servo->set_speed(speed_copilot);
-        }
+        box_upper_servo->move_to_percent(percentage);
+        sleep_time_for_speed = box_upper_servo->set_speed_and_get_sleeptime(speed);
     } else {
-        if(percentage_pilot != -1) {
-            box_lower_servo->move_to_percent(percentage_pilot);
-            box_lower_servo->set_speed(speed_pilot);
-        }
-        if(percentage_copilot != -1) {
-            box_upper_servo->move_to_percent(percentage_copilot);
-            box_upper_servo->set_speed(speed_copilot);
-        }
+        box_lower_servo->move_to_percent(percentage);
+        sleep_time_for_speed = box_lower_servo->set_speed_and_get_sleeptime(speed);
     }
+    return sleep_time_for_speed;
+}
+
+int box::Servomanager::move_copilot_servo_to_percent(int percentage, int speed) {
+    int sleep_time_for_speed = 0;
+    if(box_switch->is_high()) {
+        box_lower_servo->move_to_percent(percentage);
+        sleep_time_for_speed = box_lower_servo->set_speed_and_get_sleeptime(speed);
+    } else {
+        box_upper_servo->move_to_percent(percentage);
+        sleep_time_for_speed = box_upper_servo->set_speed_and_get_sleeptime(speed);
+    }
+    return sleep_time_for_speed;
 }
 
 void box::Servomanager::move_steps() {

@@ -19,17 +19,23 @@ box::ModeReset::~ModeReset() {
  *************************************************/
 
 bool box::ModeReset::run() {
+    int speed = 6;
     switch (run_mode_reset_step) {
         case 0:
-            do_move(0, 0);
+            box_servomanager->move_pilot_servo_to_percent(0, speed);
+            box_servomanager->move_copilot_servo_to_percent(0, speed);
+            box_wait->milliseconds(400);
             run_mode_reset_step++;
             return false; // not finished
         case 1:
-            do_move(100, 0);
+            speed = random(4) + 3; // Speed = 3-6
+            box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, speed));
             run_mode_reset_step++;
             return false; // not finished
         case 2:
-            do_move(0, 0);
+            box_servomanager->move_pilot_servo_to_percent(0, speed);
+            box_servomanager->move_copilot_servo_to_percent(0, speed);
+            box_wait->milliseconds(400);
             if(random(100) > 50) {
                 run_mode_reset_step++;
                 return false; // change direction
@@ -37,25 +43,19 @@ bool box::ModeReset::run() {
             run_mode_reset_step = 0;
             return true; // finished
         case 3:
-            do_move(100, 0);
+            speed = random(4) + 3; // Speed = 3-6
+            box_wait->milliseconds(box_servomanager->move_pilot_servo_to_percent(100, speed));
             run_mode_reset_step++;
             return false; // not finished
         case 4:
-            do_move(0,0);
+            box_servomanager->move_pilot_servo_to_percent(0, speed);
+            box_servomanager->move_copilot_servo_to_percent(0, speed);
+            box_wait->milliseconds(400);
             run_mode_reset_step = 0;
             return true; //finished
         default:
             run_mode_reset_step = 0;
-            return true; // finished
+            return false; // not finished
     }
-}
-
-/*************************************************************************************************
- * Private Methods
- *************************************************/
-
-void box::ModeReset::do_move(int percent_pilot, int percent_copilot) {
-    int box_speed = random(4) + 3; // Speed = 3-6
-    box_servomanager->move_servos_to_percent(percent_pilot, box_speed, percent_copilot, box_speed);
-    box_wait->milliseconds(400);
+    return false; // not finished
 }

@@ -18,10 +18,8 @@ class Servomanager {
                  box::Switch* box_switch);
     virtual ~Servomanager();
     virtual void move_steps();
-    virtual void move_pilot_servo_to_percent(int percentage, int speed);
-    virtual void move_copilot_servo_to_percent(int percentage, int speed);
-    virtual void move_servos_to_percent(int percentage_pilot, int speed_pilot,
-                                int percentage_copilot, int speed_copilot);
+    virtual int move_pilot_servo_to_percent(int percentage, int speed);
+    virtual int move_copilot_servo_to_percent(int percentage, int speed);
     virtual bool is_no_box_action();
 };
 }
