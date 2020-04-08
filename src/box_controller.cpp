@@ -12,12 +12,12 @@ using namespace arduino;
 box::Controller::Controller(box::Switch* box_switch,
                 box::Sonar* box_sonar,
                 box::Servomanager* box_servomanager,
-                box::Wait* box_wait,
+                box::Wait* box_wait_controller,
                 box::ModeManager* box_mode_manager) {
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servomanager = box_servomanager;
-    box::Controller::box_wait = box_wait;
+    box::Controller::box_wait_controller = box_wait_controller;
     box::Controller::box_mode_manager = box_mode_manager;
     box_mode = MODE_STARTUP;
     is_mode_finished = false;
@@ -39,7 +39,7 @@ void box::Controller::run() {
         box_mode = MODE_RESET;
         is_mode_finished = false;
     }
-    if (!box_wait->is_free()) { return; }
+    if (!box_wait_controller->is_free()) { return; }
     if (is_mode_finished) { switch_box_mode(); }
     switch (box_mode) {
     case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;

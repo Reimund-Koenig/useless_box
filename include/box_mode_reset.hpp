@@ -12,13 +12,14 @@ class ModeReset {
 
   private:
     box::Servomanager* box_servomanager;
-    box::Wait* box_wait;
+    box::Wait* box_wait_controller;
     int run_mode_reset_step;
     bool switch_start_state_is_high;
     void run_mode_reset();
 
   public:
-    ModeReset(box::Servomanager* box_servomanager, box::Wait* box_wait);
+    ModeReset(box::Servomanager* box_servomanager,
+              box::Wait* box_wait_controller);
     virtual ~ModeReset();
     virtual bool run();
 

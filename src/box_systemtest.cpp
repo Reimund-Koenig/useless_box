@@ -132,11 +132,10 @@ void box::Systemtest::test_lower_servomotor() {
     if(box_switch->has_changed()){
         motor_speed++;
         if(motor_speed>6) {motor_speed=0;}
-        box_lower_servomotor->set_speed_and_get_sleeptime(motor_speed);
         println("Motorspeed is  ", motor_speed);
     }
     servomotor_angle = box_potentiometer->get_value();
-    box_lower_servomotor->move_to_angle(servomotor_angle);
+    box_lower_servomotor->move_to_angle(servomotor_angle, motor_speed);
     if ((millis() - last_debounce_time) > 1000) {
         println("Motorangle is  ", servomotor_angle);
         last_debounce_time = millis();
@@ -148,11 +147,10 @@ void box::Systemtest::test_upper_servomotor() {
     if(box_switch->has_changed()){
         motor_speed++;
         if(motor_speed>6) {motor_speed=0;}
-        box_upper_servomotor->set_speed_and_get_sleeptime(motor_speed);
         println("Motorspeed is  ", motor_speed);
     }
     servomotor_angle = box_potentiometer->get_value();
-    box_upper_servomotor->move_to_angle(servomotor_angle);
+    box_upper_servomotor->move_to_angle(servomotor_angle, motor_speed);
     if ((millis() - last_debounce_time) > 1000) {
         println("Motorangle is  ", servomotor_angle);
         last_debounce_time = millis();

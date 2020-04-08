@@ -5,9 +5,9 @@
 using namespace arduino;
 
 box::ModeNormal::ModeNormal(box::Servomanager* box_servomanager,
-                                  box::Wait* box_wait) {
+                                  box::Wait* box_wait_controller) {
     box::ModeNormal::box_servomanager = box_servomanager;
-    box::ModeNormal::box_wait = box_wait;
+    box::ModeNormal::box_wait_controller = box_wait_controller;
     box::ModeNormal::run_mode_normal_step = 0;
 }
 
@@ -23,7 +23,7 @@ void box::ModeNormal::run() {
         case 0:
             box_servomanager->move_pilot_servo_to_percent(0,6);
             box_servomanager->move_copilot_servo_to_percent(0,6);
-            box_wait->milliseconds(50);
+            box_wait_controller->milliseconds(50);
             return;
         default:
             run_mode_normal_step = 0;

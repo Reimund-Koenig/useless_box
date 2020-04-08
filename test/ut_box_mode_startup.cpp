@@ -14,8 +14,10 @@ using ::testing::NiceMock;
 
 struct ModeStartup_under_test : public box::ModeStartup {
     ModeStartup_under_test(box::Servomanager* box_servomanager_mock,
-                          box::Wait* box_wait_mock, box::Switch* box_switch_mock) :
-    ModeStartup(box_servomanager_mock, box_wait_mock, box_switch_mock) {}
+                          box::Wait* box_wait_mock,
+                          box::Wait* box_wait_startup_mock,
+                          box::Switch* box_switch_mock) :
+    ModeStartup(box_servomanager_mock, box_wait_mock, box_wait_startup_mock, box_switch_mock) {}
 };
 
 class TestModeStartup : public ::testing::Test {
@@ -26,15 +28,18 @@ class TestModeStartup : public ::testing::Test {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
         box_wait_mock = new NiceMock<BoxWaitMock>;
+        box_wait_startup_mock = new NiceMock<BoxWaitMock>;
         box_switch_mock = new NiceMock<BoxSwitchMock>;
         mode_startup_under_test = new ModeStartup_under_test(
                                         (box::Servomanager*) box_servomanager_mock,
                                         (box::Wait*) box_wait_mock,
+                                        (box::Wait*) box_wait_startup_mock,
                                         (box::Switch*) box_switch_mock);
     }
     virtual void TearDown() {
         delete mode_startup_under_test;
         delete box_switch_mock;
+        delete box_wait_startup_mock;
         delete box_wait_mock;
         delete box_servomanager_mock;
         delete arduino_mock;
@@ -65,17 +70,38 @@ class TestModeStartup : public ::testing::Test {
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(80,6));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // Jitter upper motor (with the eye)
-        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_)).Times(AtLeast(5));
-        EXPECT_FALSE(mode_startup_under_test->run());
+        // // Jitter upper motor (with the eye)
+        EXPECT_CALL(*box_wait_startup_mock, is_free()).WillOnce(Return(false));
+        EXPECT_FALSE(mode_startup_under_test->run()); // nothing happens
+        EXPECT_CALL(*box_wait_startup_mock, is_free()).WillOnce(Return(false));
+        EXPECT_FALSE(mode_startup_under_test->run()); // nothing happens
+        EXPECT_CALL(*box_wait_startup_mock, is_free()).Times(AtLeast(5)).WillRepeatedly(Return(true));
+        EXPECT_FALSE(mode_startup_under_test->run()); // set start values
+        for(int i = 0; i<25; i++) {
+            EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_)).Times(2);
+            EXPECT_CALL(*box_wait_startup_mock, milliseconds(_)).Times(2);
+            EXPECT_FALSE(mode_startup_under_test->run()); // move 90 percent
+            EXPECT_FALSE(mode_startup_under_test->run()); // move 70 percent
+        }
 
         // Press button with lower
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));
+        EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // lower slowly back and press button with upper
-        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));
+        // lower slowly back
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,2));
+        EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // // press button with upper
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));
+        EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // // upper back to 70%
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_));
+        EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
         // Reset both motors

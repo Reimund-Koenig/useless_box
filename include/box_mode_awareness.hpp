@@ -12,12 +12,12 @@ class ModeAwareness {
 
   private:
     box::Servomanager* box_servomanager;
-    box::Wait* box_wait;
+    box::Wait* box_wait_controller;
     int last_distance;
 
   public:
     ModeAwareness(box::Servomanager* box_servomanager,
-                  box::Wait* box_wait);
+                  box::Wait* box_wait_controller);
     virtual ~ModeAwareness();
     virtual bool run(int distance);
 

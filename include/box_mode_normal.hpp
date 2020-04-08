@@ -12,13 +12,13 @@ class ModeNormal {
 
   private:
     box::Servomanager* box_servomanager;
-    box::Wait* box_wait;
+    box::Wait* box_wait_controller;
     int run_mode_normal_step;
     void run_mode_reset();
 
   public:
     ModeNormal(box::Servomanager* box_servomanager,
-                  box::Wait* box_wait);
+                  box::Wait* box_wait_controller);
     virtual ~ModeNormal();
     virtual void run();
 

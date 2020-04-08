@@ -7,7 +7,7 @@ using namespace arduino;
 box::ModeAwareness::ModeAwareness(box::Servomanager* box_servomanager,
                                   box::Wait* box_wait) {
     box::ModeAwareness::box_servomanager = box_servomanager;
-    box::ModeAwareness::box_wait = box_wait;
+    box::ModeAwareness::box_wait_controller = box_wait;
     box::ModeAwareness::last_distance = 0;
 }
 

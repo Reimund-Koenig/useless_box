@@ -5,9 +5,9 @@
 using namespace arduino;
 
 box::ModeReset::ModeReset(box::Servomanager* box_servomanager,
-                                  box::Wait* box_wait) {
+                                  box::Wait* box_wait_controller) {
     box::ModeReset::box_servomanager = box_servomanager;
-    box::ModeReset::box_wait = box_wait;
+    box::ModeReset::box_wait_controller = box_wait_controller;
     box::ModeReset::run_mode_reset_step  = 0;
 }
 

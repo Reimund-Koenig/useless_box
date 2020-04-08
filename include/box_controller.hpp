@@ -19,7 +19,7 @@ class Controller {
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomanager* box_servomanager;
-    box::Wait* box_wait;
+    box::Wait* box_wait_controller;
     box::ModeManager* box_mode_manager;
     void select_new_box_mode();
     void switch_box_mode();
