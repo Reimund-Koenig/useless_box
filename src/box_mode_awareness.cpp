@@ -26,7 +26,8 @@ bool box::ModeAwareness::run(int distance) {
     int box_percentage = 0;
     box_servomanager->move_copilot_servo_to_percent(0, 6);
     if(distance >= 30) {
-        box_servomanager->move_pilot_servo_to_percent(0, 6);
+        box_speed = 6;
+        box_percentage = 0;
     } else if(distance >= 20) {
         box_speed = 6;
         box_percentage = random(20)+30; // random move 30-50%
