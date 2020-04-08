@@ -85,9 +85,9 @@ unsigned long box::Servomotor::speed_to_millseconds(int speed) {
     if(speed > 5) { return (unsigned long) 0; }
     if(speed > 4) { return (unsigned long) 1; }
     if(speed > 3) { return (unsigned long) 2; }
-    if(speed > 2) { return (unsigned long) 3; }
-    if(speed > 1) { return (unsigned long) 4; }
-    return (unsigned long) 5;
+    if(speed > 2) { return (unsigned long) 5; }
+    if(speed > 1) { return (unsigned long) 8; }
+    return (unsigned long) 10;
 }
 
 void box::Servomotor::set_angle(int angle) {

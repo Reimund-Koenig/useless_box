@@ -33,16 +33,17 @@ bool box::ModeStartup::run() {
     } if (box_mode_state == 2) { // Move slowly both motors to 90%
         box_servomanager->move_pilot_servo_to_percent(90, 1);
         box_servomanager->move_copilot_servo_to_percent(90, 1);
+        box_wait->add_milliseconds(1000);
         box_mode_state++;
         return false; // not finished
     } if (box_mode_state == 3) {// Move first one fast back
         box_servomanager->move_copilot_servo_to_percent(0, 6);
-        box_wait->add_milliseconds(400);
+        box_wait->add_milliseconds(750);
         box_mode_state++;
         return false; // finished
     } if (box_mode_state == 4) {// Move second one fast back
         box_servomanager->move_pilot_servo_to_percent(0, 6);
-        box_wait->add_milliseconds(400);
+        box_wait->add_milliseconds(750);
         box_mode_state++;
         return false;
     } if (box_mode_state == 5) { // Move upper out
@@ -57,17 +58,19 @@ bool box::ModeStartup::run() {
             delay(delay_time);
             box_servomanager->move_copilot_servo_to_percent(70, speed);
             delay(delay_time);
+            if(delay_time%50==0) { speed++; }
             delay_time -= 10;
         }
         box_mode_state++;
         return false;
     } if (box_mode_state == 7) { // Press button with lower
         box_servomanager->move_pilot_servo_to_percent(100, 6);
+        box_wait->add_milliseconds(1000);
         box_mode_state++;
         return false;
     } if (box_mode_state == 8) { // lower slowly back and press button with upper
         box_servomanager->move_copilot_servo_to_percent(0, 2);
-        delay(100);
+        delay(1000);
         box_servomanager->move_pilot_servo_to_percent(100, 4);
         box_mode_state++;
         return false;

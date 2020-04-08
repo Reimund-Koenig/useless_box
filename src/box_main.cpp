@@ -6,7 +6,7 @@ using namespace arduino;
 
 #define LOWER_SERVO_PWM 9
 #define LOWER_SERVO_MIN 0
-#define LOWER_SERVO_MAX 138
+#define LOWER_SERVO_MAX 132
 #define LOWER_SERVO_CLOCKWISE false
 #define UPPER_SERVO_PWM 10
 #define UPPER_SERVO_MIN 38
