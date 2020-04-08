@@ -65,18 +65,18 @@ TEST_F(TestSonar, test_get_distance_cm) {
 }
 TEST_F(TestSonar, test_average_part_of_first_iteration) {
     int number_of_runs = 10;
-    int expected_result = 5;
+    int expected_result = 8;
     run_calculate_average_loop(number_of_runs, expected_result);
 }
 
 TEST_F(TestSonar, test_average_exactly_one_iteration) {
     int number_of_runs = 100;
-    int expected_result = 95;
+    int expected_result = 98;
     run_calculate_average_loop(number_of_runs, expected_result);
 }
 
 TEST_F(TestSonar, test_average_more_then_one_iteration) {
     int number_of_runs = 300;
-    int expected_result = 297; // inaccuracy of formular
+    int expected_result = 300; // inaccuracy of formular
     run_calculate_average_loop(number_of_runs, expected_result);
 }
