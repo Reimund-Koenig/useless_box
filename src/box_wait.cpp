@@ -20,7 +20,9 @@ void box::Wait::add_milliseconds(unsigned long milliseconds) {
 }
 
 void box::Wait::milliseconds(unsigned long milliseconds) {
-    last_time = millis();
+    unsigned long current = millis();
+    if (!(is_free() || current+milliseconds > last_time+wait_delay)) { return; }
+    last_time = current;
     wait_delay =  milliseconds;
 }
 

@@ -5,7 +5,7 @@
 #include "box_switch.hpp"
 #include "box_potentiometer.hpp"
 #include "box_sonar.hpp"
-// #include <Serial.h>
+#include <Serial.h>
 #include <Arduino.h>
 
 using namespace arduino;

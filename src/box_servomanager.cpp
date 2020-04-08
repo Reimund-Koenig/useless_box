@@ -45,7 +45,7 @@ void box::Servomanager::move_copilot_servo_to_percent(int percentage, int speed)
         box_upper_servo->move_to_percent(percentage);
         sleep_time_for_speed = box_upper_servo->set_speed_and_get_sleeptime(speed);
     }
-    // box_wait->milliseconds(sleep_time_for_speed);
+    box_wait->milliseconds(sleep_time_for_speed);
 }
 
 void box::Servomanager::move_steps() {
