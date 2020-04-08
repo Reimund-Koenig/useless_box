@@ -10,7 +10,6 @@ box::ModeStartup::ModeStartup(box::Servomanager* box_servomanager,
     box::ModeStartup::box_wait = box_wait;
     box::ModeStartup::box_switch = box_switch;
     box::ModeStartup::box_mode_state = 0;
-    box::ModeStartup::counter = 0;
 }
 
 box::ModeStartup::~ModeStartup() {
@@ -21,31 +20,63 @@ box::ModeStartup::~ModeStartup() {
  *************************************************/
 
 bool box::ModeStartup::run() {
-    int speed = 6;
-    switch (box_mode_state) {
-        case 0: // Move switch up if it is down
-            box_mode_state++;
-            counter++;
-            if(!box_switch->is_high()) { return false; }
-            box_servomanager->move_pilot_servo_to_percent(100, speed);
-            return false; // not finished
-        case 1: // Move pilot to 100 which changes pilot and copilot
-            speed = random(4) + 3; // Speed = 3-6
-            box_servomanager->move_pilot_servo_to_percent(100, speed);
-            box_servomanager->move_copilot_servo_to_percent(0, 6);
-            counter++;
-            if(counter == 10) {  box_mode_state++; }
-            return false; // not finished
-        case 2: // Everything done -> reset and exit
-            box_servomanager->move_pilot_servo_to_percent(0, speed);
-            box_servomanager->move_copilot_servo_to_percent(0, speed);
-            box_mode_state = 0;
-            counter = 0;
-            return true; // finished
-        default:
-            counter = 0;
-            box_mode_state = 0;
-            return false; // not finished
+    if (box_mode_state == 0) { // Move switch up if it is down
+        box_mode_state++;
+        if(!box_switch->is_high()) { return false; }
+        box_servomanager->move_pilot_servo_to_percent(100, 6);
+        return false; // not finished
+    } if (box_mode_state == 1) { // Reset both motors
+        box_servomanager->move_pilot_servo_to_percent(0, 6);
+        box_servomanager->move_copilot_servo_to_percent(0, 6);
+        box_mode_state++;
+        return false;
+    } if (box_mode_state == 2) { // Move slowly both motors to 90%
+        box_servomanager->move_pilot_servo_to_percent(90, 1);
+        box_servomanager->move_copilot_servo_to_percent(90, 1);
+        box_mode_state++;
+        return false; // not finished
+    } if (box_mode_state == 3) {// Move first one fast back
+        box_servomanager->move_copilot_servo_to_percent(0, 6);
+        box_wait->add_milliseconds(400);
+        box_mode_state++;
+        return false; // finished
+    } if (box_mode_state == 4) {// Move second one fast back
+        box_servomanager->move_pilot_servo_to_percent(0, 6);
+        box_wait->add_milliseconds(400);
+        box_mode_state++;
+        return false;
+    } if (box_mode_state == 5) { // Move upper out
+        box_servomanager->move_copilot_servo_to_percent(80, 6);
+        box_mode_state++;
+        return false;
+    } if (box_mode_state == 6) { // Jitter upper motor (with the eye)
+        int delay_time = 250;
+        int speed = 2;
+        while(delay_time > 0) {
+            box_servomanager->move_copilot_servo_to_percent(90, speed);
+            delay(delay_time);
+            box_servomanager->move_copilot_servo_to_percent(70, speed);
+            delay(delay_time);
+            delay_time -= 10;
+        }
+        box_mode_state++;
+        return false;
+    } if (box_mode_state == 7) { // Press button with lower
+        box_servomanager->move_pilot_servo_to_percent(100, 6);
+        box_mode_state++;
+        return false;
+    } if (box_mode_state == 8) { // lower slowly back and press button with upper
+        box_servomanager->move_copilot_servo_to_percent(0, 2);
+        delay(100);
+        box_servomanager->move_pilot_servo_to_percent(100, 4);
+        box_mode_state++;
+        return false;
+    } if (box_mode_state == 9) { // Reset both motors
+        box_servomanager->move_pilot_servo_to_percent(0, 6);
+        box_servomanager->move_copilot_servo_to_percent(0, 6);
+        box_mode_state = 0;
+        return true; // finished
     }
+    box_mode_state = 0;
     return false; // not finished
 }

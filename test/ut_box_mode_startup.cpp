@@ -40,62 +40,68 @@ class TestModeStartup : public ::testing::Test {
         delete arduino_mock;
     }
 
-    virtual void test_switch_move_pilot_to_100_percent() {
-        int rnd_result = 3;
-        const int expected_speed = rnd_result+3;
-        EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(rnd_result));
-        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,expected_speed));
+    virtual void runStartUpSequence() {
+        // Reset both motors
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
         EXPECT_FALSE(mode_startup_under_test->run());
+
+        // Move slowly both motors to 90%
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(90,_));
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(90,_));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // Move first one fast back
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
+        EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // Move second one fast back
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
+        EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // Move upper out
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(80,6));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // Jitter upper motor (with the eye)
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_)).Times(AtLeast(5));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // Press button with lower
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // lower slowly back and press button with upper
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,2));
+        EXPECT_FALSE(mode_startup_under_test->run());
+
+        // Reset both motors
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
+        EXPECT_TRUE(mode_startup_under_test->run());
     }
 };
 
 TEST_F(TestModeStartup, test_wait_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestModeStartup, test_start_with_low_switchstate) {
+    // move switch to start state -> if low nothing happens
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(false));
-    // run 1
     EXPECT_FALSE(mode_startup_under_test->run());
-    test_switch_move_pilot_to_100_percent();
-    // // run 2
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
-    // // run 3
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
-    // // run 4
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
-    // // run 5
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
 
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    EXPECT_TRUE(mode_startup_under_test->run());
+    // now run the startup sequence
+    runStartUpSequence();
 }
 
 TEST_F(TestModeStartup, test_start_with_high_switchstate) {
+    // move switch to start state -> if low nothing happens
     EXPECT_CALL(*box_switch_mock, is_high()).WillOnce(Return(true));
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,6));
-
-    // run 1
     EXPECT_FALSE(mode_startup_under_test->run());
-    test_switch_move_pilot_to_100_percent();
-    // run 2
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
-    // run 3
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
-    // run 4
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
-    // run 5
-    test_switch_move_pilot_to_100_percent();
-    test_switch_move_pilot_to_100_percent();
 
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    EXPECT_TRUE(mode_startup_under_test->run());
+    // now run the startup sequence
+    runStartUpSequence();
 }

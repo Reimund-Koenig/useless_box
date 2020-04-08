@@ -15,7 +15,6 @@ class ModeStartup {
     box::Wait* box_wait;
     box::Switch* box_switch;
     int box_mode_state;
-    int counter;
     bool switch_start_state_is_high;
     void run_mode_reset();
 
