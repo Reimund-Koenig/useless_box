@@ -67,7 +67,6 @@ class BoxModeManagerMock : public box::ModeManager {
 ::testing::NiceMock<BoxServoMock>* box_upper_servo_mock;
 ::testing::NiceMock<BoxServoManagerMock>* box_servomanager_mock;
 ::testing::NiceMock<BoxWaitMock>* box_wait_mock;
-::testing::NiceMock<BoxWaitMock>* box_wait_startup_mock;
 ::testing::NiceMock<BoxModeManagerMock>* box_mode_manager_mock;
 
 #endif // MOCK_BOX_SWITCH_HPP_

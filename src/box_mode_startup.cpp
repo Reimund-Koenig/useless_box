@@ -6,15 +6,12 @@ using namespace arduino;
 
 box::ModeStartup::ModeStartup(box::Servomanager* box_servomanager,
                                   box::Wait* box_wait_controller,
-                                  box::Wait* box_wait_mode_startup,
                                   box::Switch* box_switch) {
     box::ModeStartup::box_servomanager = box_servomanager;
     box::ModeStartup::box_wait_controller = box_wait_controller;
-    box::ModeStartup::box_wait_mode_startup = box_wait_mode_startup;
     box::ModeStartup::box_switch = box_switch;
     box::ModeStartup::box_mode_state = 0;
     box::ModeStartup::box_mode_jitter_state = 0;
-    box::ModeStartup::jitter_delay_time = 0;
     box::ModeStartup::jitter_speed = 0;
 }
 
@@ -53,18 +50,20 @@ bool box::ModeStartup::run() {
         box_mode_state++;
         return false;
     } if (box_mode_state == 5) { // Move upper out
-        box_servomanager->move_copilot_servo_to_percent(80, 6);
+        box_servomanager->move_copilot_servo_to_percent(90, 6);
         box_mode_state++;
         return false;
     } if (box_mode_state == 6) { // Jitter upper motor (with the eye)
         if(run_jitter()) { box_mode_state++; }
         return false;
-    } if (box_mode_state == 7) { // Press button with lower
+    } if (box_mode_state == 7) { // Press button with lower while upper moving slowly back
+        box_servomanager->move_copilot_servo_to_percent(0, 1);
         box_servomanager->move_pilot_servo_to_percent(100, 6);
         box_wait_controller->add_milliseconds(1000);
         box_mode_state++;
         return false;
-    } if (box_mode_state == 8) { // lower slowly back
+    } if (box_mode_state == 8) { // lower slowly back while upper moving slowly forward
+        box_servomanager->move_pilot_servo_to_percent(70, 2);
         box_servomanager->move_copilot_servo_to_percent(0, 2);
         box_wait_controller->add_milliseconds(1000);
         box_mode_state++;
@@ -95,23 +94,18 @@ bool box::ModeStartup::run() {
  *************************************************/
 
 bool box::ModeStartup::run_jitter() {
-    if(!box_wait_mode_startup->is_free()) { return false; }
     if(box_mode_jitter_state == 0) {
         jitter_speed = 2;
-        jitter_delay_time = 250;
         box_mode_jitter_state++;
         return false;
     } if(box_mode_jitter_state == 1) {
-        box_servomanager->move_copilot_servo_to_percent(90, jitter_speed);
-        box_wait_mode_startup->milliseconds(jitter_delay_time);
+        box_servomanager->move_copilot_servo_to_percent(70, jitter_speed);
         box_mode_jitter_state++;
         return false;
     } if(box_mode_jitter_state == 2) {
-        box_servomanager->move_copilot_servo_to_percent(70, jitter_speed);
-        if(jitter_delay_time%50==0) { jitter_speed++; }
-        jitter_delay_time -= 10;
-        box_wait_mode_startup->milliseconds(jitter_delay_time);
-        if(jitter_delay_time == 0) {
+        box_servomanager->move_copilot_servo_to_percent(85, jitter_speed);
+        jitter_speed++;
+        if(jitter_speed > 6) {
             box_mode_jitter_state = 0;
             return true;
         }

@@ -20,7 +20,6 @@ class ModeManager {
     box::ModeNormal* box_mode_normal;
     box::ModeReset* box_mode_reset;
     box::ModeStartup* box_mode_startup;
-    box::Wait* box_wait_mode_startup;
 
   public:
     ModeManager(box::Servomanager* box_servomanager,
