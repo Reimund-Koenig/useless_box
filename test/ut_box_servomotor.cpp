@@ -95,7 +95,7 @@ TEST_F(TestServo, test_servomotor_move_step_not_called_if_angle_reached) {
 }
 
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
-    EXPECT_TRUE(servomotor_under_test->move_to_angle(15,1) > 400);
+    EXPECT_TRUE(servomotor_under_test->move_to_angle(15,1) > 10);
     EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(false));
     EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
     servomotor_under_test->move_step();
@@ -104,7 +104,7 @@ TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
 TEST_F(TestServo, test_servomotor_move_to_angle) {
     const int expected_value = 13;
     servomotor_under_test->move_to_angle(13, 4);
-    EXPECT_TRUE(servomotor_under_test->move_to_angle(13, 4) > 400); // = 13 Anti Clockwise
+    EXPECT_TRUE(servomotor_under_test->move_to_angle(13, 3) > 10); // = 13 Anti Clockwise
     int start_angle = TEST_MIN_ANGLE;
     EXPECT_EQ(servomotor_under_test->get_angle(), start_angle); // 10
     test_move_step(++start_angle); // 11
@@ -117,7 +117,7 @@ TEST_F(TestServo, test_servomotor_move_to_angle) {
 TEST_F(TestServo, test_servomotor_move_to_angle_clockwise) {
     const int expected_value_clockwise = 17;
     const int expected_steps = 3;
-    EXPECT_TRUE(servomotor_under_test_clockwise->move_to_angle(13, 5) > 400); // = 17 Clockwise
+    EXPECT_TRUE(servomotor_under_test_clockwise->move_to_angle(13, 2) > 10); // = 17 Clockwise
     int start_angle_clockwise = TEST_MAX_ANGLE;
     EXPECT_EQ(servomotor_under_test_clockwise->get_angle(), start_angle_clockwise); // 20
     test_move_step_clockwise(--start_angle_clockwise); // 19
