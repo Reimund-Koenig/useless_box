@@ -29,6 +29,7 @@ class BoxServoManagerMock : public box::Servomanager {
     MOCK_METHOD2(move_copilot_servo_to_percent, void(int,int));
     MOCK_METHOD0(box_servos_not_reached_switch, bool());
     MOCK_METHOD0(move_steps, void());
+    MOCK_METHOD4(run_jitter, bool(int,int,int,int));
 };
 
 class BoxSonarMock : public box::Sonar{

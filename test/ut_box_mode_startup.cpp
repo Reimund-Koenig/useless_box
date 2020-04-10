@@ -68,12 +68,18 @@ class TestModeStartup : public ::testing::Test {
         EXPECT_FALSE(mode_startup_under_test->run());
 
         // 6 - Jitter upper motor (with the eye)
-        EXPECT_FALSE(mode_startup_under_test->run()); // set start values
-        for(int i = 0; i<5; i++) {
-            EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_)).Times(2);
-            EXPECT_FALSE(mode_startup_under_test->run()); // move 70 percent
-            EXPECT_FALSE(mode_startup_under_test->run()); // move 90 percent
-        }
+        EXPECT_CALL(*box_servomanager_mock, run_jitter(_,_,_,_)).WillOnce(Return(false))
+                                                         .WillOnce(Return(false))
+                                                         .WillOnce(Return(true));
+        EXPECT_FALSE(mode_startup_under_test->run()); // run jitter speed 2-> false
+        EXPECT_FALSE(mode_startup_under_test->run()); // run jitter speed 2-> false
+        EXPECT_FALSE(mode_startup_under_test->run()); // run jitter  speed 2-> true
+
+        EXPECT_CALL(*box_servomanager_mock, run_jitter(_,_,_,_)).WillRepeatedly(Return(true));
+        EXPECT_FALSE(mode_startup_under_test->run()); // run jitter speed 3 -> true
+        EXPECT_FALSE(mode_startup_under_test->run()); // run jitter speed 4 -> true
+        EXPECT_FALSE(mode_startup_under_test->run()); // run jitter speed 5 -> true
+        EXPECT_FALSE(mode_startup_under_test->run()); // run jitter speed 6 -> true
 
         // 7 - Press button with lower while upper moving slowly back
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));

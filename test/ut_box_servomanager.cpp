@@ -126,6 +126,16 @@ TEST_F(TestServomanager, test_servomanager_move_both_servo_percentage) {
     servomanager_under_test->move_copilot_servo_to_percent(50, 6);
 }
 
+TEST_F(TestServomanager, test_servomanager_box_test_jitter) {
+        EXPECT_FALSE(servomanager_under_test->run_jitter(5,70,85,2));
+        for(int i = 0; i<5; i++) {
+            // EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_)).Times(2);
+            EXPECT_FALSE(servomanager_under_test->run_jitter(5,70,85,2)); // move 70 percent
+            EXPECT_FALSE(servomanager_under_test->run_jitter(5,70,85,2)); // move 90 percent
+        }
+        EXPECT_TRUE(servomanager_under_test->run_jitter(5,70,85,2));
+}
+
 TEST_F(TestServomanager, test_servomanager_box_servos_not_reached_switch) {
     EXPECT_CALL(*box_upper_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(true));
     EXPECT_CALL(*box_lower_servo_mock, current_angle_smaller_than_95_percent()).WillOnce(Return(true));

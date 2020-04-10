@@ -15,10 +15,7 @@ class ModeStartup {
     box::Wait* box_wait_controller;
     box::Switch* box_switch;
     int box_mode_state;
-    int box_mode_jitter_state;
-    int jitter_speed;
     bool switch_start_state_is_high;
-    bool run_jitter();
 
   public:
     ModeStartup(box::Servomanager* box_servomanager,
