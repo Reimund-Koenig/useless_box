@@ -5,9 +5,11 @@
 using namespace arduino;
 
 box::ModeStartup::ModeStartup(box::Servomanager* box_servomanager,
-                                  box::Wait* box_wait_controller,
-                                  box::Switch* box_switch) {
+                            box::ModeFunctionJitter* box_mode_function_jitter,
+                            box::Wait* box_wait_controller,
+                            box::Switch* box_switch) {
     box::ModeStartup::box_servomanager = box_servomanager;
+    box::ModeStartup::box_mode_function_jitter = box_mode_function_jitter;
     box::ModeStartup::box_wait_controller = box_wait_controller;
     box::ModeStartup::box_switch = box_switch;
     box::ModeStartup::box_mode_state = 0;
@@ -52,19 +54,19 @@ bool box::ModeStartup::run() {
         box_mode_state++;
         return false;
     } if (box_mode_state == 6) { // Jitter upper motor speed 2(with the eye)
-        if(box_servomanager->run_jitter(1,70,85,2)) { box_mode_state++; }
+        if(box_mode_function_jitter->run(false, 1,70,85,2)) { box_mode_state++; }
         return false;
     } if (box_mode_state == 7) { // Jitter upper motor speed 3(with the eye)
-        if(box_servomanager->run_jitter(1,70,85,3)) { box_mode_state++; }
+        if(box_mode_function_jitter->run(false, 1,70,85,3)) { box_mode_state++; }
         return false;
     } if (box_mode_state == 8) { // Jitter upper motor speed 4(with the eye)
-        if(box_servomanager->run_jitter(2,70,85,4)) { box_mode_state++; }
+        if(box_mode_function_jitter->run(false, 2,70,85,4)) { box_mode_state++; }
         return false;
     } if (box_mode_state == 9) { // Jitter upper motor speed 5(with the eye)
-        if(box_servomanager->run_jitter(3,70,85,5)) { box_mode_state++; }
+        if(box_mode_function_jitter->run(false, 3,70,85,5)) { box_mode_state++; }
         return false;
     } if (box_mode_state == 10) { // Jitter upper motor speed 6(with the eye)
-        if(box_servomanager->run_jitter(4,70,85,6)) { box_mode_state++; }
+        if(box_mode_function_jitter->run(false, 4,70,85,6)) { box_mode_state++; }
         return false;
     } if (box_mode_state == 11) { // Press button with lower while upper moving slowly back
         box_servomanager->move_pilot_servo_to_percent(100, 6);

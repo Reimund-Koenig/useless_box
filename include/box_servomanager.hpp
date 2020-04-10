@@ -12,9 +12,6 @@ class Servomanager {
     box::Servomotor* box_upper_servo;
     box::Switch* box_switch;
     box::Wait* box_wait_controller;
-    int box_mode_jitter_state;
-    int jitter_speed;
-    int jitter_count;
 
   public:
     Servomanager(box::Servomotor* box_lower_servo,
@@ -26,7 +23,6 @@ class Servomanager {
     virtual void move_pilot_servo_to_percent(int percentage, int speed);
     virtual void move_copilot_servo_to_percent(int percentage, int speed);
     virtual bool box_servos_not_reached_switch();
-    virtual bool run_jitter(int count, int percent_1, int percent_2, int speed);
 };
 }
 

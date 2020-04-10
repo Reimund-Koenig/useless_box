@@ -29,7 +29,6 @@ class BoxServoManagerMock : public box::Servomanager {
     MOCK_METHOD2(move_copilot_servo_to_percent, void(int,int));
     MOCK_METHOD0(box_servos_not_reached_switch, bool());
     MOCK_METHOD0(move_steps, void());
-    MOCK_METHOD4(run_jitter, bool(int,int,int,int));
 };
 
 class BoxSonarMock : public box::Sonar{
@@ -62,6 +61,12 @@ class BoxModeManagerMock : public box::ModeManager {
     MOCK_METHOD0(run_mode_startup, bool());
 };
 
+class BoxModeFunctionJitterMock : public box::ModeFunctionJitter {
+  public:
+    BoxModeFunctionJitterMock() : box::ModeFunctionJitter(NULL) {}
+    MOCK_METHOD5(run, bool(bool,int,int,int,int));
+};
+
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
 ::testing::NiceMock<BoxSonarMock>* box_sonar_mock;
 ::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
@@ -69,5 +74,6 @@ class BoxModeManagerMock : public box::ModeManager {
 ::testing::NiceMock<BoxServoManagerMock>* box_servomanager_mock;
 ::testing::NiceMock<BoxWaitMock>* box_wait_mock;
 ::testing::NiceMock<BoxModeManagerMock>* box_mode_manager_mock;
+::testing::NiceMock<BoxModeFunctionJitterMock>* box_mode_function_jitter_mock;
 
 #endif // MOCK_BOX_SWITCH_HPP_
