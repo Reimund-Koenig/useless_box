@@ -23,4 +23,4 @@ cp /usr/share/arduino/libraries/Servo/Servo.h ./
 cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 make upload clean
 cd ..
-# rm sketch -rf
+rm sketch -rf
