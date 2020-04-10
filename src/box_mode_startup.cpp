@@ -57,7 +57,6 @@ bool box::ModeStartup::run() {
         if(run_jitter()) { box_mode_state++; }
         return false;
     } if (box_mode_state == 7) { // Press button with lower while upper moving slowly back
-        box_servomanager->move_copilot_servo_to_percent(0, 1);
         box_servomanager->move_pilot_servo_to_percent(100, 6);
         box_wait_controller->add_milliseconds(1000);
         box_mode_state++;
@@ -65,16 +64,15 @@ bool box::ModeStartup::run() {
     } if (box_mode_state == 8) { // lower slowly back while upper moving slowly forward
         box_servomanager->move_pilot_servo_to_percent(70, 2);
         box_servomanager->move_copilot_servo_to_percent(0, 2);
-        box_wait_controller->add_milliseconds(1000);
+        box_wait_controller->add_milliseconds(500);
         box_mode_state++;
         return false;
     } if (box_mode_state == 9) { // press button with upper
         box_servomanager->move_pilot_servo_to_percent(100, 4);
-        box_wait_controller->add_milliseconds(250);
         box_mode_state++;
         return false;
     } if (box_mode_state == 10) { // upper back to 70%
-        box_servomanager->move_copilot_servo_to_percent(70, 1);
+        box_servomanager->move_copilot_servo_to_percent(70, 4);
         box_wait_controller->add_milliseconds(1000);
         box_mode_state++;
         return false;

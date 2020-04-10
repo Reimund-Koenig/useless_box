@@ -42,32 +42,32 @@ class TestModeStartup : public ::testing::Test {
     }
 
     virtual void runStartUpSequence() {
-        // Reset both motors
+        // 1 - Reset both motors
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // Move slowly both motors to 90%
+        // 2 - Move slowly both motors to 90%
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(90,_));
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(90,_));
         EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // Move first one fast back
+        // 3 - Move first one fast back
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
         EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // Move second one fast back
+        // 4 - Move second one fast back
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
         EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // Move upper out
+        // 5 - Move upper out
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(90,6));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // Jitter upper motor (with the eye)
+        // 6 - Jitter upper motor (with the eye)
         EXPECT_FALSE(mode_startup_under_test->run()); // set start values
         for(int i = 0; i<5; i++) {
             EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_)).Times(2);
@@ -75,29 +75,27 @@ class TestModeStartup : public ::testing::Test {
             EXPECT_FALSE(mode_startup_under_test->run()); // move 90 percent
         }
 
-        // Press button with lower while upper moving slowly back
-        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,_));
+        // 7 - Press button with lower while upper moving slowly back
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));
         EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // lower slowly back while upper moving slowly forward
+        // 8 - lower slowly back while upper moving slowly forward
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(70,_));
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,2));
         EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // press button with upper
+        // 9 - press button with upper
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100,_));
-        EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // upper back to 70%
+        // 10 - upper back to 70%
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_));
         EXPECT_CALL(*box_wait_mock, add_milliseconds(_));
         EXPECT_FALSE(mode_startup_under_test->run());
 
-        // Reset both motors
+        // 11 - Reset both motors
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
         EXPECT_TRUE(mode_startup_under_test->run());
