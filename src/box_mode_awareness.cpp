@@ -44,7 +44,7 @@ bool box::ModeAwareness::run(int distance) {
  *************************************************/
 
 void box::ModeAwareness::init_jitter(int box_percentage){
-    random_jitter = random(100) > 80;
+    random_jitter = random(100) > 66;
     if(!random_jitter) { return; }
     jitter_count = random(8) + 3;
     jitter_speed = random(4) + 3;
