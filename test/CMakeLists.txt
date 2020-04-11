@@ -61,7 +61,6 @@ enable_testing()
 add_library(uselessbox
     ${BOX_SRC}/box_main.cpp
     ${BOX_SRC}/box_controller.cpp
-    ${BOX_SRC}/box_gearmotor.cpp
     ${BOX_SRC}/box_switch.cpp
     ${BOX_SRC}/box_potentiometer.cpp
     ${BOX_SRC}/box_servomotor.cpp
@@ -83,7 +82,6 @@ target_include_directories(uselessbox PRIVATE ${BOX_INCLUDE})
 # Add Tests
 #************************************************
 register_test(ut_box_controller)
-register_test(ut_box_gearmotor)
 register_test(ut_box_servomotor)
 register_test(ut_box_servomanager)
 register_test(ut_box_switch)
