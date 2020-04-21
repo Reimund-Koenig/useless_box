@@ -12,8 +12,8 @@ using namespace arduino;
 
 #define PIN_RANDOM A0 //A0
 #define PIN_POTENTIOMETER A1 //A1
-#define PIN_BUTTON 2
-#define PIN_SWITCH 4
+#define PIN_BUTTON 4
+#define PIN_SWITCH 2
 #define LOWER_SERVO_PWM 9
 #define LOWER_SERVO_MIN 0
 #define LOWER_SERVO_MAX 133

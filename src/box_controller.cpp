@@ -1,5 +1,6 @@
 #include "ardunio_namespace.h" // needed for arduino build
 #include "box_controller.hpp"
+#include <avr/sleep.h>
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
@@ -8,19 +9,23 @@ using namespace arduino;
 #define MODE_RESET 1
 #define MODE_AWARENESS 2
 #define MODE_NORMAL 3
+#define DEEP_SLEEP_DELAY 60000
 
 box::Controller::Controller(box::Switch* box_switch,
                 box::Sonar* box_sonar,
                 box::Servomanager* box_servomanager,
                 box::Wait* box_wait_controller,
+                box::Wait* box_wait_deep_sleep,
                 box::ModeManager* box_mode_manager) {
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servomanager = box_servomanager;
     box::Controller::box_wait_controller = box_wait_controller;
+    box::Controller::box_wait_deep_sleep = box_wait_deep_sleep;
     box::Controller::box_mode_manager = box_mode_manager;
     box_mode = MODE_STARTUP;
     is_mode_finished = false;
+    box_wait_deep_sleep->milliseconds(DEEP_SLEEP_DELAY);
     distance = box_sonar->get_average_distance_cm();
 }
 
@@ -30,14 +35,27 @@ box::Controller::~Controller() {
 /*************************************************************************************************
  * Public Methods
  *************************************************/
-
+static void wake_up(){
+    // ToDo!
+    // detachInterrupt(INT0);
+}
 void box::Controller::run() {
+    if (box_wait_deep_sleep->is_free()) {
+        attachInterrupt(INT0, wake_up, CHANGE);
+        set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+        sleep_enable();
+        // sleep_cpu();
+        sleep_mode();
+        sleep_disable();
+        box_wait_deep_sleep->milliseconds(DEEP_SLEEP_DELAY);
+    }
     distance = box_sonar->get_average_distance_cm();
     box_servomanager->move_steps();
     bool user_interrupt = box_switch->has_changed() && box_servomanager->box_servos_not_reached_switch();
     if(user_interrupt) {
         box_mode = MODE_RESET;
         is_mode_finished = false;
+        box_wait_deep_sleep->milliseconds(DEEP_SLEEP_DELAY);
     }
     if (!box_wait_controller->is_free()) { return; }
     if (is_mode_finished) { switch_box_mode(); }
