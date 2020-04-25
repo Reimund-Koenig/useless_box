@@ -4,7 +4,6 @@ project(UselessBoxUnitTest)
 include(CTest)
 add_compile_options(-std=c++11 -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable)
 
-
 #*************************************************************************************************
 # Download googletest
 #************************************************
@@ -32,7 +31,7 @@ set(BOX_STUBS       "${CMAKE_CURRENT_LIST_DIR}/stubs")
 #************************************************
 
 SET(GCC_COMPILE_FLAGS "-ggdb3")
-SET(CMAKE_CXX_FLAGS "-pthread")
+SET(CMAKE_CXX_FLAGS "-pthread -DUNITTEST")
 add_definitions(${GCC_COMPILE_FLAGS})
 add_definitions(${CMAKE_CXX_FLAGS})
 
