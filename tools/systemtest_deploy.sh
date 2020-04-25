@@ -9,14 +9,8 @@ cp ../useless_box.ino ./
 cp ../Makefile ./
 cp ../../../include/* ./
 cp ../../../src/* ./
-rm Arduino.h
-rm Servo.h
-rm Serial.h
-rm Serial.cpp
 rm box_main.hpp
 rm box_main.cpp
-rm box_gearmotor.cpp
-rm box_gearmotor.hpp
 rm box_controller.cpp
 rm box_controller.hpp
 cp /usr/share/arduino/libraries/Servo/Servo.h ./
