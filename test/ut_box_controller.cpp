@@ -2,10 +2,10 @@
 #include "gmock/gmock.h"
 #include <cstdio>
 
-#include "mocks/mock_arduino.hpp"
-#include "mocks/mock_avr_sleep.hpp"
-#include "mocks/mock_serial.hpp"
-#include "mocks/mock_box.hpp"
+#include "mock_arduino.hpp"
+#include "mock_avr_sleep.hpp"
+#include "mock_serial.hpp"
+#include "mock_box.hpp"
 
 #include "box_controller.hpp"
 

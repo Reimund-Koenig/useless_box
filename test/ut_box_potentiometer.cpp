@@ -2,7 +2,7 @@
 #include "gmock/gmock.h"
 #include <cstdio>
 
-#include "mocks/mock_arduino.hpp"
+#include "mock_arduino.hpp"
 #include "box_potentiometer.hpp"
 
 using ::testing::_;

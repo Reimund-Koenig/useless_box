@@ -3,9 +3,9 @@
 #include <cstdio>
 
 #include "box_systemtest.hpp"
-#include "mocks/mock_serial.hpp"
-#include "mocks/mock_arduino.hpp"
-#include "mocks/mock_servomotor.hpp"
+#include "mock_serial.hpp"
+#include "mock_arduino.hpp"
+#include "mock_servomotor.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;

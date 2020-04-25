@@ -2,9 +2,9 @@
 #include "gmock/gmock.h"
 #include <cstdio>
 
-#include "mocks/mock_servomotor.hpp"
-#include "mocks/mock_box.hpp"
-#include "mocks/mock_arduino.hpp"
+#include "mock_servomotor.hpp"
+#include "mock_box.hpp"
+#include "mock_arduino.hpp"
 #include "box_servomotor.hpp"
 
 using ::testing::_;

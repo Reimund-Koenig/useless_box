@@ -24,6 +24,8 @@ add_subdirectory(   "${CMAKE_BINARY_DIR}/googletest-src"
 
 set(BOX_SRC         "${CMAKE_CURRENT_LIST_DIR}/../src")
 set(BOX_INCLUDE     "${CMAKE_CURRENT_LIST_DIR}/../include")
+set(BOX_MOCKS       "${CMAKE_CURRENT_LIST_DIR}/mocks")
+set(BOX_STUBS       "${CMAKE_CURRENT_LIST_DIR}/stubs")
 
 #*************************************************************************************************
 # Enable debugging
@@ -50,7 +52,7 @@ include_directories(
 macro(register_test test_name)
     add_executable(${test_name} ${test_name}.cpp ${ARGN})
     target_link_libraries(${test_name} gmock_main uselessbox)
-    target_include_directories(${test_name} PRIVATE ${BOX_INCLUDE})
+    target_include_directories(${test_name} PRIVATE ${BOX_MOCKS} ${BOX_STUBS} ${BOX_INCLUDE})
     add_test (NAME ${test_name} COMMAND ${test_name})
 endmacro()
 enable_testing()
@@ -76,7 +78,7 @@ add_library(uselessbox
     ${BOX_SRC}/box_mode_manager.cpp
     ${BOX_SRC}/box_wait.cpp
 )
-target_include_directories(uselessbox PRIVATE ${BOX_INCLUDE})
+target_include_directories(uselessbox PRIVATE ${BOX_MOCKS} ${BOX_STUBS} ${BOX_INCLUDE})
 
 #*************************************************************************************************
 # Add Tests
