@@ -45,9 +45,9 @@ void box::Controller::run() {
     if (box_wait_deep_sleep->is_free()) {
         attachInterrupt(INT0, nullptr, CHANGE);
         set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-        sleep_enable();
-        // sleep_cpu();
-        sleep_mode();
+        // sleep_mode(); // call sleep_enable() then sleep_cpu() then sleep_disable()
+        sleep_enable(); // set sleep enable bit
+        sleep_cpu(); //  sleep without SE bit.
         sleep_disable();
         box_wait_deep_sleep->milliseconds(DEEP_SLEEP_DELAY);
     }
