@@ -3,6 +3,7 @@
 #include <cstdio>
 
 #include "mocks/mock_arduino.hpp"
+#include "mocks/mock_avr_sleep.hpp"
 #include "mocks/mock_serial.hpp"
 #include "mocks/mock_box.hpp"
 
@@ -19,12 +20,14 @@ struct Controller_under_test : public box::Controller {
     Controller_under_test(box::Switch* box_switch,
                     box::Sonar* box_sonar,
                     box::Servomanager* box_servomanager,
-                    box::Wait* box_wait,
+                    box::Wait* box_wait_controller,
+                    box::Wait* box_wait_deep_sleep,
                     box::ModeManager* box_mode_manager)
                     : Controller(box_switch,
                             box_sonar,
                             box_servomanager,
-                            box_wait,
+                            box_wait_controller,
+                            box_wait_deep_sleep,
                             box_mode_manager) {}
 };
 
@@ -54,6 +57,7 @@ class TestController : public ::testing::Test {
         controller_under_test = new Controller_under_test((box::Switch*) box_switch_mock,
                                               (box::Sonar*) box_sonar_mock,
                                               (box::Servomanager*) box_servomanager_mock,
+                                              (box::Wait*) box_wait_mock,
                                               (box::Wait*) box_wait_mock,
                                               (box::ModeManager*) box_mode_manager_mock);
     }

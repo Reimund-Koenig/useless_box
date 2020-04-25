@@ -3,6 +3,7 @@
 #include <avr/sleep.h>
 #include <Arduino.h>
 #include <stdio.h>
+
 using namespace arduino;
 
 #define MODE_STARTUP 0
@@ -35,13 +36,14 @@ box::Controller::~Controller() {
 /*************************************************************************************************
  * Public Methods
  *************************************************/
-static void wake_up(){
+// static void wake_up(){
     // ToDo!
     // detachInterrupt(INT0);
-}
+// }
+
 void box::Controller::run() {
     if (box_wait_deep_sleep->is_free()) {
-        attachInterrupt(INT0, wake_up, CHANGE);
+        attachInterrupt(INT0, nullptr, CHANGE);
         set_sleep_mode(SLEEP_MODE_PWR_DOWN);
         sleep_enable();
         // sleep_cpu();

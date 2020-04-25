@@ -15,6 +15,9 @@
 #define A2 2
 #define A3 3
 #define A4 4
+#define INT0 2
+#define INT1 3
+#define SLEEP_MODE_PWR_DOWN 100
 
 namespace arduino
 {
