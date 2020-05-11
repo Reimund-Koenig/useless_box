@@ -17,17 +17,19 @@ using ::testing::NiceMock;
 using ::testing::InSequence;
 
 struct Controller_under_test : public box::Controller {
-    Controller_under_test(box::Switch* box_switch,
+    Controller_under_test(bool enable_sleep_mode,
+                    box::Switch* box_switch,
                     box::Sonar* box_sonar,
                     box::Servomanager* box_servomanager,
                     box::Wait* box_wait_controller,
-                    box::Wait* box_wait_deep_sleep,
+                    box::Wait* box_wait_standby,
                     box::ModeManager* box_mode_manager)
-                    : Controller(box_switch,
+                    : Controller(enable_sleep_mode,
+                            box_switch,
                             box_sonar,
                             box_servomanager,
                             box_wait_controller,
-                            box_wait_deep_sleep,
+                            box_wait_standby,
                             box_mode_manager) {}
 };
 
@@ -55,7 +57,8 @@ class TestController : public ::testing::Test {
         box_wait_deep_sleep_mock = new NiceMock<BoxWaitMock>;
         avr_sleep_mock = new NiceMock<AvrSleepMock>;
         box_mode_manager_mock = new NiceMock<BoxModeManagerMock>;
-        controller_under_test = new Controller_under_test((box::Switch*) box_switch_mock,
+        controller_under_test = new Controller_under_test(true,
+                                              (box::Switch*) box_switch_mock,
                                               (box::Sonar*) box_sonar_mock,
                                               (box::Servomanager*) box_servomanager_mock,
                                               (box::Wait*) box_wait_mock,

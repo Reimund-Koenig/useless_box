@@ -71,7 +71,7 @@ add_library(uselessbox
     ${BOX_SRC}/box_systemtest.cpp
     ${BOX_SRC}/box_mode_function_jitter.cpp
     ${BOX_SRC}/box_mode_awareness.cpp
-    ${BOX_SRC}/box_mode_normal.cpp
+    ${BOX_SRC}/box_mode_wakeup.cpp
     ${BOX_SRC}/box_mode_reset.cpp
     ${BOX_SRC}/box_mode_startup.cpp
     ${BOX_SRC}/box_mode_manager.cpp
@@ -83,6 +83,7 @@ target_include_directories(uselessbox PRIVATE ${BOX_MOCKS} ${BOX_STUBS} ${BOX_IN
 # Add Tests
 #************************************************
 register_test(ut_box_controller)
+register_test(ut_box_controller_no_sleep)
 register_test(ut_box_servomotor)
 register_test(ut_box_servomanager)
 register_test(ut_box_switch)
@@ -92,7 +93,7 @@ register_test(ut_box_button)
 register_test(ut_box_systemtest)
 register_test(ut_box_mode_function_jitter)
 register_test(ut_box_mode_awareness)
-register_test(ut_box_mode_normal)
+register_test(ut_box_mode_wakeup)
 register_test(ut_box_mode_reset)
 register_test(ut_box_mode_startup)
 register_test(ut_box_wait)

@@ -16,22 +16,24 @@ class Controller {
     int box_speed;
     int distance;
     bool is_mode_finished;
+    bool sleep_mode_enabled;
+    int time_till_sleep;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomanager* box_servomanager;
     box::Wait* box_wait_controller;
-    box::Wait* box_wait_deep_sleep;
+    box::Wait* box_wait_standby;
     box::ModeManager* box_mode_manager;
-    void select_new_box_mode();
     void switch_box_mode();
 
   public:
-    Controller(box::Switch* box_switch,
-         box::Sonar* box_sonar,
-         box::Servomanager* box_servomanager,
-         box::Wait* box_wait_controller,
-         box::Wait* box_wait_deep_sleep,
-         box::ModeManager* box_mode_manager);
+    Controller(bool enable_sleep_mode,
+        box::Switch* box_switch,
+        box::Sonar* box_sonar,
+        box::Servomanager* box_servomanager,
+        box::Wait* box_wait_controller,
+        box::Wait* box_wait_standby,
+        box::ModeManager* box_mode_manager);
     virtual ~Controller();
     virtual void run();
 
