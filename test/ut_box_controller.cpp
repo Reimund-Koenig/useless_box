@@ -46,7 +46,6 @@ struct Controller_under_test : public box::Controller {
 class TestController : public ::testing::Test {
       protected:
     Controller_under_test* controller_under_test;
-    int current_mode;
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_switch_mock = new NiceMock<BoxSwitchMock>;
@@ -75,12 +74,6 @@ class TestController : public ::testing::Test {
         delete controller_under_test;
     }
 
-    virtual void CheckCallSelectNewBoxMode(int next_mode) {
-        if(next_mode == current_mode) { return; }
-        current_mode = next_mode;
-        EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(next_mode));
-    }
-
     virtual void RunPreSteps(const int ultra_sonar_result) {
         EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillOnce(Return(ultra_sonar_result));
         EXPECT_CALL(*box_servomanager_mock, move_steps());
@@ -101,16 +94,8 @@ class TestController : public ::testing::Test {
         controller_under_test->run();
     }
 
-    virtual void RunNormalMode(const bool switch_mode) {
-        RunPreSteps(42);
-        CheckCallSelectNewBoxMode(MODE_NORMAL);
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_normal()).WillOnce(Return(switch_mode));
-        controller_under_test->run();
-    }
-
     virtual void RunAwarenessMode(const bool switch_mode, const int ultra_sonar_result) {
         RunPreSteps(ultra_sonar_result);
-        CheckCallSelectNewBoxMode(MODE_AWARENESS);
         EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(ultra_sonar_result)).WillOnce(Return(switch_mode));
         controller_under_test->run();
     }
@@ -132,9 +117,9 @@ TEST_F(TestController, test_controller_init) { EXPECT_TRUE(true); }
 TEST_F(TestController, test_controller_without_user_interrupt) {
     RunStartupMode( MODE_NOT_FINISHED);
     RunStartupMode( MODE_FINISHED);
-    RunNormalMode(  MODE_NOT_FINISHED);
-    RunNormalMode(  MODE_NOT_FINISHED);
-    RunNormalMode(  MODE_FINISHED);
+    RunAwarenessMode(  MODE_NOT_FINISHED, 60);
+    RunAwarenessMode(  MODE_NOT_FINISHED, 50);
+    RunAwarenessMode(  MODE_FINISHED, 30);
     RunResetMode(   MODE_NOT_FINISHED);
     RunResetMode(   MODE_FINISHED);
     RunAwarenessMode(  MODE_NOT_FINISHED, 60);
@@ -149,30 +134,30 @@ TEST_F(TestController, test_controller_startup_to_awareness_no_user_interrupt) {
     RunStartupMode(     MODE_FINISHED);
     RunAwarenessMode(   MODE_FINISHED, 50);
     RunResetMode(       MODE_FINISHED);
-    RunNormalMode(      MODE_NOT_FINISHED);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
 }
 
 TEST_F(TestController, test_controller_run_with_user_interrupt) {
     RunStartupMode(     MODE_NOT_FINISHED);
     RunStartupMode(     MODE_NOT_FINISHED);
     RunUserInterrupt();
-    RunNormalMode(      MODE_NOT_FINISHED);
-    RunNormalMode(      MODE_NOT_FINISHED);
-    RunUserInterrupt();
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
     RunUserInterrupt();
-    RunNormalMode(      MODE_FINISHED);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
     RunUserInterrupt();
     RunAwarenessMode(   MODE_FINISHED, 50);
     RunUserInterrupt();
-    RunNormalMode(      MODE_NOT_FINISHED);
+    RunAwarenessMode(   MODE_FINISHED, 50);
+    RunUserInterrupt();
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
 }
 
 TEST_F(TestController, test_controller_startup_switch_with_user_interrupt) {
     RunStartupMode(     MODE_FINISHED);
     RunUserInterrupt();
-    RunNormalMode(      MODE_NOT_FINISHED);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
 }
 
 TEST_F(TestController, test_controller_test_is_free) {
@@ -184,7 +169,6 @@ TEST_F(TestController, test_controller_test_is_free) {
     EXPECT_CALL(*box_wait_deep_sleep_mock, is_free()).WillRepeatedly(Return(false));
     EXPECT_CALL(*arduino_mock, random(_)).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).Times(0);
-    EXPECT_CALL(*box_mode_manager_mock, run_mode_normal()).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(_)).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).Times(0);
     controller_under_test->run();

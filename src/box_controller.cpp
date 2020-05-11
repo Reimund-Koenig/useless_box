@@ -11,6 +11,7 @@ using namespace arduino;
 #define MODE_AWARENESS 2
 #define MODE_NORMAL 3
 #define DEEP_SLEEP_DELAY 60000
+#define BOX_CONNECTED_TO_POWER_SUPPLY false
 
 box::Controller::Controller(box::Switch* box_switch,
                 box::Sonar* box_sonar,
@@ -42,7 +43,7 @@ box::Controller::~Controller() {
 // }
 
 void box::Controller::run() {
-    if (box_wait_deep_sleep->is_free()) {
+    if (box_wait_deep_sleep->is_free() && !BOX_CONNECTED_TO_POWER_SUPPLY) {
         attachInterrupt(INT0, nullptr, CHANGE);
         set_sleep_mode(SLEEP_MODE_PWR_DOWN);
         // sleep_mode(); // call sleep_enable() then sleep_cpu() then sleep_disable()
@@ -84,9 +85,5 @@ void box::Controller::switch_box_mode() {
 }
 
 void box::Controller::select_new_box_mode() {
-    if(random(100) < 75) {
-        box_mode = MODE_AWARENESS;
-        return;
-    }
-    box_mode = MODE_NORMAL;
+    box_mode = MODE_AWARENESS;
 }
