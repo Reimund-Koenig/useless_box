@@ -34,7 +34,7 @@ bool box::ModeReset::run() {
         case 2:
             box_servomanager->move_pilot_servo_to_percent(0, speed);
             box_servomanager->move_copilot_servo_to_percent(0, speed);
-            if(random(100) > 50) {
+            if(random(100) > 80) {
                 run_mode_reset_step++;
                 return false; // change direction
             }

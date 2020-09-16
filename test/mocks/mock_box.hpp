@@ -49,7 +49,7 @@ class BoxWaitMock : public box::Wait {
     BoxWaitMock() : box::Wait() {}
     MOCK_METHOD1(milliseconds, void(unsigned long));
     MOCK_METHOD1(add_milliseconds, void(unsigned long));
-    MOCK_METHOD0(is_free, bool());
+    MOCK_METHOD0(is_expired, bool());
 };
 
 class BoxModeManagerMock : public box::ModeManager {

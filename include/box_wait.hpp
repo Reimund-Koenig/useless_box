@@ -14,7 +14,7 @@ class Wait {
     virtual ~Wait();
     virtual void add_milliseconds(unsigned long milliseconds);
     virtual void milliseconds(unsigned long milliseconds);
-    virtual bool is_free();
+    virtual bool is_expired();
 };
 
 } // namespace box

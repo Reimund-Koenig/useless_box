@@ -21,12 +21,12 @@ void box::Wait::add_milliseconds(unsigned long milliseconds) {
 
 void box::Wait::milliseconds(unsigned long milliseconds) {
     unsigned long current = millis();
-    if (!(is_free() || current+milliseconds > last_time+wait_delay)) { return; }
+    if (!(is_expired() || current + milliseconds > last_time + wait_delay)) { return; }
     last_time = current;
     wait_delay =  milliseconds;
 }
 
-bool box::Wait::is_free() {
+bool box::Wait::is_expired() {
     if ((millis() - last_time) < wait_delay) {
         return false;
     }

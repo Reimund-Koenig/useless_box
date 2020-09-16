@@ -22,17 +22,17 @@ class Controller {
     box::Switch* box_switch;
     box::Servomanager* box_servomanager;
     box::Wait* box_wait_controller;
-    box::Wait* box_wait_standby;
+    box::Wait* box_wait_deepsleep;
     box::ModeManager* box_mode_manager;
     void switch_box_mode();
 
   public:
-    Controller(bool enable_sleep_mode,
+    Controller(
         box::Switch* box_switch,
         box::Sonar* box_sonar,
         box::Servomanager* box_servomanager,
         box::Wait* box_wait_controller,
-        box::Wait* box_wait_standby,
+        box::Wait* box_wait_deepsleep,
         box::ModeManager* box_mode_manager);
     virtual ~Controller();
     virtual void run();
