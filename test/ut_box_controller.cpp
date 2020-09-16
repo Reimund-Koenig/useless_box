@@ -82,12 +82,6 @@ class TestController : public ::testing::Test {
         EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
     }
 
-    virtual void RunStartupMode(bool switch_mode) {
-        RunPreSteps(55);
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).WillOnce(Return(switch_mode));
-        controller_under_test->run();
-    }
-
     virtual void RunResetMode(const bool switch_mode) {
         RunPreSteps(42);
         EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(switch_mode));
@@ -115,8 +109,7 @@ class TestController : public ::testing::Test {
 TEST_F(TestController, test_controller_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestController, test_controller_without_user_interrupt) {
-    RunStartupMode( MODE_NOT_FINISHED);
-    RunStartupMode( MODE_FINISHED);
+    RunResetMode(   MODE_FINISHED);
     RunAwarenessMode(  MODE_NOT_FINISHED, 60);
     RunAwarenessMode(  MODE_NOT_FINISHED, 50);
     RunAwarenessMode(  MODE_FINISHED, 30);
@@ -130,17 +123,8 @@ TEST_F(TestController, test_controller_without_user_interrupt) {
     RunResetMode(   MODE_FINISHED);
 }
 
-TEST_F(TestController, test_controller_startup_to_awareness_no_user_interrupt) {
-    RunStartupMode(     MODE_FINISHED);
-    RunAwarenessMode(   MODE_FINISHED, 50);
-    RunResetMode(       MODE_FINISHED);
-    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
-}
-
 TEST_F(TestController, test_controller_run_with_user_interrupt) {
-    RunStartupMode(     MODE_NOT_FINISHED);
-    RunStartupMode(     MODE_NOT_FINISHED);
-    RunUserInterrupt();
+    RunResetMode(   MODE_FINISHED);
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
     RunUserInterrupt();
@@ -150,12 +134,6 @@ TEST_F(TestController, test_controller_run_with_user_interrupt) {
     RunAwarenessMode(   MODE_FINISHED, 50);
     RunUserInterrupt();
     RunAwarenessMode(   MODE_FINISHED, 50);
-    RunUserInterrupt();
-    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
-}
-
-TEST_F(TestController, test_controller_startup_switch_with_user_interrupt) {
-    RunStartupMode(     MODE_FINISHED);
     RunUserInterrupt();
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
 }
@@ -170,7 +148,6 @@ TEST_F(TestController, test_controller_test_is_free) {
     EXPECT_CALL(*arduino_mock, random(_)).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(_)).Times(0);
-    EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).Times(0);
     controller_under_test->run();
     controller_under_test->run();
     controller_under_test->run();

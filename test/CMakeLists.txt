@@ -81,5 +81,14 @@ target_include_directories(uselessbox PRIVATE ${BOX_MOCKS} ${BOX_STUBS} ${BOX_IN
 # Add Tests
 #************************************************
 register_test(ut_box_controller)
-
-
+register_test(ut_box_servomotor)
+register_test(ut_box_servomanager)
+register_test(ut_box_switch)
+register_test(ut_box_potentiometer)
+register_test(ut_box_sonar)
+register_test(ut_box_button)
+register_test(ut_box_systemtest)
+register_test(ut_box_mode_function_jitter)
+register_test(ut_box_mode_awareness)
+register_test(ut_box_mode_reset)
+register_test(ut_box_wait)

@@ -70,7 +70,7 @@ TEST_F(TestModeReset, test_switchsate_high_change_direction) {
 
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    EXPECT_CALL(*arduino_mock, random(100)).WillOnce(Return(51));
+    EXPECT_CALL(*arduino_mock, random(100)).WillOnce(Return(99));
     EXPECT_FALSE(mode_reset_under_test->run());
 
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100, expected_speed));
