@@ -1,6 +1,6 @@
 #include "ardunio_namespace.h" // needed for arduino build
 #include "box_controller.hpp"
-#include <LowPower.h>
+#include <LowPower.h> // Install Rocket Scream LowPower
 #include <Arduino.h>
 #include <stdio.h>
 
