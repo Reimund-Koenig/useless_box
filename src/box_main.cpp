@@ -4,17 +4,21 @@
 
 using namespace arduino;
 
-#define LOWER_SERVO_PWM 9
+
+#define PIN_SWITCH 2
+#define PIN_POWER_SERVOS 7
+#define PIN_POWER_SONAR 8
+#define PIN_LOWER_SERVO_PWM 9
+#define PIN_UPPER_SERVO_PWM 10
+#define PIN_SONAR_TRIGGER 11
+#define PIN_SONAR_ECHO 12
+
 #define LOWER_SERVO_MIN 0
 #define LOWER_SERVO_MAX 135
 #define LOWER_SERVO_CLOCKWISE false
-#define UPPER_SERVO_PWM 10
 #define UPPER_SERVO_MIN 30
 #define UPPER_SERVO_MAX 180
 #define UPPER_SERVO_CLOCKWISE true
-#define PIN_SONAR_TRIGGER 11
-#define PIN_SONAR_ECHO 12
-#define PIN_SWITCH 2
 
 box::Main::Main() {
     box_wait_controller = new box::Wait();
@@ -24,11 +28,11 @@ box::Main::Main() {
     box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
     box_switch = new box::Switch(PIN_SWITCH);
     box_lower_servo = new box::Servomotor(
-                        LOWER_SERVO_PWM, LOWER_SERVO_CLOCKWISE,
+                        PIN_LOWER_SERVO_PWM, LOWER_SERVO_CLOCKWISE,
                         LOWER_SERVO_MIN, LOWER_SERVO_MAX,
                         box_wait_lower_servo);
     box_upper_servo = new box::Servomotor(
-                        UPPER_SERVO_PWM, UPPER_SERVO_CLOCKWISE,
+                        PIN_UPPER_SERVO_PWM, UPPER_SERVO_CLOCKWISE,
                         UPPER_SERVO_MIN, UPPER_SERVO_MAX,
                         box_wait_upper_servo);
     box_servomanager = new box::Servomanager(box_lower_servo, box_upper_servo, box_wait_controller, box_switch);
@@ -38,7 +42,9 @@ box::Main::Main() {
                                             box_servomanager,
                                             box_wait_controller,
                                             box_wait_deepsleep,
-                                            box_mode_manager);
+                                            box_mode_manager,
+                                            PIN_POWER_SERVOS,
+                                            PIN_POWER_SONAR);
     randomSeed(analogRead(0));
 }
 

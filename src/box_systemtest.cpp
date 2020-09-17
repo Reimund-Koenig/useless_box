@@ -17,11 +17,11 @@ using namespace arduino;
 #define PIN_POTENTIOMETER A1 //A1
 #define PIN_BUTTON 4
 #define PIN_SWITCH 2
-#define LOWER_SERVO_PWM 9
+#define PIN_LOWER_SERVO_PWM 9
 #define LOWER_SERVO_MIN 0
 #define LOWER_SERVO_MAX 133
 #define LOWER_SERVO_CLOCKWISE false
-#define UPPER_SERVO_PWM 10
+#define PIN_UPPER_SERVO_PWM 10
 #define UPPER_SERVO_MIN 38
 #define UPPER_SERVO_MAX 180
 #define UPPER_SERVO_CLOCKWISE true
@@ -40,12 +40,12 @@ box::Systemtest::Systemtest() {
     box_potentiometer = new box::Potentiometer(PIN_POTENTIOMETER,
                                                BOX_MIN_RANGE,
                                                BOX_MAX_RANGE);
-    box_lower_servomotor = new box::Servomotor(LOWER_SERVO_PWM,
+    box_lower_servomotor = new box::Servomotor(PIN_LOWER_SERVO_PWM,
                                             LOWER_SERVO_CLOCKWISE,
                                             LOWER_SERVO_MIN,
                                             LOWER_SERVO_MAX,
                                             box_wait_lower_servo);
-    box_upper_servomotor = new box::Servomotor(UPPER_SERVO_PWM,
+    box_upper_servomotor = new box::Servomotor(PIN_UPPER_SERVO_PWM,
                                             UPPER_SERVO_CLOCKWISE,
                                            UPPER_SERVO_MIN,
                                            UPPER_SERVO_MAX,

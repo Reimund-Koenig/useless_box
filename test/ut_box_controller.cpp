@@ -22,13 +22,17 @@ struct Controller_under_test : public box::Controller {
                     box::Servomanager* box_servomanager,
                     box::Wait* box_wait_controller,
                     box::Wait* box_wait_deepsleep,
-                    box::ModeManager* box_mode_manager)
+                    box::ModeManager* box_mode_manager,
+                    int pin_power_servos,
+                    int pin_power_sonar)
                     : Controller(box_switch,
                             box_sonar,
                             box_servomanager,
                             box_wait_controller,
                             box_wait_deepsleep,
-                            box_mode_manager) {}
+                            box_mode_manager,
+                            pin_power_servos,
+                            pin_power_sonar) {}
 };
 
 #define SWITCH_TO_NEXT_MODE true
@@ -55,12 +59,16 @@ class TestController : public ::testing::Test {
         box_wait_deep_sleep_mock = new NiceMock<BoxWaitMock>;
         low_power_mock = new NiceMock<LowPowerMock>;
         box_mode_manager_mock = new NiceMock<BoxModeManagerMock>;
+        int pin_power_servos = 0;
+        int pin_power_sonar = 1;
         controller_under_test = new Controller_under_test((box::Switch*) box_switch_mock,
                                               (box::Sonar*) box_sonar_mock,
                                               (box::Servomanager*) box_servomanager_mock,
                                               (box::Wait*) box_wait_mock,
                                               (box::Wait*) box_wait_deep_sleep_mock,
-                                              (box::ModeManager*) box_mode_manager_mock);
+                                              (box::ModeManager*) box_mode_manager_mock,
+                                              pin_power_servos,
+                                              pin_power_sonar);
     }
     virtual void TearDown() {
         delete arduino_mock;

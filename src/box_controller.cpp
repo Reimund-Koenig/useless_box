@@ -16,7 +16,13 @@ box::Controller::Controller(
                 box::Servomanager* box_servomanager,
                 box::Wait* box_wait_controller,
                 box::Wait* box_wait_deepsleep,
-                box::ModeManager* box_mode_manager) {
+                box::ModeManager* box_mode_manager,
+                int pin_power_servos,
+                int pin_power_sonar) {
+    box::Controller::pin_power_servos = pin_power_servos;
+    box::Controller::pin_power_sonar = pin_power_sonar;
+    pinMode(pin_power_servos, OUTPUT);
+    pinMode(pin_power_sonar, OUTPUT);
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servomanager = box_servomanager;
@@ -27,6 +33,8 @@ box::Controller::Controller(
     is_mode_finished = false;
     box_wait_deepsleep->milliseconds(DEEP_SLEEP_DELAY);
     distance = box_sonar->get_average_distance_cm();
+    digitalWrite(pin_power_servos, HIGH);
+    digitalWrite(pin_power_sonar, HIGH);
 }
 
 box::Controller::~Controller() {
@@ -41,6 +49,8 @@ void box::Controller::run() {
         attachInterrupt(INT0, nullptr, CHANGE);
         LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
         box_wait_deepsleep->milliseconds(DEEP_SLEEP_DELAY);
+        digitalWrite(pin_power_servos, HIGH);
+        digitalWrite(pin_power_sonar, HIGH);
     }
     distance = box_sonar->get_average_distance_cm();
     box_servomanager->move_steps();

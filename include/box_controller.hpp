@@ -18,6 +18,8 @@ class Controller {
     bool is_mode_finished;
     bool sleep_mode_enabled;
     int time_till_sleep;
+    int pin_power_servos;
+    int pin_power_sonar;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomanager* box_servomanager;
@@ -33,7 +35,9 @@ class Controller {
         box::Servomanager* box_servomanager,
         box::Wait* box_wait_controller,
         box::Wait* box_wait_deepsleep,
-        box::ModeManager* box_mode_manager);
+        box::ModeManager* box_mode_manager,
+        int pin_power_servos,
+        int pin_power_sonar);
     virtual ~Controller();
     virtual void run();
 
