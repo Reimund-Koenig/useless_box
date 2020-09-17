@@ -20,9 +20,9 @@ using ::testing::NiceMock;
 #define TEST_ANTI_CLOCKWISE false
 
 struct Servomotor_under_test : public box::Servomotor {
-    Servomotor_under_test(bool clockwise, box::Wait* box_wait) :
+    Servomotor_under_test(bool clockwise, box::Wait* box_wait_controller) :
             Servomotor(TEST_PIN_PWM_SERVOMOTOR, clockwise,
-                        TEST_MIN_ANGLE, TEST_MAX_ANGLE, box_wait) {}
+                        TEST_MIN_ANGLE, TEST_MAX_ANGLE, box_wait_controller) {}
 };
 
 class TestServo : public ::testing::Test {

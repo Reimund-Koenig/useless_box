@@ -9,8 +9,6 @@ cp ../useless_box.ino ./
 cp ../Makefile ./
 cp ../../../include/* ./
 cp ../../../src/* ./
-rm box_systemtest.hpp
-rm box_systemtest.cpp
 cp /usr/share/arduino/libraries/Servo/Servo.h ./
 cp /usr/share/arduino/libraries/Servo/Servo.cpp ./
 make upload clean
