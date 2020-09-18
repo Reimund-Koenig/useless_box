@@ -8,7 +8,7 @@ using namespace arduino;
 
 #define MODE_RESET 1
 #define MODE_AWARENESS 2
-#define DEEP_SLEEP_DELAY 15000
+#define DEEP_SLEEP_DELAY 30000
 
 box::Controller::Controller(
                 box::Switch* box_switch,
@@ -53,6 +53,9 @@ void box::Controller::run() {
         digitalWrite(pin_power_sonar, HIGH);
     }
     distance = box_sonar->get_average_distance_cm();
+    if(distance < 100) {
+        box_wait_deepsleep->milliseconds(DEEP_SLEEP_DELAY);
+    }
     box_servomanager->move_steps();
     bool user_interrupt = box_switch->has_changed() && box_servomanager->box_servos_not_reached_switch();
     if(user_interrupt) {
