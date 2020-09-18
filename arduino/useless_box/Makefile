@@ -3,7 +3,7 @@ ARDUINO_PORT = /dev/ttyUSB0 # Pro
 # ARDUINO_PORT = /dev/ttyACM0  # UNO
 
 USER_LIB_PATH = ~/workspace/useless_box/include
-BOARD_TAG = pro328
+BOARD_TAG = pro5v328
 # BOARD_TAG = uno
 # BOARD_TAG = mega2560
 
