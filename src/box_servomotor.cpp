@@ -6,8 +6,13 @@
 box::Servomotor::Servomotor(int pin_pwm_servomotor, bool clockwise,
                             int min_peak_angle, int max_peak_angle,
                             box::Wait* box_wait_controller) {
-    box::Servomotor::min_peak_angle = min_peak_angle;
-    box::Servomotor::max_peak_angle = max_peak_angle;
+    if(clockwise){
+        box::Servomotor::min_peak_angle = 180 - max_peak_angle;
+        box::Servomotor::max_peak_angle = 180 - min_peak_angle;
+    } else {
+        box::Servomotor::min_peak_angle = min_peak_angle;
+        box::Servomotor::max_peak_angle = max_peak_angle;
+    }
     box::Servomotor::clockwise = clockwise;
     box::Servomotor::box_wait_servo_speed = box_wait_controller;
     set_angle(min_peak_angle);
