@@ -13,8 +13,8 @@ using namespace arduino;
 #define PIN_SONAR_TRIGGER 11
 #define PIN_SONAR_ECHO 12
 
-#define LOWER_SERVO_MIN 0
-#define LOWER_SERVO_MAX 135
+#define LOWER_SERVO_MAX 180
+#define LOWER_SERVO_MIN 25
 #define LOWER_SERVO_CLOCKWISE false
 #define UPPER_SERVO_MIN 30
 #define UPPER_SERVO_MAX 180
