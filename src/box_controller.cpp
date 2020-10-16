@@ -53,7 +53,7 @@ void box::Controller::run() {
         digitalWrite(pin_power_sonar, HIGH);
     }
     distance = box_sonar->get_average_distance_cm();
-    if(distance < 100) {
+    if(distance < 30) {
         box_wait_deepsleep->milliseconds(DEEP_SLEEP_DELAY);
     }
     box_servomanager->move_steps();
