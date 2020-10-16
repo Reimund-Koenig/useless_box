@@ -41,6 +41,7 @@ bool box::ModeReset::run() {
             run_mode_reset_step = 0;
             return true; // finished
         case 3:
+            speed = random(4) + 3; // Speed = 3-6
             box_servomanager->move_pilot_servo_to_percent(100, speed);
             run_mode_reset_step++;
             return false; // not finished
