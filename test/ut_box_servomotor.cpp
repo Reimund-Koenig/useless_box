@@ -83,9 +83,10 @@ TEST_F(TestServo, test_servomotor_defaults) {
 
 TEST_F(TestServo, test_servomotor_get_current_angle) {
     int expected_angle = 13;
+    int expected_angle_clockwise = 180 - 13;
     EXPECT_CALL(*servomotor_mock, read()).Times(2).WillRepeatedly(Return(expected_angle));
     EXPECT_EQ(expected_angle, servomotor_under_test->get_current_angle());
-    EXPECT_EQ(expected_angle, servomotor_under_test_clockwise->get_current_angle());
+    EXPECT_EQ(expected_angle_clockwise, servomotor_under_test_clockwise->get_current_angle());
 }
 
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_angle_reached) {

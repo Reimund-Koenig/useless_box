@@ -74,10 +74,9 @@ int box::Servomotor::get_angle() {
 }
 
 int box::Servomotor::get_current_angle() {
-    // TODO
-    // if(box::Servomotor::clockwise) {
-    //     return 180 - box::Servomotor::current_angle;
-    // }
+    if(box::Servomotor::clockwise) {
+        return 180 - servo.read();
+    }
     return servo.read();
 }
 
