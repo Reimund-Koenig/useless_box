@@ -67,7 +67,7 @@ class TestServo : public ::testing::Test {
 
     virtual void test_move_step_clockwise(const int expected_angle) {
         EXPECT_CALL(*box_wait_mock, is_expired()).WillOnce(Return(true));
-        EXPECT_CALL(*servomotor_mock, write(expected_angle)).Times(1);
+        EXPECT_CALL(*servomotor_mock, write(180-expected_angle)).Times(1);
         EXPECT_CALL(*box_wait_mock, milliseconds(_)).Times(1);
         servomotor_under_test_clockwise->move_step();
         EXPECT_EQ(expected_angle, servomotor_under_test_clockwise->get_angle());
@@ -78,7 +78,7 @@ TEST_F(TestServo, test_servomotor_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestServo, test_servomotor_defaults) {
     EXPECT_EQ(servomotor_under_test->get_angle(), TEST_MIN_ANGLE);
-    EXPECT_EQ(servomotor_under_test_clockwise->get_angle(), TEST_MAX_ANGLE);
+    EXPECT_EQ(servomotor_under_test_clockwise->get_angle(), TEST_MIN_ANGLE);
 }
 
 TEST_F(TestServo, test_servomotor_get_current_angle) {
@@ -115,19 +115,19 @@ TEST_F(TestServo, test_servomotor_move_to_angle) {
 }
 
 TEST_F(TestServo, test_servomotor_move_to_angle_clockwise) {
-    const int expected_value_clockwise = 17;
-    const int expected_steps = 3;
-    EXPECT_TRUE(servomotor_under_test_clockwise->move_to_angle(13, 2) > 10); // = 17 Clockwise
-    int start_angle_clockwise = TEST_MAX_ANGLE;
-    EXPECT_EQ(servomotor_under_test_clockwise->get_angle(), start_angle_clockwise); // 20
-    test_move_step_clockwise(--start_angle_clockwise); // 19
-    test_move_step_clockwise(--start_angle_clockwise); // 18
-    test_move_step_clockwise(--start_angle_clockwise); // 17
+    const int expected_value_clockwise = 13;
+    int r = servomotor_under_test_clockwise->move_to_angle(13, 3);
+    EXPECT_TRUE(r > 10); // = 13 Clockwise
+    int start_angle_clockwise = TEST_MIN_ANGLE;
+    EXPECT_EQ(servomotor_under_test_clockwise->get_angle(), start_angle_clockwise); // 10
+    test_move_step_clockwise(++start_angle_clockwise); // 11
+    test_move_step_clockwise(++start_angle_clockwise); // 12
+    test_move_step_clockwise(++start_angle_clockwise); // 13
     servomotor_under_test_clockwise->move_step();
     EXPECT_EQ(expected_value_clockwise, servomotor_under_test_clockwise->get_angle());
 }
 
-TEST_F(TestServo, test_servomotor_clockwise_move_percentage) {
+TEST_F(TestServo, test_servomotor_move_percentage) {
     int expected_angle_0_percent = 10;
     int expected_angle_50_percent = 15;
     int expected_angle_75_percent = 17;
@@ -142,11 +142,11 @@ TEST_F(TestServo, test_servomotor_clockwise_move_percentage) {
     EXPECT_FALSE(servomotor_under_test->current_angle_smaller_than_95_percent());
 }
 
-TEST_F(TestServo, test_servomotor_anti_clockwise_move_percentage) {
-    int expected_angle_0_percent = 20;
+TEST_F(TestServo, test_servomotor_clockwise_move_percentage) {
+    int expected_angle_0_percent = 10;
     int expected_angle_50_percent = 15;
-    int expected_angle_75_percent = 13;
-    int expected_angle_100_percent = 10;
+    int expected_angle_75_percent = 17;
+    int expected_angle_100_percent = 20;
     test_percentage(servomotor_under_test_clockwise, 0,expected_angle_0_percent, 0);
     EXPECT_TRUE(servomotor_under_test_clockwise->current_angle_smaller_than_95_percent());
     test_percentage(servomotor_under_test_clockwise, 50,expected_angle_50_percent, 50);
@@ -156,4 +156,3 @@ TEST_F(TestServo, test_servomotor_anti_clockwise_move_percentage) {
     test_percentage(servomotor_under_test_clockwise, 100,expected_angle_100_percent, 100);
     EXPECT_FALSE(servomotor_under_test_clockwise->current_angle_smaller_than_95_percent());
 }
-
