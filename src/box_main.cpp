@@ -16,7 +16,7 @@ using namespace arduino;
 #define LOWER_SERVO_MAX 180
 #define LOWER_SERVO_MIN 25
 #define LOWER_SERVO_CLOCKWISE false
-#define UPPER_SERVO_MIN 30
+#define UPPER_SERVO_MIN 0
 #define UPPER_SERVO_MAX 180
 #define UPPER_SERVO_CLOCKWISE true
 
