@@ -13,17 +13,9 @@ class ModeStartup {
 
   private:
     box::Servomanager* box_servomanager;
-    box::ModeFunctionJitter* box_mode_function_jitter;
-    box::Wait* box_wait_controller;
-    box::Switch* box_switch;
-    int box_mode_state;
-    bool switch_start_state_is_high;
 
   public:
-    ModeStartup(box::Servomanager* box_servomanager,
-                box::ModeFunctionJitter* box_mode_function_jitter,
-                box::Wait* box_wait_controller,
-                box::Switch* box_switch);
+    ModeStartup(box::Servomanager* box_servomanager);
     virtual ~ModeStartup();
     virtual bool run();
 

@@ -74,6 +74,7 @@ add_library(uselessbox
     ${BOX_SRC}/box_mode_normal.cpp
     ${BOX_SRC}/box_mode_reset.cpp
     ${BOX_SRC}/box_mode_startup.cpp
+    ${BOX_SRC}/box_mode_start_sequence.cpp
     ${BOX_SRC}/box_mode_manager.cpp
     ${BOX_SRC}/box_wait.cpp
 )
@@ -95,5 +96,6 @@ register_test(ut_box_mode_awareness)
 register_test(ut_box_mode_normal)
 register_test(ut_box_mode_reset)
 register_test(ut_box_mode_startup)
+register_test(ut_box_mode_start_sequence)
 register_test(ut_box_wait)
 
