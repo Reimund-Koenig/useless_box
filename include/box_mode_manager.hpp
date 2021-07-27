@@ -8,7 +8,6 @@
 
 #include "box_mode_function_jitter.hpp"
 #include "box_mode_awareness.hpp"
-#include "box_mode_normal.hpp"
 #include "box_mode_reset.hpp"
 #include "box_mode_startup.hpp"
 
@@ -19,7 +18,6 @@ class ModeManager {
   private:
     box::ModeFunctionJitter* box_mode_function_jitter;
     box::ModeAwareness* box_mode_awareness;
-    box::ModeNormal* box_mode_normal;
     box::ModeReset* box_mode_reset;
     box::ModeStartup* box_mode_startup;
 
@@ -28,7 +26,6 @@ class ModeManager {
                   box::Wait* box_wait_controller, box::Switch* box_switch);
     virtual ~ModeManager();
     virtual bool run_mode_awareness(int distance);
-    virtual bool run_mode_normal();
     virtual bool run_mode_reset();
     virtual bool run_mode_startup();
 

@@ -34,13 +34,11 @@ struct Controller_under_test : public box::Controller {
 #define SWITCH_TO_NEXT_MODE true
 #define STAY_IN_CURRENT_MODE false
 #define MODE_AWARENESS 74
-#define MODE_NORMAL 75
 #define MODE_FINISHED true
 #define MODE_NOT_FINISHED false
 #define SWITCH_VICE_VERSA_AND_RERUN_MODE_RESET -1
 #define NO_SWITCH_VICE_VERSA_MODE_RESET -2
 #define NO_SWITCH_VICE_VERSA_MODE_AWARENESS MODE_AWARENESS
-#define NO_SWITCH_VICE_VERSA_MODE_NORMAL MODE_NORMAL
 
 
 class TestController : public ::testing::Test {

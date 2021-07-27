@@ -9,7 +9,6 @@ using namespace arduino;
 #define MODE_STARTUP 0
 #define MODE_RESET 1
 #define MODE_AWARENESS 2
-#define MODE_NORMAL 3
 #define DEEP_SLEEP_DELAY 60000
 #define BOX_CONNECTED_TO_POWER_SUPPLY false
 
@@ -65,7 +64,6 @@ void box::Controller::run() {
     switch (box_mode) {
     case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;
     case MODE_AWARENESS:    is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
-    case MODE_NORMAL:       is_mode_finished = box_mode_manager->run_mode_normal(); return;
     case MODE_STARTUP:      is_mode_finished = box_mode_manager->run_mode_startup(); return;
     default:                box_mode = MODE_RESET; return;
     }
