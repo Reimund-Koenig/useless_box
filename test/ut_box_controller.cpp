@@ -144,7 +144,7 @@ TEST_F(TestController, test_controller_run_with_user_interrupt) {
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
 }
 
-TEST_F(TestController, test_controller_test_is_free) {
+TEST_F(TestController, test_controller_test_is_expired) {
     EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillRepeatedly(Return(70));
     EXPECT_CALL(*box_servomanager_mock, move_steps()).Times(AtLeast(1));
     EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(true));
