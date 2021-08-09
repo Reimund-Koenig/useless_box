@@ -71,6 +71,7 @@ add_library(uselessbox
     ${BOX_SRC}/box_mode_function_jitter.cpp
     ${BOX_SRC}/box_mode_awareness.cpp
     ${BOX_SRC}/box_mode_reset.cpp
+    ${BOX_SRC}/box_mode_startup.cpp
     ${BOX_SRC}/box_mode_manager.cpp
     ${BOX_SRC}/box_wait.cpp
 )
@@ -89,4 +90,5 @@ register_test(ut_box_button)
 register_test(ut_box_mode_function_jitter)
 register_test(ut_box_mode_awareness)
 register_test(ut_box_mode_reset)
+register_test(ut_box_mode_startup)
 register_test(ut_box_wait)
