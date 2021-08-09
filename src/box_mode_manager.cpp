@@ -10,6 +10,7 @@ box::ModeManager::ModeManager(box::Servomanager* box_servomanager,
     box::ModeManager::box_mode_function_jitter = new box::ModeFunctionJitter(box_servomanager);
     box::ModeManager::box_mode_awareness = new box::ModeAwareness(box_servomanager, box_mode_function_jitter, box_wait_controller);
     box::ModeManager::box_mode_reset = new box::ModeReset(box_servomanager, box_wait_controller);
+    box::ModeManager::box_mode_startup = new box::ModeStartup(box_servomanager);
 }
 
 box::ModeManager::~ModeManager() {
@@ -22,4 +23,8 @@ bool box::ModeManager::run_mode_awareness(int distance){
 
 bool box::ModeManager::run_mode_reset(){
     return box::ModeManager::box_mode_reset->run();
+}
+
+bool box::ModeManager::run_mode_startup(){
+    return box::ModeManager::box_mode_startup->run();
 }

@@ -6,6 +6,7 @@
 
 using namespace arduino;
 
+#define MODE_STARTUP 0
 #define MODE_RESET 1
 #define MODE_AWARENESS 2
 #define DEEP_SLEEP_DELAY 30000
