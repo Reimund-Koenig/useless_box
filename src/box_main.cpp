@@ -37,14 +37,18 @@ box::Main::Main() {
                         box_wait_upper_servo);
     box_servomanager = new box::Servomanager(box_lower_servo, box_upper_servo, box_wait_controller, box_switch);
     box_mode_manager = new box::ModeManager(box_servomanager, box_wait_controller, box_switch);
-    box_controller = new box::Controller(   box_switch,
+    bool is_engery_safe_mode = true;
+    box_controller = new box::Controller(   is_engery_safe_mode,
+                                            box_switch,
                                             box_sonar,
                                             box_servomanager,
                                             box_wait_controller,
                                             box_wait_deepsleep,
-                                            box_mode_manager,
-                                            PIN_POWER_SERVOS,
-                                            PIN_POWER_SONAR);
+                                            box_mode_manager);
+    // ToDo Check (<LowPower.h>)
+    // ,
+    //                                         PIN_POWER_SERVOS,
+    //                                         PIN_POWER_SONAR);
     randomSeed(analogRead(0));
 }
 

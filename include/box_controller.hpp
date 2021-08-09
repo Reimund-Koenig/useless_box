@@ -16,7 +16,6 @@ class Controller {
     int box_speed;
     int distance;
     bool is_mode_finished;
-    bool sleep_mode_enabled;
     int time_till_sleep;
     int pin_power_servos;
     int pin_power_sonar;
@@ -30,14 +29,17 @@ class Controller {
 
   public:
     Controller(
+        bool is_engery_safe_mode,
         box::Switch* box_switch,
         box::Sonar* box_sonar,
         box::Servomanager* box_servomanager,
         box::Wait* box_wait_controller,
         box::Wait* box_wait_deepsleep,
-        box::ModeManager* box_mode_manager,
-        int pin_power_servos,
-        int pin_power_sonar);
+        box::ModeManager* box_mode_manager);
+    // ToDo Check (<LowPower.h>)
+    // ,
+    //     int pin_power_servos,
+    //     int pin_power_sonar);
     virtual ~Controller();
     virtual void run();
 
