@@ -25,14 +25,16 @@ struct Controller_under_test : public box::Controller {
                     box::ModeManager* box_mode_manager,
                     int pin_power_servos,
                     int pin_power_sonar)
-                    : Controller(box_switch,
+                    : Controller(true,
+                            box_switch,
                             box_sonar,
                             box_servomanager,
                             box_wait_controller,
                             box_wait_deepsleep,
-                            box_mode_manager,
-                            pin_power_servos,
-                            pin_power_sonar) {}
+                            box_mode_manager) {}
+                            // ,
+                            // pin_power_servos,
+                            // pin_power_sonar) {}
 };
 
 #define SWITCH_TO_NEXT_MODE true
