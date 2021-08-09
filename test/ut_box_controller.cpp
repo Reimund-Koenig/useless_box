@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "mock_arduino.hpp"
-#include "mock_avr_sleep.hpp"
+#include "mock_low_power.hpp"
 #include "mock_serial.hpp"
 #include "mock_box.hpp"
 
@@ -21,14 +21,20 @@ struct Controller_under_test : public box::Controller {
                     box::Sonar* box_sonar,
                     box::Servomanager* box_servomanager,
                     box::Wait* box_wait_controller,
-                    box::Wait* box_wait_deep_sleep,
-                    box::ModeManager* box_mode_manager)
-                    : Controller(box_switch,
+                    box::Wait* box_wait_deepsleep,
+                    box::ModeManager* box_mode_manager,
+                    int pin_power_servos,
+                    int pin_power_sonar)
+                    : Controller(true,
+                            box_switch,
                             box_sonar,
                             box_servomanager,
                             box_wait_controller,
-                            box_wait_deep_sleep,
+                            box_wait_deepsleep,
                             box_mode_manager) {}
+                            // ,
+                            // pin_power_servos,
+                            // pin_power_sonar) {}
 };
 
 #define SWITCH_TO_NEXT_MODE true
@@ -51,14 +57,18 @@ class TestController : public ::testing::Test {
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
         box_wait_mock = new NiceMock<BoxWaitMock>;
         box_wait_deep_sleep_mock = new NiceMock<BoxWaitMock>;
-        avr_sleep_mock = new NiceMock<AvrSleepMock>;
+        low_power_mock = new NiceMock<LowPowerMock>;
         box_mode_manager_mock = new NiceMock<BoxModeManagerMock>;
+        int pin_power_servos = 0;
+        int pin_power_sonar = 1;
         controller_under_test = new Controller_under_test((box::Switch*) box_switch_mock,
                                               (box::Sonar*) box_sonar_mock,
                                               (box::Servomanager*) box_servomanager_mock,
                                               (box::Wait*) box_wait_mock,
                                               (box::Wait*) box_wait_deep_sleep_mock,
-                                              (box::ModeManager*) box_mode_manager_mock);
+                                              (box::ModeManager*) box_mode_manager_mock,
+                                              pin_power_servos,
+                                              pin_power_sonar);
     }
     virtual void TearDown() {
         delete arduino_mock;
@@ -68,7 +78,7 @@ class TestController : public ::testing::Test {
         delete box_wait_mock;
         delete box_wait_deep_sleep_mock;
         delete box_mode_manager_mock;
-        delete avr_sleep_mock;
+        delete low_power_mock;
         delete controller_under_test;
     }
 
@@ -76,12 +86,12 @@ class TestController : public ::testing::Test {
         EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillOnce(Return(ultra_sonar_result));
         EXPECT_CALL(*box_servomanager_mock, move_steps());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(false));
-        EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
-        EXPECT_CALL(*box_wait_deep_sleep_mock, is_free()).WillRepeatedly(Return(false));
+        EXPECT_CALL(*box_wait_mock, is_expired()).WillOnce(Return(true));
+        EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
     }
 
-    virtual void RunStartupMode(bool switch_mode) {
-        RunPreSteps(55);
+    virtual void RunStartupMode(const bool switch_mode) {
+        RunPreSteps(42);
         EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).WillOnce(Return(switch_mode));
         controller_under_test->run();
     }
@@ -103,8 +113,8 @@ class TestController : public ::testing::Test {
         EXPECT_CALL(*box_servomanager_mock, move_steps());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(true));
         EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillOnce(Return(true));
-        EXPECT_CALL(*box_wait_mock, is_free()).WillOnce(Return(true));
-        EXPECT_CALL(*box_wait_deep_sleep_mock, is_free()).WillRepeatedly(Return(false));
+        EXPECT_CALL(*box_wait_mock, is_expired()).WillOnce(Return(true));
+        EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
         EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(true));
         controller_under_test->run();
     }
@@ -113,62 +123,45 @@ class TestController : public ::testing::Test {
 TEST_F(TestController, test_controller_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestController, test_controller_without_user_interrupt) {
-    RunStartupMode( MODE_NOT_FINISHED);
-    RunStartupMode( MODE_FINISHED);
-    RunAwarenessMode(  MODE_NOT_FINISHED, 60);
-    RunAwarenessMode(  MODE_NOT_FINISHED, 50);
-    RunAwarenessMode(  MODE_FINISHED, 30);
-    RunResetMode(   MODE_NOT_FINISHED);
-    RunResetMode(   MODE_FINISHED);
-    RunAwarenessMode(  MODE_NOT_FINISHED, 60);
-    RunAwarenessMode(  MODE_NOT_FINISHED, 50);
-    RunAwarenessMode(  MODE_NOT_FINISHED, 40);
-    RunAwarenessMode(  MODE_NOT_FINISHED, 30);
-    RunAwarenessMode(  MODE_FINISHED, 30);
-    RunResetMode(   MODE_FINISHED);
-}
-
-TEST_F(TestController, test_controller_startup_to_awareness_no_user_interrupt) {
     RunStartupMode(     MODE_FINISHED);
-    RunAwarenessMode(   MODE_FINISHED, 50);
-    RunResetMode(       MODE_FINISHED);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 60);
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
+    RunAwarenessMode(   MODE_FINISHED, 30);
+    RunResetMode(       MODE_NOT_FINISHED);
+    RunResetMode(       MODE_FINISHED);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 60);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 40);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 30);
+    RunAwarenessMode(   MODE_FINISHED, 30);
+    RunResetMode(       MODE_FINISHED);
 }
 
 TEST_F(TestController, test_controller_run_with_user_interrupt) {
-    RunStartupMode(     MODE_NOT_FINISHED);
-    RunStartupMode(     MODE_NOT_FINISHED);
-    RunUserInterrupt();
-    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
-    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
-    RunUserInterrupt();
-    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
-    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
-    RunUserInterrupt();
-    RunAwarenessMode(   MODE_FINISHED, 50);
-    RunUserInterrupt();
-    RunAwarenessMode(   MODE_FINISHED, 50);
-    RunUserInterrupt();
-    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
-}
-
-TEST_F(TestController, test_controller_startup_switch_with_user_interrupt) {
     RunStartupMode(     MODE_FINISHED);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
+    RunUserInterrupt();
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
+    RunAwarenessMode(   MODE_NOT_FINISHED, 50);
+    RunUserInterrupt();
+    RunAwarenessMode(   MODE_FINISHED, 50);
+    RunUserInterrupt();
+    RunAwarenessMode(   MODE_FINISHED, 50);
     RunUserInterrupt();
     RunAwarenessMode(   MODE_NOT_FINISHED, 50);
 }
 
-TEST_F(TestController, test_controller_test_is_free) {
+TEST_F(TestController, test_controller_test_is_expired) {
     EXPECT_CALL(*box_sonar_mock, get_average_distance_cm()).WillRepeatedly(Return(70));
     EXPECT_CALL(*box_servomanager_mock, move_steps()).Times(AtLeast(1));
     EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillRepeatedly(Return(true));
-    EXPECT_CALL(*box_wait_mock, is_free()).WillRepeatedly(Return(false));
-    EXPECT_CALL(*box_wait_deep_sleep_mock, is_free()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_wait_mock, is_expired()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
     EXPECT_CALL(*arduino_mock, random(_)).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_awareness(_)).Times(0);
-    EXPECT_CALL(*box_mode_manager_mock, run_mode_startup()).Times(0);
     controller_under_test->run();
     controller_under_test->run();
     controller_under_test->run();
@@ -178,11 +171,9 @@ TEST_F(TestController, test_controller_test_is_free) {
 }
 
 TEST_F(TestController, test_deep_sleep) {
-    EXPECT_CALL(*box_wait_deep_sleep_mock, is_free()).WillOnce(Return(true));
+    EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillOnce(Return(true));
     EXPECT_CALL(*arduino_mock, attachInterrupt(_,_,_)).Times(1);
-    EXPECT_CALL(*avr_sleep_mock, set_sleep_mode(_)).Times(1);
-    EXPECT_CALL(*avr_sleep_mock, sleep_enable()).Times(1);
-    EXPECT_CALL(*avr_sleep_mock, sleep_cpu()).Times(1);
-    EXPECT_CALL(*avr_sleep_mock, sleep_disable()).Times(1);
+    // ToDo Check (<LowPower.h>)
+    // EXPECT_CALL(*low_power_mock, powerDown(_,_,_)).Times(1);
     controller_under_test->run();
 }

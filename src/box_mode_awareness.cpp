@@ -6,10 +6,10 @@ using namespace arduino;
 
 box::ModeAwareness::ModeAwareness(box::Servomanager* box_servomanager,
                 box::ModeFunctionJitter* box_mode_function_jitter,
-        box::Wait*          box_wait) {
+                box::Wait* box_wait_controller) {
     box::ModeAwareness::box_mode_function_jitter = box_mode_function_jitter;
     box::ModeAwareness::box_servomanager = box_servomanager;
-    box::ModeAwareness::box_wait_controller = box_wait;
+    box::ModeAwareness::box_wait_controller = box_wait_controller;
     box::ModeAwareness::last_distance = 0;
     random_jitter = false;
     jitter_count = 0;

@@ -28,7 +28,6 @@ class ModeManager {
     virtual bool run_mode_awareness(int distance);
     virtual bool run_mode_reset();
     virtual bool run_mode_startup();
-
 };
 
 } // namespace box

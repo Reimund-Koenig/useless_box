@@ -63,17 +63,13 @@ add_library(uselessbox
     ${BOX_SRC}/box_main.cpp
     ${BOX_SRC}/box_controller.cpp
     ${BOX_SRC}/box_switch.cpp
-    ${BOX_SRC}/box_potentiometer.cpp
     ${BOX_SRC}/box_servomotor.cpp
     ${BOX_SRC}/box_servomanager.cpp
     ${BOX_SRC}/box_sonar.cpp
-    ${BOX_SRC}/box_button.cpp
-    ${BOX_SRC}/box_systemtest.cpp
     ${BOX_SRC}/box_mode_function_jitter.cpp
     ${BOX_SRC}/box_mode_awareness.cpp
     ${BOX_SRC}/box_mode_reset.cpp
     ${BOX_SRC}/box_mode_startup.cpp
-    ${BOX_SRC}/box_mode_start_sequence.cpp
     ${BOX_SRC}/box_mode_manager.cpp
     ${BOX_SRC}/box_wait.cpp
 )
@@ -86,14 +82,9 @@ register_test(ut_box_controller)
 register_test(ut_box_servomotor)
 register_test(ut_box_servomanager)
 register_test(ut_box_switch)
-register_test(ut_box_potentiometer)
 register_test(ut_box_sonar)
-register_test(ut_box_button)
-register_test(ut_box_systemtest)
 register_test(ut_box_mode_function_jitter)
 register_test(ut_box_mode_awareness)
 register_test(ut_box_mode_reset)
 register_test(ut_box_mode_startup)
-register_test(ut_box_mode_start_sequence)
 register_test(ut_box_wait)
-
