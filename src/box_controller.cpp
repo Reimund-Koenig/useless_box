@@ -58,19 +58,7 @@ box::Controller::~Controller() {
 
 void box::Controller::run() {
     if (box_wait_deepsleep->is_expired()) {
-        attachInterrupt(INT0, nullptr, CHANGE);
-
-        // ToDo Check (<LowPower.h>)
-        // LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
-        // box_wait_deepsleep->milliseconds(DEEP_SLEEP_DELAY);
-        // digitalWrite(pin_power_servos, HIGH);
-        // digitalWrite(pin_power_sonar, HIGH);
-
-        // set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-        // // sleep_mode(); // call sleep_enable() then sleep_cpu() then sleep_disable()
-        // sleep_enable(); // set sleep enable bit
-        // sleep_cpu(); //  sleep without SE bit.
-        // sleep_disable();
+        deep_sleep_till_switch_is_toggled();
         box_wait_deepsleep->milliseconds(time_till_sleep);
     }
     distance = box_sonar->get_average_distance_cm();
@@ -104,4 +92,23 @@ void box::Controller::switch_box_mode() {
         return;
     }
     box_mode = MODE_RESET;
+}
+
+/*****************************************************************************************
+ * Box goes into deep_sleep power saving mode until User-Interrupt occurs
+*****************************************/
+void box::Controller::deep_sleep_till_switch_is_toggled() {
+    attachInterrupt(INT0, nullptr, CHANGE);
+
+    // ToDo Check (<LowPower.h>)
+    // LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
+    // box_wait_deepsleep->milliseconds(DEEP_SLEEP_DELAY);
+    // digitalWrite(pin_power_servos, HIGH);
+    // digitalWrite(pin_power_sonar, HIGH);
+
+    // set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    // // sleep_mode(); // call sleep_enable() then sleep_cpu() then sleep_disable()
+    // sleep_enable(); // set sleep enable bit
+    // sleep_cpu(); //  sleep without SE bit.
+    // sleep_disable();
 }
