@@ -71,7 +71,7 @@ void box::Controller::run() {
     case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;
     case MODE_AWARENESS:    is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
     case MODE_STARTUP:      is_mode_finished = box_mode_manager->run_mode_startup(); return;
-    default:                box_mode = MODE_RESET; return;
+    default:                switch_box_mode(); return;
     }
 }
 
