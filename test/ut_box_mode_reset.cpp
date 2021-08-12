@@ -16,7 +16,7 @@ using ::testing::InSequence;
 struct ModeReset_under_test : public box::ModeReset {
     ModeReset_under_test(box::Servomanager* box_servomanager_mock,
                          box::Wait* box_wait_mock) :
-    ModeReset(box_servomanager_mock, box_wait_mock) {}
+    ModeReset(box_servomanager_mock) {}
 };
 
 class TestModeReset : public ::testing::Test {

@@ -15,7 +15,6 @@ class ModeAwareness {
   private:
     box::Servomanager* box_servo_manager;
     box::ModeFunctionJitter* box_mode_function_jitter;
-    box::Wait* box_wait_controller;
     int last_distance;
     bool random_jitter;
     int jitter_percentage_1;
@@ -28,8 +27,7 @@ class ModeAwareness {
 
   public:
     ModeAwareness(box::Servomanager* box_servo_manager,
-                  box::ModeFunctionJitter* box_mode_function_jitter,
-                  box::Wait* box_wait_controller);
+                  box::ModeFunctionJitter* box_mode_function_jitter);
     virtual ~ModeAwareness();
     virtual bool run(int distance);
 

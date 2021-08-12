@@ -16,7 +16,7 @@ struct ModeAwareness_under_test : public box::ModeAwareness {
     ModeAwareness_under_test(box::Servomanager* box_servomanager_mock,
                              box::ModeFunctionJitter* box_mode_function_jitter_mock,
                              box::Wait* box_wait_mock) :
-    ModeAwareness(box_servomanager_mock, box_mode_function_jitter_mock, box_wait_mock) {}
+    ModeAwareness(box_servomanager_mock, box_mode_function_jitter_mock) {}
 };
 
 class TestModeAwareness : public ::testing::Test {

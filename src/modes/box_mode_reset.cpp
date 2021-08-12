@@ -4,10 +4,8 @@
 #include <stdio.h>
 using namespace arduino;
 
-box::ModeReset::ModeReset(box::Servomanager* box_servo_manager,
-                                  box::Wait* box_wait_controller) {
+box::ModeReset::ModeReset(box::Servomanager* box_servo_manager) {
     box::ModeReset::box_servo_manager = box_servo_manager;
-    box::ModeReset::box_wait_controller = box_wait_controller;
     run_mode_reset_step  = 0;
 }
 

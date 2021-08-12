@@ -22,8 +22,7 @@ class ModeManager {
     box::ModeStartup* box_mode_startup;
 
   public:
-    ModeManager(box::Servomanager* box_servo_manager,
-                  box::Wait* box_wait_controller, box::Switch* box_switch);
+    ModeManager(box::Servomanager* box_servo_manager, box::Switch* box_switch);
     virtual ~ModeManager();
     virtual bool run_mode_awareness(int distance);
     virtual bool run_mode_reset();
