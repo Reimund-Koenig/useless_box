@@ -5,8 +5,8 @@
 using namespace arduino;
 
 box::ModeManager::ModeManager(box::Servomanager* box_servo_manager, box::Switch* box_switch) {
-    box::ModeManager::box_mode_function_jitter = new box::ModeFunctionJitter(box_servo_manager);
-    box::ModeManager::box_mode_awareness = new box::ModeAwareness(box_servo_manager, box_mode_function_jitter);
+    box::ModeManager::box_submode_function_jitter = new box::SubModeFunctionJitter(box_servo_manager);
+    box::ModeManager::box_mode_awareness = new box::ModeAwareness(box_servo_manager, box_submode_function_jitter);
     box::ModeManager::box_mode_reset = new box::ModeReset(box_servo_manager);
     box::ModeManager::box_mode_startup = new box::ModeStartup(box_servo_manager);
 }

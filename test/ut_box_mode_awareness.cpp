@@ -14,9 +14,9 @@ using ::testing::NiceMock;
 
 struct ModeAwareness_under_test : public box::ModeAwareness {
     ModeAwareness_under_test(box::Servomanager* box_servomanager_mock,
-                             box::ModeFunctionJitter* box_mode_function_jitter_mock,
+                             box::SubModeFunctionJitter* box_submode_function_jitter_mock,
                              box::Wait* box_wait_mock) :
-    ModeAwareness(box_servomanager_mock, box_mode_function_jitter_mock) {}
+    ModeAwareness(box_servomanager_mock, box_submode_function_jitter_mock) {}
 };
 
 class TestModeAwareness : public ::testing::Test {
@@ -26,15 +26,15 @@ class TestModeAwareness : public ::testing::Test {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
         box_wait_mock = new NiceMock<BoxWaitMock>;
-        box_mode_function_jitter_mock = new NiceMock<BoxModeFunctionJitterMock>;
+        box_submode_function_jitter_mock = new NiceMock<BoxModeFunctionJitterMock>;
         mode_awareness_under_test = new ModeAwareness_under_test(
                                                 (box::Servomanager*) box_servomanager_mock,
-                                                (box::ModeFunctionJitter*) box_mode_function_jitter_mock,
+                                                (box::SubModeFunctionJitter*) box_submode_function_jitter_mock,
                                                 (box::Wait*) box_wait_mock);
     }
     virtual void TearDown() {
         delete mode_awareness_under_test;
-        delete box_mode_function_jitter_mock;
+        delete box_submode_function_jitter_mock;
         delete box_wait_mock;
         delete box_servomanager_mock;
         delete arduino_mock;
@@ -84,7 +84,7 @@ TEST_F(TestModeAwareness, test_awareness_jitter) {
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(80,4));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
     mode_awareness_under_test->run(11);
-    EXPECT_CALL(*box_mode_function_jitter_mock, run(true, _,90,80,_)).Times(5).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_submode_function_jitter_mock, run(true, _,90,80,_)).Times(5).WillRepeatedly(Return(false));
     mode_awareness_under_test->run(11);
     mode_awareness_under_test->run(70);
     mode_awareness_under_test->run(0);
@@ -102,7 +102,7 @@ TEST_F(TestModeAwareness, test_awareness_jitter_greater_95) {
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(89,4));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
     mode_awareness_under_test->run(11);
-    EXPECT_CALL(*box_mode_function_jitter_mock, run(true, _,79,89,_)).Times(5).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_submode_function_jitter_mock, run(true, _,79,89,_)).Times(5).WillRepeatedly(Return(false));
     mode_awareness_under_test->run(11);
     mode_awareness_under_test->run(70);
     mode_awareness_under_test->run(0);

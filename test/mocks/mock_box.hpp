@@ -60,9 +60,9 @@ class BoxModeManagerMock : public box::ModeManager {
     MOCK_METHOD0(run_mode_startup, bool());
 };
 
-class BoxModeFunctionJitterMock : public box::ModeFunctionJitter {
+class BoxModeFunctionJitterMock : public box::SubModeFunctionJitter {
   public:
-    BoxModeFunctionJitterMock() : box::ModeFunctionJitter(NULL) {}
+    BoxModeFunctionJitterMock() : box::SubModeFunctionJitter(NULL) {}
     MOCK_METHOD5(run, bool(bool,int,int,int,int));
 };
 
@@ -74,6 +74,6 @@ class BoxModeFunctionJitterMock : public box::ModeFunctionJitter {
 ::testing::NiceMock<BoxWaitMock>* box_wait_mock;
 ::testing::NiceMock<BoxWaitMock>* box_wait_deep_sleep_mock;
 ::testing::NiceMock<BoxModeManagerMock>* box_mode_manager_mock;
-::testing::NiceMock<BoxModeFunctionJitterMock>* box_mode_function_jitter_mock;
+::testing::NiceMock<BoxModeFunctionJitterMock>* box_submode_function_jitter_mock;
 
 #endif // MOCK_BOX_SWITCH_HPP_

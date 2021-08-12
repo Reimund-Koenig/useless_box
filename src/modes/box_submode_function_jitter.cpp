@@ -1,24 +1,24 @@
 #include "ardunio_namespace.h" // needed for arduino build
-#include "modes/box_mode_function_jitter.hpp"
+#include "modes/box_submode_function_jitter.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
 
-box::ModeFunctionJitter::ModeFunctionJitter(box::Servomanager* box_servo_manager) {
-    box::ModeFunctionJitter::box_servo_manager = box_servo_manager;
+box::SubModeFunctionJitter::SubModeFunctionJitter(box::Servomanager* box_servo_manager) {
+    box::SubModeFunctionJitter::box_servo_manager = box_servo_manager;
     box_mode_jitter_state = 0;
     jitter_speed = 0;
     jitter_count = 0;
 }
 
-box::ModeFunctionJitter::~ModeFunctionJitter() {
+box::SubModeFunctionJitter::~SubModeFunctionJitter() {
 }
 
 /*************************************************************************************************
  * Public Methods
  *************************************************/
 
-bool box::ModeFunctionJitter::run(bool pilot, int count, int percent_1, int percent_2, int speed) {
+bool box::SubModeFunctionJitter::run(bool pilot, int count, int percent_1, int percent_2, int speed) {
     if(box_mode_jitter_state == 0) {
         jitter_count = count;
         box_mode_jitter_state++;

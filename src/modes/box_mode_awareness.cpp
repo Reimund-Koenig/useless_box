@@ -5,8 +5,8 @@
 using namespace arduino;
 
 box::ModeAwareness::ModeAwareness(box::Servomanager* box_servo_manager,
-                box::ModeFunctionJitter* box_mode_function_jitter) {
-    box::ModeAwareness::box_mode_function_jitter = box_mode_function_jitter;
+                box::SubModeFunctionJitter* box_submode_function_jitter) {
+    box::ModeAwareness::box_submode_function_jitter = box_submode_function_jitter;
     box::ModeAwareness::box_servo_manager = box_servo_manager;
     box::ModeAwareness::last_distance = 0;
     random_jitter = false;
@@ -25,7 +25,7 @@ box::ModeAwareness::~ModeAwareness() {
 
 bool box::ModeAwareness::run(int distance) {
     if(random_jitter) {
-        random_jitter = !box_mode_function_jitter->run(
+        random_jitter = !box_submode_function_jitter->run(
                                 true,
                                 jitter_count,
                                 jitter_percentage_1,
