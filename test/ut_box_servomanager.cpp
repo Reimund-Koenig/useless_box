@@ -18,10 +18,10 @@ using ::testing::NiceMock;
 struct Servomanager_under_test : public box::Servomanager {
     Servomanager_under_test(box::Servomotor* box_lower_servo,
                             box::Servomotor* box_upper_servo,
-                            box::Wait* box_wait_controller,
+                            box::Wait* box_wait_servo_speed_control,
                             box::Switch* box_switch)
                     : Servomanager(box_lower_servo, box_upper_servo,
-                                    box_wait_controller, box_switch) {}
+                                    box_wait_servo_speed_control, box_switch) {}
 };
 
 

@@ -19,7 +19,7 @@ class Main {
     box::Servomotor* box_lower_servo;
     box::Servomotor* box_upper_servo;
     box::Servomanager* box_servo_manager;
-    box::Wait* box_wait_controller;
+    box::Wait* box_wait_servo_speed_control;
     box::Wait* box_wait_deepsleep;
     box::Wait* box_wait_lower_servo;
     box::Wait* box_wait_upper_servo;

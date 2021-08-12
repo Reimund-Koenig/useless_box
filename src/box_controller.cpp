@@ -18,7 +18,7 @@ box::Controller::Controller(bool is_engery_safe_mode,
                 box::Switch* box_switch,
                 box::Sonar* box_sonar,
                 box::Servomanager* box_servo_manager,
-                box::Wait* box_wait_controller,
+                box::Wait* box_wait_servo_speed_control,
                 box::Wait* box_wait_deepsleep,
                 box::ModeManager* box_mode_manager) {
     // ToDo Check (<LowPower.h>)
@@ -32,7 +32,7 @@ box::Controller::Controller(bool is_engery_safe_mode,
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servo_manager = box_servo_manager;
-    box::Controller::box_wait_controller = box_wait_controller;
+    box::Controller::box_wait_servo_speed_control = box_wait_servo_speed_control;
     box::Controller::box_wait_deepsleep = box_wait_deepsleep;
     box::Controller::box_mode_manager = box_mode_manager;
     if(is_engery_safe_mode) {
@@ -76,13 +76,9 @@ void box::Controller::run() {
     distance = box_sonar->get_average_distance_cm();
     box_servo_manager->move_steps();
     bool user_interrupt = box_switch->has_changed() && box_servo_manager->box_servos_not_reached_switch();
-    if(user_interrupt) {
-        box_mode = MODE_RESET;
-        is_mode_finished = false;
-        box_wait_deepsleep->milliseconds(time_till_sleep);
-    }
-    if (!box_wait_controller->is_expired()) { return; }
-    if (is_mode_finished) { switch_box_mode(); }
+    if(user_interrupt) { switch_to_reset_mode(); }
+    if(!box_wait_servo_speed_control->is_expired()) { return; }
+    if(is_mode_finished) { switch_box_mode(); }
     switch (box_mode) {
     case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;
     case MODE_AWARENESS:    is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
@@ -94,6 +90,12 @@ void box::Controller::run() {
 /*************************************************************************************************
  * Private Methods
  *************************************************/
+
+void box::Controller::switch_to_reset_mode() {
+    box_mode = MODE_RESET;
+    is_mode_finished = false;
+    box_wait_deepsleep->milliseconds(time_till_sleep);
+}
 
 void box::Controller::switch_box_mode() {
     is_mode_finished = false;

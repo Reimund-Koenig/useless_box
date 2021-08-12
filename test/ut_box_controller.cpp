@@ -20,7 +20,7 @@ struct Controller_under_test : public box::Controller {
     Controller_under_test(box::Switch* box_switch,
                     box::Sonar* box_sonar,
                     box::Servomanager* box_servo_manager,
-                    box::Wait* box_wait_controller,
+                    box::Wait* box_wait_servo_speed_control,
                     box::Wait* box_wait_deepsleep,
                     box::ModeManager* box_mode_manager,
                     int pin_power_servos,
@@ -29,7 +29,7 @@ struct Controller_under_test : public box::Controller {
                             box_switch,
                             box_sonar,
                             box_servo_manager,
-                            box_wait_controller,
+                            box_wait_servo_speed_control,
                             box_wait_deepsleep,
                             box_mode_manager) {}
                             // ,

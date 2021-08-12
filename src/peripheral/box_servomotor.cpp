@@ -5,11 +5,11 @@
 
 box::Servomotor::Servomotor(int pin_pwm_servomotor, bool clockwise,
                             int min_peak_angle, int max_peak_angle,
-                            box::Wait* box_wait_controller) {
+                            box::Wait* box_wait_servo_speed_control) {
     box::Servomotor::min_peak_angle = min_peak_angle;
     box::Servomotor::max_peak_angle = max_peak_angle;
     box::Servomotor::clockwise = clockwise;
-    box::Servomotor::box_wait_servo_speed = box_wait_controller;
+    box::Servomotor::box_wait_servo_speed = box_wait_servo_speed_control;
     set_angle(box::Servomotor::min_peak_angle);
     servo.write(box::Servomotor::angle);
     box::Servomotor::current_angle = box::Servomotor::angle;

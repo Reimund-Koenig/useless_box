@@ -11,12 +11,12 @@ class Servomanager {
     box::Servomotor* box_lower_servo;
     box::Servomotor* box_upper_servo;
     box::Switch* box_switch;
-    box::Wait* box_wait_controller;
+    box::Wait* box_wait_servo_speed_control;
 
   public:
     Servomanager(box::Servomotor* box_lower_servo,
                  box::Servomotor* box_upper_servo,
-                 box::Wait* box_wait_controller,
+                 box::Wait* box_wait_servo_speed_control,
                  box::Switch* box_switch);
     virtual ~Servomanager();
     virtual void move_steps();
