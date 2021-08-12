@@ -1,11 +1,11 @@
 #ifndef BOX_CONTROLLER_HPP_
 #define BOX_CONTROLLER_HPP_
 
-#include "box_servomanager.hpp"
-#include "box_sonar.hpp"
-#include "box_switch.hpp"
-#include "box_wait.hpp"
-#include "box_mode_manager.hpp"
+#include "manager/box_servo_manager.hpp"
+#include "manager/box_wait_manager.hpp"
+#include "manager/box_mode_manager.hpp"
+#include "peripheral/box_sonar.hpp"
+#include "peripheral/box_switch.hpp"
 
 namespace box {
 
@@ -21,7 +21,7 @@ class Controller {
     int pin_power_sonar;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
-    box::Servomanager* box_servomanager;
+    box::Servomanager* box_servo_manager;
     box::Wait* box_wait_controller;
     box::Wait* box_wait_deepsleep;
     box::ModeManager* box_mode_manager;
@@ -32,7 +32,7 @@ class Controller {
         bool is_engery_safe_mode,
         box::Switch* box_switch,
         box::Sonar* box_sonar,
-        box::Servomanager* box_servomanager,
+        box::Servomanager* box_servo_manager,
         box::Wait* box_wait_controller,
         box::Wait* box_wait_deepsleep,
         box::ModeManager* box_mode_manager);

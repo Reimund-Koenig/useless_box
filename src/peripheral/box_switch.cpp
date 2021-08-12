@@ -1,5 +1,5 @@
 #include "ardunio_namespace.h" // needed for arduino build
-#include "box_switch.hpp"
+#include "peripheral/box_switch.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;

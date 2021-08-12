@@ -62,16 +62,16 @@ enable_testing()
 add_library(uselessbox
     ${BOX_SRC}/box_main.cpp
     ${BOX_SRC}/box_controller.cpp
-    ${BOX_SRC}/box_switch.cpp
-    ${BOX_SRC}/box_servomotor.cpp
-    ${BOX_SRC}/box_servomanager.cpp
-    ${BOX_SRC}/box_sonar.cpp
-    ${BOX_SRC}/box_mode_function_jitter.cpp
-    ${BOX_SRC}/box_mode_awareness.cpp
-    ${BOX_SRC}/box_mode_reset.cpp
-    ${BOX_SRC}/box_mode_startup.cpp
-    ${BOX_SRC}/box_mode_manager.cpp
-    ${BOX_SRC}/box_wait.cpp
+    ${BOX_SRC}/manager/box_servo_manager.cpp
+    ${BOX_SRC}/manager/box_mode_manager.cpp
+    ${BOX_SRC}/manager/box_wait_manager.cpp
+    ${BOX_SRC}/peripheral/box_sonar.cpp
+    ${BOX_SRC}/peripheral/box_switch.cpp
+    ${BOX_SRC}/peripheral/box_servomotor.cpp
+    ${BOX_SRC}/modes/box_mode_function_jitter.cpp
+    ${BOX_SRC}/modes/box_mode_awareness.cpp
+    ${BOX_SRC}/modes/box_mode_reset.cpp
+    ${BOX_SRC}/modes/box_mode_startup.cpp
 )
 target_include_directories(uselessbox PRIVATE ${BOX_MOCKS} ${BOX_STUBS} ${BOX_INCLUDE})
 

@@ -1,11 +1,11 @@
 #include "ardunio_namespace.h" // needed for arduino build
-#include "box_mode_startup.hpp"
+#include "modes/box_mode_startup.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
 
-box::ModeStartup::ModeStartup(box::Servomanager* box_servomanager) {
-    box::ModeStartup::box_servomanager = box_servomanager;
+box::ModeStartup::ModeStartup(box::Servomanager* box_servo_manager) {
+    box::ModeStartup::box_servo_manager = box_servo_manager;
 }
 
 box::ModeStartup::~ModeStartup() {
@@ -16,7 +16,7 @@ box::ModeStartup::~ModeStartup() {
  *************************************************/
 
 bool box::ModeStartup::run() {
-    box_servomanager->move_pilot_servo_to_percent(0, 6);
-    box_servomanager->move_copilot_servo_to_percent(0, 6);
+    box_servo_manager->move_pilot_servo_to_percent(0, 6);
+    box_servo_manager->move_copilot_servo_to_percent(0, 6);
     return false;
 }

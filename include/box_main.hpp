@@ -2,11 +2,11 @@
 #define BOX_MAIN_HPP_
 
 #include "box_controller.hpp"
-#include "box_servomanager.hpp"
-#include "box_sonar.hpp"
-#include "box_switch.hpp"
-#include "box_wait.hpp"
-#include "box_mode_manager.hpp"
+#include "manager/box_servo_manager.hpp"
+#include "manager/box_mode_manager.hpp"
+#include "manager/box_wait_manager.hpp"
+#include "peripheral/box_sonar.hpp"
+#include "peripheral/box_switch.hpp"
 
 namespace box {
 
@@ -18,7 +18,7 @@ class Main {
     box::Switch* box_switch;
     box::Servomotor* box_lower_servo;
     box::Servomotor* box_upper_servo;
-    box::Servomanager* box_servomanager;
+    box::Servomanager* box_servo_manager;
     box::Wait* box_wait_controller;
     box::Wait* box_wait_deepsleep;
     box::Wait* box_wait_lower_servo;

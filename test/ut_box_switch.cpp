@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "mock_arduino.hpp"
-#include "box_switch.hpp"
+#include "peripheral/box_switch.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;

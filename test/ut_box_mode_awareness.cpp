@@ -4,7 +4,7 @@
 
 #include "mock_arduino.hpp"
 #include "mock_box.hpp"
-#include "box_mode_awareness.hpp"
+#include "modes/box_mode_awareness.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;

@@ -3,12 +3,12 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include <box_switch.hpp>
-#include <box_servomotor.hpp>
-#include <box_servomanager.hpp>
-#include <box_sonar.hpp>
-#include <box_wait.hpp>
-#include <box_mode_manager.hpp>
+#include <peripheral/box_switch.hpp>
+#include <peripheral/box_servomotor.hpp>
+#include <peripheral/box_sonar.hpp>
+#include <manager/box_servo_manager.hpp>
+#include <manager/box_wait_manager.hpp>
+#include <manager/box_mode_manager.hpp>
 
 class BoxServoMock : public box::Servomotor {
   public:

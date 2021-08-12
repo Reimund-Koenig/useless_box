@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "mock_arduino.hpp"
-#include "box_sonar.hpp"
+#include "peripheral/box_sonar.hpp"
 
 
 using ::testing::_;

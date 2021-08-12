@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "mock_arduino.hpp"
-#include "box_wait.hpp"
+#include "manager/box_wait_manager.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;

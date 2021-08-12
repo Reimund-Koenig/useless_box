@@ -1,5 +1,5 @@
 #include "ardunio_namespace.h" // needed for arduino build
-#include "box_servomotor.hpp"
+#include "peripheral/box_servomotor.hpp"
 #include "Servo.h"
 #include <stdio.h>
 

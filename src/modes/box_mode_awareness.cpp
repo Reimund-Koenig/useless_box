@@ -1,14 +1,14 @@
 #include "ardunio_namespace.h" // needed for arduino build
-#include "box_mode_awareness.hpp"
+#include "modes/box_mode_awareness.hpp"
 #include <Arduino.h>
 #include <stdio.h>
 using namespace arduino;
 
-box::ModeAwareness::ModeAwareness(box::Servomanager* box_servomanager,
+box::ModeAwareness::ModeAwareness(box::Servomanager* box_servo_manager,
                 box::ModeFunctionJitter* box_mode_function_jitter,
                 box::Wait* box_wait_controller) {
     box::ModeAwareness::box_mode_function_jitter = box_mode_function_jitter;
-    box::ModeAwareness::box_servomanager = box_servomanager;
+    box::ModeAwareness::box_servo_manager = box_servo_manager;
     box::ModeAwareness::box_wait_controller = box_wait_controller;
     box::ModeAwareness::last_distance = 0;
     random_jitter = false;
@@ -63,7 +63,7 @@ bool box::ModeAwareness::run_awareness(int distance) {
     bool return_val = false;
     int box_speed = 6;
     int box_percentage = 0;
-    box_servomanager->move_copilot_servo_to_percent(0, 6);
+    box_servo_manager->move_copilot_servo_to_percent(0, 6);
     if(distance >= 30) {
         box_speed = 6;
         box_percentage = 0;
@@ -84,6 +84,6 @@ bool box::ModeAwareness::run_awareness(int distance) {
         return_val = true;
     }
     last_distance = distance;
-    box_servomanager->move_pilot_servo_to_percent(box_percentage, box_speed);
+    box_servo_manager->move_pilot_servo_to_percent(box_percentage, box_speed);
     return return_val;
 }

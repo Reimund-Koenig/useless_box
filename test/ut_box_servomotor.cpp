@@ -5,7 +5,7 @@
 #include "mock_servomotor.hpp"
 #include "mock_box.hpp"
 #include "mock_arduino.hpp"
-#include "box_servomotor.hpp"
+#include "peripheral/box_servomotor.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;

@@ -2,7 +2,7 @@
 #define BOX_SERVOMOTOR_HPP_
 
 #include "Servo.h"
-#include "box_wait.hpp"
+#include "manager/box_wait_manager.hpp"
 
 namespace box {
 

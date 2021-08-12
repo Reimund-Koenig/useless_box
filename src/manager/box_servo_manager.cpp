@@ -1,7 +1,7 @@
 
 #include "Servo.h"
-#include "box_servomanager.hpp"
-#include "box_servomotor.hpp"
+#include "manager/box_servo_manager.hpp"
+#include "peripheral/box_servomotor.hpp"
 #include "ardunio_namespace.h" // needed for arduino build
 #include <Arduino.h>
 #include <stdio.h>

@@ -1,7 +1,7 @@
 #ifndef BOX_SWITCH_HPP_
 #define BOX_SWITCH_HPP_
 
-#include "box_wait.hpp"
+#include "manager/box_wait_manager.hpp"
 
 namespace box {
 

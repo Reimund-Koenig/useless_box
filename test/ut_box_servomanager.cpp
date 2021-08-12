@@ -7,7 +7,7 @@
 #include "mock_servomotor.hpp"
 #include "mock_box.hpp"
 
-#include "box_servomanager.hpp"
+#include "manager/box_servo_manager.hpp"
 
 using ::testing::_;
 using ::testing::AtLeast;

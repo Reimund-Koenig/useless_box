@@ -17,7 +17,7 @@ using namespace arduino;
 box::Controller::Controller(bool is_engery_safe_mode,
                 box::Switch* box_switch,
                 box::Sonar* box_sonar,
-                box::Servomanager* box_servomanager,
+                box::Servomanager* box_servo_manager,
                 box::Wait* box_wait_controller,
                 box::Wait* box_wait_deepsleep,
                 box::ModeManager* box_mode_manager) {
@@ -31,7 +31,7 @@ box::Controller::Controller(bool is_engery_safe_mode,
     // pinMode(pin_power_sonar, OUTPUT);
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
-    box::Controller::box_servomanager = box_servomanager;
+    box::Controller::box_servo_manager = box_servo_manager;
     box::Controller::box_wait_controller = box_wait_controller;
     box::Controller::box_wait_deepsleep = box_wait_deepsleep;
     box::Controller::box_mode_manager = box_mode_manager;
@@ -74,8 +74,8 @@ void box::Controller::run() {
         box_wait_deepsleep->milliseconds(time_till_sleep);
     }
     distance = box_sonar->get_average_distance_cm();
-    box_servomanager->move_steps();
-    bool user_interrupt = box_switch->has_changed() && box_servomanager->box_servos_not_reached_switch();
+    box_servo_manager->move_steps();
+    bool user_interrupt = box_switch->has_changed() && box_servo_manager->box_servos_not_reached_switch();
     if(user_interrupt) {
         box_mode = MODE_RESET;
         is_mode_finished = false;

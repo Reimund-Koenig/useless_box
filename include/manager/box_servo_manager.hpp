@@ -1,8 +1,8 @@
 #ifndef BOX_SERVOMANAGER_HPP_
 #define BOX_SERVOMANAGER_HPP_
 
-#include "box_servomotor.hpp"
-#include "box_switch.hpp"
+#include "peripheral/box_servomotor.hpp"
+#include "peripheral/box_switch.hpp"
 
 namespace box {
 

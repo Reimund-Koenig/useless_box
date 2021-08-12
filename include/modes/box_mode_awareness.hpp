@@ -1,18 +1,19 @@
 #ifndef BOX_AWARENESS_HPP_
 #define BOX_AWARENESS_HPP_
 
-#include "box_mode_function_jitter.hpp"
-#include "box_servomanager.hpp"
-#include "box_sonar.hpp"
-#include "box_switch.hpp"
-#include "box_wait.hpp"
+#include "modes/box_mode_function_jitter.hpp"
+#include "manager/box_wait_manager.hpp"
+#include "manager/box_servo_manager.hpp"
+#include "peripheral/box_sonar.hpp"
+#include "peripheral/box_switch.hpp"
+
 
 namespace box {
 
 class ModeAwareness {
 
   private:
-    box::Servomanager* box_servomanager;
+    box::Servomanager* box_servo_manager;
     box::ModeFunctionJitter* box_mode_function_jitter;
     box::Wait* box_wait_controller;
     int last_distance;
@@ -26,7 +27,7 @@ class ModeAwareness {
     void init_jitter(int box_percentage);
 
   public:
-    ModeAwareness(box::Servomanager* box_servomanager,
+    ModeAwareness(box::Servomanager* box_servo_manager,
                   box::ModeFunctionJitter* box_mode_function_jitter,
                   box::Wait* box_wait_controller);
     virtual ~ModeAwareness();
