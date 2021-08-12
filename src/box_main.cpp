@@ -5,6 +5,8 @@
 using namespace arduino;
 
 
+#define POWER_SUPPLY_CONNECTED false
+
 #define PIN_SWITCH 2
 #define PIN_POWER_SERVOS 7
 #define PIN_POWER_SONAR 8
@@ -37,7 +39,7 @@ box::Main::Main() {
                         box_wait_upper_servo);
     box_servo_manager = new box::Servomanager(box_lower_servo, box_upper_servo, box_wait_servo_speed_control, box_switch);
     box_mode_manager = new box::ModeManager(box_servo_manager, box_switch);
-    bool is_engery_safe_mode = true;
+    bool is_engery_safe_mode = !POWER_SUPPLY_CONNECTED;
     box_controller = new box::Controller(   is_engery_safe_mode,
                                             box_switch,
                                             box_sonar,
