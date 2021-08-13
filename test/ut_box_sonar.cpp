@@ -50,7 +50,7 @@ class TestSonar : public ::testing::Test {
     }
 };
 
-TEST_F(TestSonar, test_sonar_init) {EXPECT_TRUE(1); }
+TEST_F(TestSonar, test_sonar_init) { EXPECT_TRUE(1); }
 
 TEST_F(TestSonar, test_get_distance_cm) {
     unsigned int expected_result = 5;

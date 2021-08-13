@@ -21,8 +21,8 @@ box::SubModeFunctionJitter::~SubModeFunctionJitter() {
 void box::SubModeFunctionJitter::init(int box_percentage){
     jitter_count = random(8) + 3;
     jitter_speed = random(4) + 3;
-    jitter_percentage_start = box_percentage;
     int jitter_range = random(10) + 5;
+    jitter_percentage_start = box_percentage;
     if(box_percentage+jitter_range >= 95) {
         jitter_percentage_end = box_percentage-jitter_range;
     } else {
