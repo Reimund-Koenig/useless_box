@@ -13,8 +13,8 @@ class SubModeFunctionJitter {
     int jitter_speed;
     int jitter_count;
     int jitter_count2;
-    int jitter_percentage_1;
-    int jitter_percentage_2;
+    int jitter_percentage_start;
+    int jitter_percentage_end;
 
   public:
     SubModeFunctionJitter(box::Servomanager* box_servo_manager);

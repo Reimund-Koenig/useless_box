@@ -21,7 +21,8 @@ box::ModeAwareness::~ModeAwareness() {
 
 bool box::ModeAwareness::run(int distance) {
     if(run_submode_jitter) {
-        run_submode_jitter = !box_submode_function_jitter->run(true);
+        bool submode_finished = box_submode_function_jitter->run(true);
+        run_submode_jitter = !submode_finished;
         return false;
     } else {
         return run_awareness(distance);
@@ -31,13 +32,20 @@ bool box::ModeAwareness::run(int distance) {
 /*************************************************************************************************
  * Private Methods
  *************************************************/
+void box::ModeAwareness::decide_for_jitter(int distance) {
+    if(distance >= 20) { return; }
+    if(distance < 10) { return; }
+    run_submode_jitter = random(100) > 66;
+    if(!run_submode_jitter) { return; }
+    box_submode_function_jitter->init(box_percentage);
+}
 
 bool box::ModeAwareness::run_awareness(int distance) {
+    decide_for_jitter(distance);
     int diff = last_distance - distance;
     if(5 > diff && diff > -5) { return false; }
     bool return_val = false;
     int box_speed = 6;
-    int box_percentage = 0;
     box_servo_manager->move_copilot_servo_to_percent(0, 6);
     if(distance >= 30) {
         box_speed = 6;
@@ -48,17 +56,9 @@ bool box::ModeAwareness::run_awareness(int distance) {
     } else if(distance >= 15) {
         box_speed = random(6) + 1; // Speed = 1-6
         box_percentage = random(20) + 50; // random move 50-70%
-        run_submode_jitter = random(100) > 66;
-        if(run_submode_jitter) {
-            box_submode_function_jitter->init(box_percentage);
-        }
     } else if(distance >= 10) {
         box_speed = random(6) + 1; // Speed = 1-6
         box_percentage = random(20) + 70; // random move 70-90%
-        run_submode_jitter = random(100) > 66;
-        if(run_submode_jitter) {
-            box_submode_function_jitter->init(box_percentage);
-        }
     } else {
         box_speed = 6;
         box_percentage = 100;

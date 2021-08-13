@@ -39,77 +39,63 @@ class TestModeAwareness : public ::testing::Test {
         delete box_servomanager_mock;
         delete arduino_mock;
     }
+
+    virtual void ReRunSubmodeJitter(int distance, bool submode_finished) {
+        EXPECT_CALL(*box_submode_function_jitter_mock, run(true)).WillOnce(Return(submode_finished));
+        EXPECT_FALSE(mode_awareness_under_test->run(distance));
+    }
+
+    virtual void RunSubmodeJitter(int speed, int percent, int run_submode, int distance) {
+        EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(run_submode)) //jitter activate
+                                             .WillOnce(Return(speed)) // speed
+                                             .WillOnce(Return(percent)); // percent
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(_,_));
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_));
+        EXPECT_CALL(*box_submode_function_jitter_mock, init(_));
+        if(distance < 10) {
+            EXPECT_TRUE(mode_awareness_under_test->run(distance));
+        } else {
+            EXPECT_FALSE(mode_awareness_under_test->run(distance));
+        }
+    }
 };
 
 TEST_F(TestModeAwareness, test_wait_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestModeAwareness, test_awareness_distance_greater_30) {
+    int distance = 31;
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    mode_awareness_under_test->run(30);
+    mode_awareness_under_test->run(distance);
 }
 
 TEST_F(TestModeAwareness, test_awareness_distance_between_20_and_30) {
+    int distance = 24;
     EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(12));  // percent
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(42,6));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    mode_awareness_under_test->run(24);
+    mode_awareness_under_test->run(distance);
 }
 
 TEST_F(TestModeAwareness, test_awareness_distance_between_15_and_20) {
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(0))   // speed
-                                         .WillOnce(Return(12))  // percent
-                                         .WillOnce(Return(1));  // jitter
+    int distance = 17;
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(1))  // jitter
+                                         .WillOnce(Return(0))   // speed
+                                         .WillOnce(Return(12));  // percent
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(62,1));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    mode_awareness_under_test->run(17);
+    mode_awareness_under_test->run(distance);
 }
 
 TEST_F(TestModeAwareness, test_awareness_distance_between_10_and_15) {
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3))   // speed
-                                         .WillOnce(Return(10))  // percent
-                                         .WillOnce(Return(1));  // jitter
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(80,4));
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    mode_awareness_under_test->run(11);
-}
-
-TEST_F(TestModeAwareness, test_awareness_jitter) {
-    int activate_jitter = 67;
     int distance = 11;
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3))   // speed
-                                         .WillOnce(Return(10))  // percent
-                                         .WillOnce(Return(99));  // jitter activate
-
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(1))  // jitter
+                                         .WillOnce(Return(3))   // speed
+                                         .WillOnce(Return(10));  // percent
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(80,4));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
     mode_awareness_under_test->run(distance);
-    EXPECT_CALL(*box_submode_function_jitter_mock, init(80)).Times(1);
-    // EXPECT_CALL(*box_submode_function_jitter_mock, run(true)).Times(5).WillRepeatedly(Return(false));
-    mode_awareness_under_test->run(11);
-    // mode_awareness_under_test->run(70);
-    // mode_awareness_under_test->run(0);
-    // mode_awareness_under_test->run(110);
-    // mode_awareness_under_test->run(11);
 }
-
-// TEST_F(TestModeAwareness, test_awareness_jitter_greater_95) {
-//     EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3))   // speed
-//                                          .WillOnce(Return(19))  // percent
-//                                          .WillOnce(Return(99))  // jitter activate
-//                                          .WillOnce(Return(2))  // jitter count
-//                                          .WillOnce(Return(3))  // jitter speed
-//                                          .WillOnce(Return(5));  // jitter range
-//     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(89,4));
-//     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-//     mode_awareness_under_test->run(11);
-//     EXPECT_CALL(*box_submode_function_jitter_mock, run(true, _,79,89,_)).Times(5).WillRepeatedly(Return(false));
-//     mode_awareness_under_test->run(11);
-//     mode_awareness_under_test->run(70);
-//     mode_awareness_under_test->run(0);
-//     mode_awareness_under_test->run(110);
-//     mode_awareness_under_test->run(11);
-// }
 
 TEST_F(TestModeAwareness, test_awareness_distance_between_0_and_10) {
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100, 6));
@@ -117,27 +103,43 @@ TEST_F(TestModeAwareness, test_awareness_distance_between_0_and_10) {
     mode_awareness_under_test->run(9);
 }
 
+TEST_F(TestModeAwareness, test_awareness_jitter) {
+    int speed = 3;
+    int percent = 10;
+    int run_submode_jitter = 99;
+    int distance1 = 10;
+    int distance2 = 22;
+    bool submode_finished = false;
+    RunSubmodeJitter(speed, percent, run_submode_jitter, distance1);
+    ReRunSubmodeJitter(distance2, submode_finished);
+    distance2 = 110;
+    ReRunSubmodeJitter(distance2, submode_finished);
+    distance2 = 0;
+    ReRunSubmodeJitter(distance2, submode_finished);
+    submode_finished = true;
+    ReRunSubmodeJitter(distance2, submode_finished);
+    distance1 = 17;
+    RunSubmodeJitter(speed, percent, run_submode_jitter, distance1);
+    ReRunSubmodeJitter(distance2, submode_finished);
+}
+
 TEST_F(TestModeAwareness, test_awareness_distance_blocker) {
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(0))   // 15a -> speed
-                                         .WillOnce(Return(12))  // 15a -> percent
-                                         .WillOnce(Return(50))  // 15a -> jitter pecent
-                                         .WillOnce(Return(12))  // 20-> percent
-                                         .WillOnce(Return(0))   // 15b -> speed
-                                         .WillOnce(Return(13))  // 15b -> percent
-                                         .WillOnce(Return(50)); // 15b -> jitter pecent
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(62,1)); // 15a
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(42,6)); // 20
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(63,1)); // 15b
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(12))  // 20a -> percent
+                                         .WillOnce(Return(13))  // 25  -> percent
+                                         .WillOnce(Return(14));  // 20b -> percent
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(42,6)); // 20a
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(43,6)); // 25
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(44,6)); // 20b
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6)).Times(3);
-    mode_awareness_under_test->run(15); // 15a
-    mode_awareness_under_test->run(16);
-    mode_awareness_under_test->run(17);
-    mode_awareness_under_test->run(18);
-    mode_awareness_under_test->run(19);
-    mode_awareness_under_test->run(20); // 20 (5 difference)
-    mode_awareness_under_test->run(19);
-    mode_awareness_under_test->run(18);
-    mode_awareness_under_test->run(17);
-    mode_awareness_under_test->run(16);
-    mode_awareness_under_test->run(15); // 15b
+    mode_awareness_under_test->run(20); // 20a
+    mode_awareness_under_test->run(21);
+    mode_awareness_under_test->run(22);
+    mode_awareness_under_test->run(23);
+    mode_awareness_under_test->run(24);
+    mode_awareness_under_test->run(25); // 25 (5 difference)
+    mode_awareness_under_test->run(24);
+    mode_awareness_under_test->run(23);
+    mode_awareness_under_test->run(22);
+    mode_awareness_under_test->run(21);
+    mode_awareness_under_test->run(20); // 20b
 }
