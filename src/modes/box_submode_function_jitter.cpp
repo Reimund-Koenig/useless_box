@@ -18,24 +18,35 @@ box::SubModeFunctionJitter::~SubModeFunctionJitter() {
  * Public Methods
  *************************************************/
 
-bool box::SubModeFunctionJitter::run(bool pilot, int count, int percent_1, int percent_2, int speed) {
+void box::SubModeFunctionJitter::init(int box_percentage){
+    jitter_count = random(8) + 3;
+    jitter_speed = random(4) + 3;
+    jitter_percentage_2 = box_percentage;
+    int jitter_range = random(10) + 5;
+    if(box_percentage+jitter_range >= 95) {
+        jitter_percentage_1 = box_percentage-jitter_range;
+    } else {
+        jitter_percentage_1 = box_percentage+jitter_range;
+    }
+}
+
+bool box::SubModeFunctionJitter::run(bool pilot) {
     if(box_mode_jitter_state == 0) {
-        jitter_count = count;
         box_mode_jitter_state++;
         return false;
     } if(box_mode_jitter_state == 1) {
         if(pilot) {
-            box_servo_manager->move_pilot_servo_to_percent(percent_1, speed);
+            box_servo_manager->move_pilot_servo_to_percent(jitter_percentage_1, jitter_speed);
         } else  {
-            box_servo_manager->move_copilot_servo_to_percent(percent_1, speed);
+            box_servo_manager->move_copilot_servo_to_percent(jitter_percentage_1, jitter_speed);
         }
         box_mode_jitter_state++;
         return false;
     } if(box_mode_jitter_state == 2) {
         if(pilot) {
-            box_servo_manager->move_pilot_servo_to_percent(percent_2, speed);
+            box_servo_manager->move_pilot_servo_to_percent(jitter_percentage_2, jitter_speed);
         } else  {
-            box_servo_manager->move_copilot_servo_to_percent(percent_2, speed);
+            box_servo_manager->move_copilot_servo_to_percent(jitter_percentage_2, jitter_speed);
         }
         if(--jitter_count == 0) {
             box_mode_jitter_state = 3;

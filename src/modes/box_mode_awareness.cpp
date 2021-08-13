@@ -9,11 +9,7 @@ box::ModeAwareness::ModeAwareness(box::Servomanager* box_servo_manager,
     box::ModeAwareness::box_submode_function_jitter = box_submode_function_jitter;
     box::ModeAwareness::box_servo_manager = box_servo_manager;
     box::ModeAwareness::last_distance = 0;
-    random_jitter = false;
-    jitter_count = 0;
-    jitter_percentage_1 = 0;
-    jitter_percentage_2 = 0;
-    jitter_speed = 0;
+    run_submode_jitter = false;
 }
 
 box::ModeAwareness::~ModeAwareness() {
@@ -24,13 +20,8 @@ box::ModeAwareness::~ModeAwareness() {
  *************************************************/
 
 bool box::ModeAwareness::run(int distance) {
-    if(random_jitter) {
-        random_jitter = !box_submode_function_jitter->run(
-                                true,
-                                jitter_count,
-                                jitter_percentage_1,
-                                jitter_percentage_2,
-                                jitter_speed);
+    if(run_submode_jitter) {
+        run_submode_jitter = !box_submode_function_jitter->run(true);
         return false;
     } else {
         return run_awareness(distance);
@@ -40,20 +31,6 @@ bool box::ModeAwareness::run(int distance) {
 /*************************************************************************************************
  * Private Methods
  *************************************************/
-
-void box::ModeAwareness::init_jitter(int box_percentage){
-    random_jitter = random(100) > 66;
-    if(!random_jitter) { return; }
-    jitter_count = random(8) + 3;
-    jitter_speed = random(4) + 3;
-    jitter_percentage_2 = box_percentage;
-    int jitter_range = random(10) + 5;
-    if(box_percentage+jitter_range >= 95) {
-        jitter_percentage_1 = box_percentage-jitter_range;
-    } else {
-        jitter_percentage_1 = box_percentage+jitter_range;
-    }
-}
 
 bool box::ModeAwareness::run_awareness(int distance) {
     int diff = last_distance - distance;
@@ -71,11 +48,17 @@ bool box::ModeAwareness::run_awareness(int distance) {
     } else if(distance >= 15) {
         box_speed = random(6) + 1; // Speed = 1-6
         box_percentage = random(20) + 50; // random move 50-70%
-        init_jitter(box_percentage);
+        run_submode_jitter = random(100) > 66;
+        if(run_submode_jitter) {
+            box_submode_function_jitter->init(box_percentage);
+        }
     } else if(distance >= 10) {
         box_speed = random(6) + 1; // Speed = 1-6
         box_percentage = random(20) + 70; // random move 70-90%
-        init_jitter(box_percentage);
+        run_submode_jitter = random(100) > 66;
+        if(run_submode_jitter) {
+            box_submode_function_jitter->init(box_percentage);
+        }
     } else {
         box_speed = 6;
         box_percentage = 100;

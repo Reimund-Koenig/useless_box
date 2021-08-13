@@ -16,14 +16,9 @@ class ModeAwareness {
     box::Servomanager* box_servo_manager;
     box::SubModeFunctionJitter* box_submode_function_jitter;
     int last_distance;
-    bool random_jitter;
-    int jitter_percentage_1;
-    int jitter_percentage_2;
-    int jitter_count;
-    int jitter_speed;
+    bool run_submode_jitter;
     bool run_awareness(int distance);
     bool run_jitter();
-    void init_jitter(int box_percentage);
 
   public:
     ModeAwareness(box::Servomanager* box_servo_manager,

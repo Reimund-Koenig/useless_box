@@ -75,40 +75,41 @@ TEST_F(TestModeAwareness, test_awareness_distance_between_10_and_15) {
 }
 
 TEST_F(TestModeAwareness, test_awareness_jitter) {
+    int activate_jitter = 67;
+    int distance = 11;
     EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3))   // speed
                                          .WillOnce(Return(10))  // percent
-                                         .WillOnce(Return(99))  // jitter activate
-                                         .WillOnce(Return(2))  // jitter count
-                                         .WillOnce(Return(3))  // jitter speed
-                                         .WillOnce(Return(5));  // jitter range
+                                         .WillOnce(Return(99));  // jitter activate
+
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(80,4));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
+    mode_awareness_under_test->run(distance);
+    EXPECT_CALL(*box_submode_function_jitter_mock, init(80)).Times(1);
+    // EXPECT_CALL(*box_submode_function_jitter_mock, run(true)).Times(5).WillRepeatedly(Return(false));
     mode_awareness_under_test->run(11);
-    EXPECT_CALL(*box_submode_function_jitter_mock, run(true, _,90,80,_)).Times(5).WillRepeatedly(Return(false));
-    mode_awareness_under_test->run(11);
-    mode_awareness_under_test->run(70);
-    mode_awareness_under_test->run(0);
-    mode_awareness_under_test->run(110);
-    mode_awareness_under_test->run(11);
+    // mode_awareness_under_test->run(70);
+    // mode_awareness_under_test->run(0);
+    // mode_awareness_under_test->run(110);
+    // mode_awareness_under_test->run(11);
 }
 
-TEST_F(TestModeAwareness, test_awareness_jitter_greater_95) {
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3))   // speed
-                                         .WillOnce(Return(19))  // percent
-                                         .WillOnce(Return(99))  // jitter activate
-                                         .WillOnce(Return(2))  // jitter count
-                                         .WillOnce(Return(3))  // jitter speed
-                                         .WillOnce(Return(5));  // jitter range
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(89,4));
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    mode_awareness_under_test->run(11);
-    EXPECT_CALL(*box_submode_function_jitter_mock, run(true, _,79,89,_)).Times(5).WillRepeatedly(Return(false));
-    mode_awareness_under_test->run(11);
-    mode_awareness_under_test->run(70);
-    mode_awareness_under_test->run(0);
-    mode_awareness_under_test->run(110);
-    mode_awareness_under_test->run(11);
-}
+// TEST_F(TestModeAwareness, test_awareness_jitter_greater_95) {
+//     EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3))   // speed
+//                                          .WillOnce(Return(19))  // percent
+//                                          .WillOnce(Return(99))  // jitter activate
+//                                          .WillOnce(Return(2))  // jitter count
+//                                          .WillOnce(Return(3))  // jitter speed
+//                                          .WillOnce(Return(5));  // jitter range
+//     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(89,4));
+//     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
+//     mode_awareness_under_test->run(11);
+//     EXPECT_CALL(*box_submode_function_jitter_mock, run(true, _,79,89,_)).Times(5).WillRepeatedly(Return(false));
+//     mode_awareness_under_test->run(11);
+//     mode_awareness_under_test->run(70);
+//     mode_awareness_under_test->run(0);
+//     mode_awareness_under_test->run(110);
+//     mode_awareness_under_test->run(11);
+// }
 
 TEST_F(TestModeAwareness, test_awareness_distance_between_0_and_10) {
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(100, 6));

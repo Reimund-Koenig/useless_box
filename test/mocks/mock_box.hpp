@@ -63,7 +63,8 @@ class BoxModeManagerMock : public box::ModeManager {
 class BoxModeFunctionJitterMock : public box::SubModeFunctionJitter {
   public:
     BoxModeFunctionJitterMock() : box::SubModeFunctionJitter(NULL) {}
-    MOCK_METHOD5(run, bool(bool,int,int,int,int));
+    MOCK_METHOD1(run, bool(bool));
+    MOCK_METHOD1(init, void(int));
 };
 
 ::testing::NiceMock<BoxSwitchMock>* box_switch_mock;
