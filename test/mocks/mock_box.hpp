@@ -57,7 +57,6 @@ class BoxModeManagerMock : public box::ModeManager {
     BoxModeManagerMock() : box::ModeManager(NULL,NULL) {}
     MOCK_METHOD1(run_mode_awareness, bool(int));
     MOCK_METHOD0(run_mode_reset, bool());
-    MOCK_METHOD0(run_mode_startup, bool());
 };
 
 class BoxModeFunctionJitterMock : public box::SubModeFunctionJitter {

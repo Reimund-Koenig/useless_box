@@ -8,7 +8,6 @@
 
 using namespace arduino;
 
-#define MODE_STARTUP 0
 #define MODE_RESET 1
 #define MODE_AWARENESS 2
 #define ENERGY_SAFE_MODE 60000
@@ -23,27 +22,26 @@ box::Controller::Controller(bool is_engery_safe_mode,
                 box::ModeManager* box_mode_manager,
                 int pin_power_servos,
                 int pin_power_sonar) {
+    pinMode(pin_power_servos, OUTPUT);
+    digitalWrite(pin_power_servos, HIGH);
+    box_servo_manager->move_pilot_servo_to_percent(0, 6);
+    box_servo_manager->move_copilot_servo_to_percent(0, 6);
+    pinMode(pin_power_sonar, OUTPUT);
+    digitalWrite(pin_power_sonar, HIGH);
     box::Controller::pin_power_servos = pin_power_servos;
     box::Controller::pin_power_sonar = pin_power_sonar;
-    pinMode(pin_power_servos, OUTPUT);
-    pinMode(pin_power_sonar, OUTPUT);
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servo_manager = box_servo_manager;
     box::Controller::box_wait_servo_speed_control = box_wait_servo_speed_control;
     box::Controller::box_wait_deepsleep = box_wait_deepsleep;
     box::Controller::box_mode_manager = box_mode_manager;
-    if(is_engery_safe_mode) {
-        time_till_sleep = ENERGY_SAFE_MODE;
-    } else {
-        time_till_sleep = FULL_POWER_MODE;
-    }
-    box_mode = MODE_STARTUP;
+    box_mode = MODE_AWARENESS;
     is_mode_finished = false;
-    box_wait_deepsleep->milliseconds(time_till_sleep);
     distance = box_sonar->get_average_distance_cm();
-    digitalWrite(pin_power_servos, HIGH);
-    digitalWrite(pin_power_sonar, HIGH);
+    if(is_engery_safe_mode)  { time_till_sleep = ENERGY_SAFE_MODE; }
+                        else { time_till_sleep = FULL_POWER_MODE; }
+    box_wait_deepsleep->milliseconds(time_till_sleep);
 }
 
 box::Controller::~Controller() {
@@ -67,7 +65,6 @@ void box::Controller::run() {
     switch (box_mode) {
     case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;
     case MODE_AWARENESS:    is_mode_finished = box_mode_manager->run_mode_awareness(distance); return;
-    case MODE_STARTUP:      is_mode_finished = box_mode_manager->run_mode_startup(); return;
     default:                switch_box_mode(); return;
     }
 }
@@ -84,7 +81,7 @@ void box::Controller::switch_to_reset_mode() {
 
 void box::Controller::switch_box_mode() {
     is_mode_finished = false;
-    if(box_mode == MODE_RESET || box_mode == MODE_STARTUP) {
+    if(box_mode == MODE_RESET) {
         box_mode = MODE_AWARENESS;
         return;
     }

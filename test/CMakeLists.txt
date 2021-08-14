@@ -71,7 +71,6 @@ add_library(uselessbox
     ${BOX_SRC}/modes/box_submode_function_jitter.cpp
     ${BOX_SRC}/modes/box_mode_awareness.cpp
     ${BOX_SRC}/modes/box_mode_reset.cpp
-    ${BOX_SRC}/modes/box_mode_startup.cpp
 )
 target_include_directories(uselessbox PRIVATE ${BOX_MOCKS} ${BOX_STUBS} ${BOX_INCLUDE})
 
@@ -86,5 +85,4 @@ register_test(ut_box_sonar)
 register_test(ut_box_submode_function_jitter)
 register_test(ut_box_mode_awareness)
 register_test(ut_box_mode_reset)
-register_test(ut_box_mode_startup)
 register_test(ut_box_wait)
