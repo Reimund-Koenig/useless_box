@@ -8,3 +8,4 @@ src/manager/manager
 src/peripheral/peripheral
 src/modes/modes
 include/include
+arduino/useless_box/build*
