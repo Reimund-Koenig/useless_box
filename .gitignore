@@ -4,3 +4,7 @@ archive/
 build-uno/
 sketch/
 arduino-mock/
+src/manager/manager
+src/peripheral/peripheral
+src/modes/modes
+include/include

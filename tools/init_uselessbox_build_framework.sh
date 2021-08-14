@@ -6,8 +6,11 @@ sudo apt install cmake &&
 sudo apt install libgcc-8-dev &&
 sudo apt-get install build-essential &&
 sudo apt-get install g++
+echo "Add all needed SymLinks to build arduino code"
 sudo ln -s ~/workspace/useless_box/include/ /usr/share/arduino/libraries/UselessBox
 sudo ln -s ~/workspace/useless_box/src/ /usr/share/arduino/libraries/UselessBoxSrc
 sudo ln -s ~/workspace/useless_box/src/manager/ /usr/share/arduino/libraries/UselessBoxManager
 sudo ln -s ~/workspace/useless_box/src/modes/ /usr/share/arduino/libraries/UselessBoxModes
 sudo ln -s ~/workspace/useless_box/src/peripheral/ /usr/share/arduino/libraries/UselessBoxPeripheral
+# echo "Add SymLinks to GitIgnore file"
+# find . -type l | sed -e s'/^\.\///g' >> .gitignore
