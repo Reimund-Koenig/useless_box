@@ -29,6 +29,8 @@ sudo apt-get install g++
 ### Grant access to Serial_Port
 
 * sudo chmod a+rw /dev/ttyACM0
+* sudo chmod a+rw /dev/ttyUSB0
+* sudo chmod a+rw /dev/ttyS4  # WSL (Windows Subsystem Linux)
 
 ### Compile code
 
