@@ -2,7 +2,7 @@ ARDUINO_DIR = /usr/share/arduino
 ARDUINO_PORT = /dev/ttyUSB0 # Pro
 # ARDUINO_PORT = /dev/ttyACM0  # UNO
 
-USER_LIB_PATH = ~/workspace/useless_box/include
+ARDUINO_LIBS    = UselessBox UselessBoxSrc UselessBoxModes UselessBoxManager UselessBoxPeripheral Servo
 BOARD_TAG = pro5v328
 # BOARD_TAG = uno
 # BOARD_TAG = mega2560

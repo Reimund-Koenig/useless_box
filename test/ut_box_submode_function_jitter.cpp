@@ -52,7 +52,6 @@ TEST_F(TestSubModeFunctionJitter, test_jitter) {
         EXPECT_TRUE(submode_function_jitter_under_test->run(false));
 }
 
-
 TEST_F(TestSubModeFunctionJitter, test_jitter_high_init) {
         EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(2)) //count
                                         .WillOnce(Return(2)) // speed
