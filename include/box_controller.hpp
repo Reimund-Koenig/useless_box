@@ -37,11 +37,9 @@ class Controller {
         box::Servomanager* box_servo_manager,
         box::Wait* box_wait_servo_speed_control,
         box::Wait* box_wait_deepsleep,
-        box::ModeManager* box_mode_manager);
-    // ToDo Check (<LowPower.h>)
-    // ,
-    //     int pin_power_servos,
-    //     int pin_power_sonar);
+        box::ModeManager* box_mode_manager,
+        int pin_power_servos,
+        int pin_power_sonar);
     virtual ~Controller();
     virtual void run();
 

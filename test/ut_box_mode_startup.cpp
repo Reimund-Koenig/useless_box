@@ -41,5 +41,5 @@ TEST_F(TestModeStartup, test_startup) {
     // move both motors to 0
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
-    EXPECT_FALSE(mode_startup_under_test->run());
+    EXPECT_TRUE(mode_startup_under_test->run());
 }

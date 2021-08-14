@@ -46,11 +46,9 @@ box::Main::Main() {
                                             box_servo_manager,
                                             box_wait_servo_speed_control,
                                             box_wait_deepsleep,
-                                            box_mode_manager);
-    // ToDo Check (<LowPower.h>)
-    // ,
-    //                                         PIN_POWER_SERVOS,
-    //                                         PIN_POWER_SONAR);
+                                            box_mode_manager,
+                                            PIN_POWER_SERVOS,
+                                            PIN_POWER_SONAR);
     randomSeed(analogRead(0));
 }
 

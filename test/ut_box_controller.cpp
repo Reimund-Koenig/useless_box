@@ -31,10 +31,9 @@ struct Controller_under_test : public box::Controller {
                             box_servo_manager,
                             box_wait_servo_speed_control,
                             box_wait_deepsleep,
-                            box_mode_manager) {}
-                            // ,
-                            // pin_power_servos,
-                            // pin_power_sonar) {}
+                            box_mode_manager,
+                            pin_power_servos,
+                            pin_power_sonar) {}
 };
 
 #define SWITCH_TO_NEXT_MODE true
@@ -173,7 +172,6 @@ TEST_F(TestController, test_controller_test_is_expired) {
 TEST_F(TestController, test_deep_sleep) {
     EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillOnce(Return(true));
     EXPECT_CALL(*arduino_mock, attachInterrupt(_,_,_)).Times(1);
-    // ToDo Check (<LowPower.h>)
-    // EXPECT_CALL(*low_power_mock, powerDown(_,_,_)).Times(1);
+    EXPECT_CALL(*low_power_mock, powerDown(_,_,_)).Times(1);
     controller_under_test->run();
 }

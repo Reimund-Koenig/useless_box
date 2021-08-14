@@ -18,5 +18,5 @@ box::ModeStartup::~ModeStartup() {
 bool box::ModeStartup::run() {
     box_servo_manager->move_pilot_servo_to_percent(0, 6);
     box_servo_manager->move_copilot_servo_to_percent(0, 6);
-    return false;
+    return true;
 }

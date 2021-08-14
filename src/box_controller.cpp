@@ -20,15 +20,13 @@ box::Controller::Controller(bool is_engery_safe_mode,
                 box::Servomanager* box_servo_manager,
                 box::Wait* box_wait_servo_speed_control,
                 box::Wait* box_wait_deepsleep,
-                box::ModeManager* box_mode_manager) {
-    // ToDo Check (<LowPower.h>)
-    //                 ,
-    //             int pin_power_servos,
-    //             int pin_power_sonar) {
-    // box::Controller::pin_power_servos = pin_power_servos;
-    // box::Controller::pin_power_sonar = pin_power_sonar;
-    // pinMode(pin_power_servos, OUTPUT);
-    // pinMode(pin_power_sonar, OUTPUT);
+                box::ModeManager* box_mode_manager,
+                int pin_power_servos,
+                int pin_power_sonar) {
+    box::Controller::pin_power_servos = pin_power_servos;
+    box::Controller::pin_power_sonar = pin_power_sonar;
+    pinMode(pin_power_servos, OUTPUT);
+    pinMode(pin_power_sonar, OUTPUT);
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servo_manager = box_servo_manager;
@@ -44,9 +42,8 @@ box::Controller::Controller(bool is_engery_safe_mode,
     is_mode_finished = false;
     box_wait_deepsleep->milliseconds(time_till_sleep);
     distance = box_sonar->get_average_distance_cm();
-    // ToDo Check (<LowPower.h>)
-    // digitalWrite(pin_power_servos, HIGH);
-    // digitalWrite(pin_power_sonar, HIGH);
+    digitalWrite(pin_power_servos, HIGH);
+    digitalWrite(pin_power_sonar, HIGH);
 }
 
 box::Controller::~Controller() {
@@ -98,7 +95,7 @@ void box::Controller::switch_box_mode() {
  * Box goes into deep_sleep power saving mode until User-Interrupt occurs
 *****************************************/
 void box::Controller::deep_sleep_till_switch_is_toggled() {
-    attachInterrupt(INT0, nullptr, CHANGE);
+    // attachInterrupt(INT0, nullptr, CHANGE);
 
     // ToDo Check (<LowPower.h>)
     // LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
