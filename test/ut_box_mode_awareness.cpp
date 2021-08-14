@@ -52,11 +52,7 @@ class TestModeAwareness : public ::testing::Test {
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(_,_));
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(_,_));
         EXPECT_CALL(*box_submode_function_jitter_mock, init(_));
-        if(distance < 10) {
-            EXPECT_TRUE(mode_awareness_under_test->run(distance));
-        } else {
-            EXPECT_FALSE(mode_awareness_under_test->run(distance));
-        }
+        mode_awareness_under_test->run(distance);
     }
 };
 
@@ -71,8 +67,10 @@ TEST_F(TestModeAwareness, test_awareness_distance_greater_30) {
 
 TEST_F(TestModeAwareness, test_awareness_distance_between_20_and_30) {
     int distance = 24;
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(12));  // percent
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(42,6));
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(1))  // jitter
+                                         .WillOnce(Return(0))   // speed
+                                         .WillOnce(Return(12));  // percent
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(42,1));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
     mode_awareness_under_test->run(distance);
 }
@@ -89,8 +87,7 @@ TEST_F(TestModeAwareness, test_awareness_distance_between_15_and_20) {
 
 TEST_F(TestModeAwareness, test_awareness_distance_between_10_and_15) {
     int distance = 11;
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(1))  // jitter
-                                         .WillOnce(Return(3))   // speed
+    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(3))   // speed
                                          .WillOnce(Return(10));  // percent
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(80,4));
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6));
@@ -107,7 +104,7 @@ TEST_F(TestModeAwareness, test_awareness_jitter) {
     int speed = 3;
     int percent = 10;
     int run_submode_jitter = 99;
-    int distance1 = 10;
+    int distance1 = 16;
     int distance2 = 22;
     bool submode_finished = false;
     RunSubmodeJitter(speed, percent, run_submode_jitter, distance1);
@@ -118,28 +115,23 @@ TEST_F(TestModeAwareness, test_awareness_jitter) {
     ReRunSubmodeJitter(distance2, submode_finished);
     submode_finished = true;
     ReRunSubmodeJitter(distance2, submode_finished);
-    distance1 = 17;
+    distance1 = 22;
     RunSubmodeJitter(speed, percent, run_submode_jitter, distance1);
     ReRunSubmodeJitter(distance2, submode_finished);
 }
 
 TEST_F(TestModeAwareness, test_awareness_distance_blocker) {
-    EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(12))  // 20a -> percent
-                                         .WillOnce(Return(13))  // 25  -> percent
-                                         .WillOnce(Return(14));  // 20b -> percent
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(42,6)); // 20a
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(43,6)); // 25
-    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(44,6)); // 20b
+    EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6)).Times(3);
     EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6)).Times(3);
-    mode_awareness_under_test->run(20); // 20a
-    mode_awareness_under_test->run(21);
-    mode_awareness_under_test->run(22);
-    mode_awareness_under_test->run(23);
-    mode_awareness_under_test->run(24);
-    mode_awareness_under_test->run(25); // 25 (5 difference)
-    mode_awareness_under_test->run(24);
-    mode_awareness_under_test->run(23);
-    mode_awareness_under_test->run(22);
-    mode_awareness_under_test->run(21);
-    mode_awareness_under_test->run(20); // 20b
+    mode_awareness_under_test->run(40); // 40a 1th call
+    mode_awareness_under_test->run(41);
+    mode_awareness_under_test->run(42);
+    mode_awareness_under_test->run(43);
+    mode_awareness_under_test->run(44);
+    mode_awareness_under_test->run(45); // 45  2nd call (5 difference)
+    mode_awareness_under_test->run(44);
+    mode_awareness_under_test->run(43);
+    mode_awareness_under_test->run(42);
+    mode_awareness_under_test->run(41);
+    mode_awareness_under_test->run(40); // 40b 3rd call (5 difference)
 }
