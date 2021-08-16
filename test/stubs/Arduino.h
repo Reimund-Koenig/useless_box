@@ -19,24 +19,23 @@
 #define INT1 3
 #define SLEEP_MODE_PWR_DOWN 100
 
-namespace arduino
-{
-extern "C" {
-    void pinMode(int, int);
-    void digitalWrite(int, int);
-    int digitalRead(int);
-    void analogWrite(int, int);
-    int analogRead(int);
-    void delay(int);
-    void delayMicroseconds(int);
-    unsigned long micros();
-    unsigned long millis();
-    void attachInterrupt(int, void (*)(void), int mode);
-    void detachInterrupt(int);
-    void randomSeed(unsigned int);
-    unsigned long pulseIn(int pin, int state, unsigned long timeout = 1000000L);
-    long map(long, long, long, long, long);
-    long random(long);
-}
+namespace arduino {
+    extern "C" {
+        void pinMode(int, int);
+        void digitalWrite(int, int);
+        int digitalRead(int);
+        void analogWrite(int, int);
+        int analogRead(int);
+        void delay(int);
+        void delayMicroseconds(int);
+        unsigned long micros();
+        unsigned long millis();
+        void attachInterrupt(int, void (*)(void), int mode);
+        void detachInterrupt(int);
+        void randomSeed(unsigned int);
+        unsigned long pulseIn(int pin, int state, unsigned long timeout = 1000000L);
+        long map(long, long, long, long, long);
+        long random(long);
+    } // extern "C"
 } // namespace arduino
-#endif
+#endif // Arduino_h

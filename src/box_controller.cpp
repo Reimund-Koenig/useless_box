@@ -1,8 +1,8 @@
 #include "ardunio_namespace.h" // needed for arduino build
 #include "box_controller.hpp"
-#include <avr/sleep.h>
 #include <Arduino.h>
 #include <stdio.h>
+#include <avr/sleep.h>
 
 using namespace arduino;
 
@@ -16,23 +16,14 @@ box::Controller::Controller(bool is_engery_safe_mode,
                 box::Servomanager* box_servo_manager,
                 box::Wait* box_wait_servo_speed_control,
                 box::Wait* box_wait_deepsleep,
-                box::ModeManager* box_mode_manager,
-                int pin_power_servos,
-                int pin_power_sonar) {
-    pinMode(pin_power_servos, OUTPUT);
-    digitalWrite(pin_power_servos, HIGH);
-    box_servo_manager->move_pilot_servo_to_percent(0, 6);
-    box_servo_manager->move_copilot_servo_to_percent(0, 6);
-    pinMode(pin_power_sonar, OUTPUT);
-    digitalWrite(pin_power_sonar, HIGH);
-    box::Controller::pin_power_servos = pin_power_servos;
-    box::Controller::pin_power_sonar = pin_power_sonar;
+                box::ModeManager* box_mode_manager) {
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servo_manager = box_servo_manager;
     box::Controller::box_wait_servo_speed_control = box_wait_servo_speed_control;
     box::Controller::box_wait_deepsleep = box_wait_deepsleep;
     box::Controller::box_mode_manager = box_mode_manager;
+    reset_servos_blocking();
     box_mode = MODE_AWARENESS;
     is_mode_finished = false;
     distance = box_sonar->get_average_distance_cm();
@@ -48,9 +39,7 @@ box::Controller::~Controller() {
 
 void box::Controller::run() {
     if (box_wait_deepsleep->is_expired()) {
-        box_servo_manager->move_pilot_servo_to_percent(0, 6);
-        box_servo_manager->move_copilot_servo_to_percent(0, 6);
-        while(!box_wait_servo_speed_control->is_expired()) {} // blocking servo move
+        reset_servos_blocking();
         deep_sleep_till_switch_is_toggled();
         box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
     }
@@ -70,6 +59,14 @@ void box::Controller::run() {
 /*************************************************************************************************
  * Private Methods
  *************************************************/
+
+void box::Controller::reset_servos_blocking() {
+        box_servo_manager->move_pilot_servo_to_percent(0, 6);
+        box_servo_manager->move_copilot_servo_to_percent(0, 6);
+        while(!box_wait_servo_speed_control->is_expired()) {
+            printf("IS NOT EXPIRED... >%d<\n", box_wait_servo_speed_control->is_expired());
+        } // blocking servo move
+}
 
 void box::Controller::switch_to_reset_mode() {
     box_mode = MODE_RESET;

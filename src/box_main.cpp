@@ -40,15 +40,17 @@ box::Main::Main() {
     box_servo_manager = new box::Servomanager(box_lower_servo, box_upper_servo, box_wait_servo_speed_control, box_switch);
     box_mode_manager = new box::ModeManager(box_servo_manager, box_switch);
     bool is_engery_safe_mode = !POWER_SUPPLY_CONNECTED;
+    pinMode(PIN_POWER_SERVOS, OUTPUT);
+    pinMode(PIN_POWER_SONAR, OUTPUT);
+    digitalWrite(PIN_POWER_SERVOS, HIGH);
+    digitalWrite(PIN_POWER_SONAR, HIGH);
     box_controller = new box::Controller(   is_engery_safe_mode,
                                             box_switch,
                                             box_sonar,
                                             box_servo_manager,
                                             box_wait_servo_speed_control,
                                             box_wait_deepsleep,
-                                            box_mode_manager,
-                                            PIN_POWER_SERVOS,
-                                            PIN_POWER_SONAR);
+                                            box_mode_manager);
     randomSeed(analogRead(0));
 }
 

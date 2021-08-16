@@ -71,7 +71,7 @@ class BoxModeFunctionJitterMock : public box::SubModeFunctionJitter {
 ::testing::NiceMock<BoxServoMock>* box_lower_servo_mock;
 ::testing::NiceMock<BoxServoMock>* box_upper_servo_mock;
 ::testing::NiceMock<BoxServoManagerMock>* box_servomanager_mock;
-::testing::NiceMock<BoxWaitMock>* box_wait_mock;
+::testing::NiceMock<BoxWaitMock>* box_wait_servo_speed_control;
 ::testing::NiceMock<BoxWaitMock>* box_wait_deep_sleep_mock;
 ::testing::NiceMock<BoxModeManagerMock>* box_mode_manager_mock;
 ::testing::NiceMock<BoxModeFunctionJitterMock>* box_submode_function_jitter_mock;
