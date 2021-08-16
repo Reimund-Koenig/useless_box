@@ -63,9 +63,7 @@ void box::Controller::run() {
 void box::Controller::reset_servos_blocking() {
         box_servo_manager->move_pilot_servo_to_percent(0, 6);
         box_servo_manager->move_copilot_servo_to_percent(0, 6);
-        while(!box_wait_servo_speed_control->is_expired()) {
-            printf("IS NOT EXPIRED... >%d<\n", box_wait_servo_speed_control->is_expired());
-        } // blocking servo move
+        while(!box_wait_servo_speed_control->is_expired()) {} // blocking servo move
 }
 
 void box::Controller::switch_to_reset_mode() {
