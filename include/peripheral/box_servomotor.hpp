@@ -26,7 +26,7 @@ class Servomotor {
   public:
     Servomotor(int pin_pwm_servomotor, bool clockwise,
                int min_peak_angle, int max_peak_angle,
-               box::Wait* box_wait_servo_speed_control);
+               box::Wait* box_wait_till_servo_finished_moving);
     virtual ~Servomotor();
     virtual void move_step();
     virtual bool current_angle_smaller_than_95_percent();

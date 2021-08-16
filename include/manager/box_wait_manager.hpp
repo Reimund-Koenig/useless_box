@@ -9,6 +9,8 @@ class Wait {
   private:
     unsigned long last_time;
     unsigned long wait_delay;
+    void set_milliseconds(unsigned long current, unsigned long milliseconds);
+
   public:
     Wait();
     virtual ~Wait();

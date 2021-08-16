@@ -15,7 +15,7 @@ using ::testing::InSequence;
 
 struct ModeReset_under_test : public box::ModeReset {
     ModeReset_under_test(box::Servomanager* box_servomanager_mock,
-                         box::Wait* box_wait_servo_speed_control) :
+                         box::Wait* box_wait_till_servo_finished_moving) :
     ModeReset(box_servomanager_mock) {}
 };
 
@@ -25,15 +25,15 @@ class TestModeReset : public ::testing::Test {
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
-        box_wait_servo_speed_control = new NiceMock<BoxWaitMock>;
+        box_wait_till_servo_finished_moving = new NiceMock<BoxWaitMock>;
         mode_reset_under_test = new ModeReset_under_test(
                                     (box::Servomanager*) box_servomanager_mock,
-                                    (box::Wait*) box_wait_servo_speed_control);
+                                    (box::Wait*) box_wait_till_servo_finished_moving);
     }
     virtual void TearDown() {
         delete arduino_mock;
         delete box_servomanager_mock;
-        delete box_wait_servo_speed_control;
+        delete box_wait_till_servo_finished_moving;
         delete mode_reset_under_test;
     }
 

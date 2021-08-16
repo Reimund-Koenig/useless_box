@@ -21,9 +21,10 @@ void box::Wait::add_milliseconds(unsigned long milliseconds) {
 
 void box::Wait::milliseconds(unsigned long milliseconds) {
     unsigned long current = millis();
-    if (!(is_expired() || current + milliseconds > last_time + wait_delay)) { return; }
-    last_time = current;
-    wait_delay =  milliseconds;
+    bool new_time_bigger_then_last_time = current + milliseconds > last_time + wait_delay;
+    if(is_expired() || new_time_bigger_then_last_time) {
+        set_milliseconds(current, milliseconds);
+    }
 }
 
 bool box::Wait::is_expired() {
@@ -31,4 +32,14 @@ bool box::Wait::is_expired() {
         return false;
     }
     return true;
+}
+
+
+/*************************************************************************************************
+ * Private Methods
+ *************************************************/
+
+void box::Wait::set_milliseconds(unsigned long current, unsigned long milliseconds) {
+    last_time = current;
+    wait_delay =  milliseconds;
 }
