@@ -14,13 +14,13 @@ box::Controller::Controller(bool is_engery_safe_mode,
                 box::Switch* box_switch,
                 box::Sonar* box_sonar,
                 box::Servomanager* box_servo_manager,
-                box::Wait* box_wait_till_servo_finished_moving,
+                box::Wait* box_wait_till_servomanager_finished_moving,
                 box::Wait* box_wait_deepsleep,
                 box::ModeManager* box_mode_manager) {
     box::Controller::box_switch = box_switch;
     box::Controller::box_sonar = box_sonar;
     box::Controller::box_servo_manager = box_servo_manager;
-    box::Controller::box_wait_till_servo_finished_moving = box_wait_till_servo_finished_moving;
+    box::Controller::box_wait_till_servomanager_finished_moving = box_wait_till_servomanager_finished_moving;
     box::Controller::box_wait_deepsleep = box_wait_deepsleep;
     box::Controller::box_mode_manager = box_mode_manager;
     reset_servos_blocking();
@@ -47,7 +47,7 @@ void box::Controller::run() {
     box_servo_manager->move_steps();
     bool user_interrupt = box_switch->has_changed() && box_servo_manager->box_servos_not_reached_switch();
     if(user_interrupt) { switch_to_reset_mode(); }
-    if(!box_wait_till_servo_finished_moving->is_expired()) { return; }
+    if(!box_wait_till_servomanager_finished_moving->is_expired()) { return; }
     if(is_mode_finished) { switch_box_mode(); }
     switch (box_mode) {
     case MODE_RESET:        is_mode_finished = box_mode_manager->run_mode_reset(); return;
@@ -63,7 +63,7 @@ void box::Controller::run() {
 void box::Controller::reset_servos_blocking() {
         box_servo_manager->move_pilot_servo_to_percent(0, 6);
         box_servo_manager->move_copilot_servo_to_percent(0, 6);
-        while(!box_wait_till_servo_finished_moving->is_expired()) {
+        while(!box_wait_till_servomanager_finished_moving->is_expired()) {
             box_servo_manager->move_steps(); // blocking servo move
         }
 }

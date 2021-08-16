@@ -15,7 +15,7 @@ using ::testing::NiceMock;
 struct ModeAwareness_under_test : public box::ModeAwareness {
     ModeAwareness_under_test(box::Servomanager* box_servomanager_mock,
                              box::SubModeFunctionJitter* box_submode_function_jitter_mock,
-                             box::Wait* box_wait_till_servo_finished_moving) :
+                             box::Wait* box_wait_till_servomanager_finished_moving) :
     ModeAwareness(box_servomanager_mock, box_submode_function_jitter_mock) {}
 };
 
@@ -25,17 +25,17 @@ class TestModeAwareness : public ::testing::Test {
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
-        box_wait_till_servo_finished_moving = new NiceMock<BoxWaitMock>;
+        box_wait_till_servomanager_finished_moving = new NiceMock<BoxWaitMock>;
         box_submode_function_jitter_mock = new NiceMock<BoxModeFunctionJitterMock>;
         mode_awareness_under_test = new ModeAwareness_under_test(
                                                 (box::Servomanager*) box_servomanager_mock,
                                                 (box::SubModeFunctionJitter*) box_submode_function_jitter_mock,
-                                                (box::Wait*) box_wait_till_servo_finished_moving);
+                                                (box::Wait*) box_wait_till_servomanager_finished_moving);
     }
     virtual void TearDown() {
         delete mode_awareness_under_test;
         delete box_submode_function_jitter_mock;
-        delete box_wait_till_servo_finished_moving;
+        delete box_wait_till_servomanager_finished_moving;
         delete box_servomanager_mock;
         delete arduino_mock;
     }

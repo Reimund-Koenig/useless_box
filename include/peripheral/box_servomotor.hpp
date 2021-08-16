@@ -19,14 +19,14 @@ class Servomotor {
     unsigned long speed_sleep_ms;
     bool clockwise;
     void set_angle(int);
-    box::Wait* box_wait_servo_speed;
+    box::Wait* box_wait_servo_step_speed;
     unsigned long speed_to_millseconds(int speed);
     int calculate_sleep_time_ms();
 
   public:
     Servomotor(int pin_pwm_servomotor, bool clockwise,
                int min_peak_angle, int max_peak_angle,
-               box::Wait* box_wait_till_servo_finished_moving);
+               box::Wait* box_wait_servo_step_speed);
     virtual ~Servomotor();
     virtual void move_step();
     virtual bool current_angle_smaller_than_95_percent();

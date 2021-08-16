@@ -20,9 +20,9 @@ using ::testing::NiceMock;
 #define TEST_ANTI_CLOCKWISE false
 
 struct Servomotor_under_test : public box::Servomotor {
-    Servomotor_under_test(bool clockwise, box::Wait* box_wait_till_servo_finished_moving) :
+    Servomotor_under_test(bool clockwise, box::Wait* box_wait_till_servomanager_finished_moving) :
             Servomotor(TEST_PIN_PWM_SERVOMOTOR, clockwise,
-                        TEST_MIN_ANGLE, TEST_MAX_ANGLE, box_wait_till_servo_finished_moving) {}
+                        TEST_MIN_ANGLE, TEST_MAX_ANGLE, box_wait_till_servomanager_finished_moving) {}
 };
 
 class TestServo : public ::testing::Test {
@@ -32,24 +32,24 @@ class TestServo : public ::testing::Test {
 
     virtual void SetUp() {
         servomotor_mock = new NiceMock<ServomotorMock>;
-        box_wait_till_servo_finished_moving= new NiceMock<BoxWaitMock>;
+        box_wait_till_servomanager_finished_moving= new NiceMock<BoxWaitMock>;
         servomotor_under_test_clockwise = new Servomotor_under_test(TEST_CLOCKWISE,
-                                            (box::Wait*) box_wait_till_servo_finished_moving);
+                                            (box::Wait*) box_wait_till_servomanager_finished_moving);
         servomotor_under_test = new Servomotor_under_test(TEST_ANTI_CLOCKWISE,
-                                            (box::Wait*) box_wait_till_servo_finished_moving);
+                                            (box::Wait*) box_wait_till_servomanager_finished_moving);
     }
 
     virtual void TearDown() {
         delete servomotor_under_test;
         delete servomotor_under_test_clockwise;
-        delete box_wait_till_servo_finished_moving;
+        delete box_wait_till_servomanager_finished_moving;
         delete servomotor_mock;
     }
 
     virtual void test_percentage(Servomotor_under_test* servo, int percentage,
                                     int expected_angle, int expected_percentage) {
         servo->move_to_percent(percentage, 5);
-        EXPECT_CALL(*box_wait_till_servo_finished_moving, is_expired()).WillRepeatedly(Return(true));
+        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillRepeatedly(Return(true));
         for(int i=0; i<11; i++) {
             servo->move_step();
         }
@@ -58,17 +58,17 @@ class TestServo : public ::testing::Test {
     }
 
     virtual void test_move_step(const int expected_angle) {
-        EXPECT_CALL(*box_wait_till_servo_finished_moving, is_expired()).WillOnce(Return(true));
+        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(true));
         EXPECT_CALL(*servomotor_mock, write(expected_angle)).Times(1);
-        EXPECT_CALL(*box_wait_till_servo_finished_moving, milliseconds(_)).Times(1);
+        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, milliseconds(_)).Times(1);
         servomotor_under_test->move_step();
         EXPECT_EQ(expected_angle, servomotor_under_test->get_angle());
     }
 
     virtual void test_move_step_clockwise(const int expected_angle) {
-        EXPECT_CALL(*box_wait_till_servo_finished_moving, is_expired()).WillOnce(Return(true));
+        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(true));
         EXPECT_CALL(*servomotor_mock, write(180-expected_angle)).Times(1);
-        EXPECT_CALL(*box_wait_till_servo_finished_moving, milliseconds(_)).Times(1);
+        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, milliseconds(_)).Times(1);
         servomotor_under_test_clockwise->move_step();
         EXPECT_EQ(expected_angle, servomotor_under_test_clockwise->get_angle());
     }
@@ -90,14 +90,14 @@ TEST_F(TestServo, test_servomotor_get_current_angle) {
 }
 
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_angle_reached) {
-    EXPECT_CALL(*box_wait_till_servo_finished_moving, is_expired()).Times(0);
+    EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).Times(0);
     EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
     servomotor_under_test->move_step();
 }
 
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
     EXPECT_TRUE(servomotor_under_test->move_to_angle(15,1) > 10);
-    EXPECT_CALL(*box_wait_till_servo_finished_moving, is_expired()).WillOnce(Return(false));
+    EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(false));
     EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
     servomotor_under_test->move_step();
 }

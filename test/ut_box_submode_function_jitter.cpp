@@ -23,14 +23,14 @@ class TestSubModeFunctionJitter : public ::testing::Test {
     virtual void SetUp() {
         arduino_mock = new NiceMock<ArduinoMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
-        box_wait_till_servo_finished_moving = new NiceMock<BoxWaitMock>;
+        box_wait_till_servomanager_finished_moving = new NiceMock<BoxWaitMock>;
         submode_function_jitter_under_test = new SubModeFunctionJitter_under_test(
                                                 (box::Servomanager*) box_servomanager_mock);
     }
     virtual void TearDown() {
         delete arduino_mock;
         delete box_servomanager_mock;
-        delete box_wait_till_servo_finished_moving;
+        delete box_wait_till_servomanager_finished_moving;
         delete submode_function_jitter_under_test;
     }
 };
