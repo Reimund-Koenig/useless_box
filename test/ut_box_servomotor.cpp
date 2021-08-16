@@ -111,12 +111,19 @@ TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
 }
 
 TEST_F(TestServo, test_servomotor_sleep_time_for_speed) {
-    test_speed(servomotor_under_test, 50, 1, 70);
-    test_speed(servomotor_under_test, 50, 2, 60);
-    test_speed(servomotor_under_test, 50, 3, 45);
-    test_speed(servomotor_under_test, 50, 4, 30);
-    test_speed(servomotor_under_test, 50, 5, 25);
-    test_speed(servomotor_under_test, 50, 6, 20);
+    test_speed(servomotor_under_test, 50, 1, 70); // 5 steps
+    test_speed(servomotor_under_test, 50, 2, 60); // 5 steps
+    test_speed(servomotor_under_test, 50, 3, 45); // 5 steps
+    test_speed(servomotor_under_test, 50, 4, 30); // 5 steps
+    test_speed(servomotor_under_test, 50, 5, 25); // 5 steps
+    test_speed(servomotor_under_test, 50, 6, 20); // 5 steps
+
+    test_speed(servomotor_under_test, 100, 1, 140); // 10 steps
+    test_speed(servomotor_under_test, 100, 2, 120); // 10 steps
+    test_speed(servomotor_under_test, 100, 3, 90); // 10 steps
+    test_speed(servomotor_under_test, 100, 4, 60); // 10 steps
+    test_speed(servomotor_under_test, 100, 5, 50); // 10 steps
+    test_speed(servomotor_under_test, 100, 6, 40); // 10 steps
 }
 
 TEST_F(TestServo, test_servomotor_move_percentage) {
