@@ -54,7 +54,6 @@ class TestController : public ::testing::Test {
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
         box_wait_servo_speed_control = new NiceMock<BoxWaitMock>;
         box_wait_deep_sleep_mock = new NiceMock<BoxWaitMock>;
-        // low_power_mock = new NiceMock<LowPowerMock>;
         box_mode_manager_mock = new NiceMock<BoxModeManagerMock>;
         EXPECT_CALL(*box_wait_servo_speed_control, is_expired()).WillRepeatedly(Return(true));
         controller_under_test = new Controller_under_test((box::Switch*) box_switch_mock,
@@ -74,7 +73,6 @@ class TestController : public ::testing::Test {
         delete box_wait_servo_speed_control;
         delete box_wait_deep_sleep_mock;
         delete box_mode_manager_mock;
-        // delete low_power_mock;
         delete controller_under_test;
     }
 
