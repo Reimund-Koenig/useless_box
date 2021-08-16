@@ -15,11 +15,11 @@ using namespace arduino;
 #define PIN_SONAR_TRIGGER 11
 #define PIN_SONAR_ECHO 12
 
-#define LOWER_SERVO_MAX 155
+#define LOWER_SERVO_MAX 160
 #define LOWER_SERVO_MIN 25
 #define LOWER_SERVO_CLOCKWISE false
 #define UPPER_SERVO_MIN 0
-#define UPPER_SERVO_MAX 158
+#define UPPER_SERVO_MAX 160
 #define UPPER_SERVO_CLOCKWISE true
 
 box::Main::Main() {
