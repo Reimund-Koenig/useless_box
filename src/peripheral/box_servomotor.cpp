@@ -11,8 +11,12 @@ box::Servomotor::Servomotor(int pin_pwm_servomotor, bool clockwise,
     box::Servomotor::clockwise = clockwise;
     box::Servomotor::box_wait_servo_step_speed = box_wait_servo_step_speed;
     set_angle(box::Servomotor::min_peak_angle);
-    servo.write(box::Servomotor::angle);
-    box::Servomotor::current_angle = box::Servomotor::angle;
+    if(box::Servomotor::clockwise) {
+        servo.write(180 - angle);
+    } else {
+        servo.write(angle);
+    }
+    box::Servomotor::current_angle = angle;
     servo.attach(pin_pwm_servomotor);
     last_percentage = 0;
 }
@@ -28,7 +32,7 @@ int box::Servomotor::move_to_percent(int percentage, int speed) {
     if(percentage > 100) { percentage = 100;}
     if(percentage < 0) { percentage = 0; }
     box::Servomotor::speed_sleep_ms = speed_to_millseconds(speed);
-    last_percentage = percentage;
+    box::Servomotor::last_percentage = percentage;
     int angle = (int)(((box::Servomotor::max_peak_angle - box::Servomotor::min_peak_angle) *
                         (percentage / 100.0)) +
                         box::Servomotor::min_peak_angle
