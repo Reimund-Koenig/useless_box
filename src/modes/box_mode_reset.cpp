@@ -17,9 +17,10 @@ box::ModeReset::~ModeReset() {
  *************************************************/
 
 bool box::ModeReset::run() {
-    int speed = 6;
+    int speed;
     switch (run_mode_reset_step) {
         case 0:
+            speed = 6;
             box_servo_manager->move_pilot_servo_to_percent(100, speed);
             box_servo_manager->move_copilot_servo_to_percent(0, speed);
             run_mode_reset_step++;
