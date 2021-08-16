@@ -4,7 +4,6 @@
 
 #include "mock_arduino.hpp"
 #include "mock_avr_sleep.hpp"
-#include "mock_low_power.hpp"
 #include "mock_serial.hpp"
 #include "mock_box.hpp"
 
