@@ -1,8 +1,6 @@
 #include "ardunio_namespace.h" // needed for arduino build
 #include "box_controller.hpp"
-// ToDo Check (<LowPower.h>)
-// #include <LowPower.h> // Install Rocket Scream LowPower
-// #include <avr/sleep.h>
+#include <avr/sleep.h>
 #include <Arduino.h>
 #include <stdio.h>
 
@@ -10,8 +8,7 @@ using namespace arduino;
 
 #define MODE_RESET 1
 #define MODE_AWARENESS 2
-#define ENERGY_SAFE_MODE 60000
-#define FULL_POWER_MODE 300000
+#define TIME_TILL_DEEP_SLEEP 60000
 
 box::Controller::Controller(bool is_engery_safe_mode,
                 box::Switch* box_switch,
@@ -39,9 +36,7 @@ box::Controller::Controller(bool is_engery_safe_mode,
     box_mode = MODE_AWARENESS;
     is_mode_finished = false;
     distance = box_sonar->get_average_distance_cm();
-    if(is_engery_safe_mode)  { time_till_sleep = ENERGY_SAFE_MODE; }
-                        else { time_till_sleep = FULL_POWER_MODE; }
-    box_wait_deepsleep->milliseconds(time_till_sleep);
+    box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
 }
 
 box::Controller::~Controller() {
@@ -53,8 +48,11 @@ box::Controller::~Controller() {
 
 void box::Controller::run() {
     if (box_wait_deepsleep->is_expired()) {
+        box_servo_manager->move_pilot_servo_to_percent(0, 6);
+        box_servo_manager->move_copilot_servo_to_percent(0, 6);
+        while(!box_wait_servo_speed_control->is_expired()) {} // blocking servo move
         deep_sleep_till_switch_is_toggled();
-        box_wait_deepsleep->milliseconds(time_till_sleep);
+        box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
     }
     distance = box_sonar->get_average_distance_cm();
     box_servo_manager->move_steps();
@@ -76,7 +74,7 @@ void box::Controller::run() {
 void box::Controller::switch_to_reset_mode() {
     box_mode = MODE_RESET;
     is_mode_finished = false;
-    box_wait_deepsleep->milliseconds(time_till_sleep);
+    box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
 }
 
 void box::Controller::switch_box_mode() {
@@ -92,17 +90,9 @@ void box::Controller::switch_box_mode() {
  * Box goes into deep_sleep power saving mode until User-Interrupt occurs
 *****************************************/
 void box::Controller::deep_sleep_till_switch_is_toggled() {
-    // attachInterrupt(INT0, nullptr, CHANGE);
-
-    // ToDo Check (<LowPower.h>)
-    // LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
-    // box_wait_deepsleep->milliseconds(DEEP_SLEEP_DELAY);
-    // digitalWrite(pin_power_servos, HIGH);
-    // digitalWrite(pin_power_sonar, HIGH);
-
-    // set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    // // sleep_mode(); // call sleep_enable() then sleep_cpu() then sleep_disable()
-    // sleep_enable(); // set sleep enable bit
-    // sleep_cpu(); //  sleep without SE bit.
-    // sleep_disable();
+    attachInterrupt(INT0, nullptr, CHANGE);
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    sleep_enable(); // set sleep enable bit
+    sleep_cpu(); //  sleep without SE bit.
+    sleep_disable();
 }
