@@ -47,6 +47,12 @@ class TestServo : public ::testing::Test {
         delete servomotor_mock;
     }
 
+    virtual void test_speed(Servomotor_under_test* servo, int percentage, int speed,
+                                                          int expected_time) {
+        int calculate_sleep_time_ms = servo->move_to_percent(percentage, speed);
+        EXPECT_EQ(expected_time, calculate_sleep_time_ms);
+    }
+
     virtual void test_percentage(Servomotor_under_test* servo, int percentage,
                                     int expected_angle, int expected_percentage) {
         servo->move_to_percent(percentage, 5);
@@ -105,16 +111,13 @@ TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
 }
 
 TEST_F(TestServo, test_servomotor_sleep_time_for_speed) {
-
-    int expected_angle_0_percent = 10;
-    int expected_angle_50_percent = 15;
-    int expected_angle_75_percent = 17;
-    int expected_angle_100_percent = 20;
-    test_percentage(servomotor_under_test, 0, expected_angle_0_percent, 0);
-    EXPECT_EQ(10, 10);
-
+    test_speed(servomotor_under_test, 50, 1, 70);
+    test_speed(servomotor_under_test, 50, 2, 60);
+    test_speed(servomotor_under_test, 50, 3, 45);
+    test_speed(servomotor_under_test, 50, 4, 30);
+    test_speed(servomotor_under_test, 50, 5, 25);
+    test_speed(servomotor_under_test, 50, 6, 20);
 }
-
 
 TEST_F(TestServo, test_servomotor_move_percentage) {
     int expected_angle_0_percent = 10;
