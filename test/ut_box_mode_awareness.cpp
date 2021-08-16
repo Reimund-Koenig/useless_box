@@ -121,17 +121,18 @@ TEST_F(TestModeAwareness, test_awareness_jitter) {
 }
 
 TEST_F(TestModeAwareness, test_awareness_distance_blocker) {
+    int total_runs = 11;
     EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0,6)).Times(3);
-    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6)).Times(3);
+    EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0,6)).Times(total_runs);
     mode_awareness_under_test->run(40); // 40a 1th call
     mode_awareness_under_test->run(41);
     mode_awareness_under_test->run(42);
-    mode_awareness_under_test->run(43);
+    mode_awareness_under_test->run(43); // 43  2nd call (3 difference)
     mode_awareness_under_test->run(44);
-    mode_awareness_under_test->run(45); // 45  2nd call (5 difference)
+    mode_awareness_under_test->run(45);
     mode_awareness_under_test->run(44);
     mode_awareness_under_test->run(43);
     mode_awareness_under_test->run(42);
     mode_awareness_under_test->run(41);
-    mode_awareness_under_test->run(40); // 40b 3rd call (5 difference)
+    mode_awareness_under_test->run(40); // 40b 3rd call (3 difference)
 }

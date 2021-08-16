@@ -14,8 +14,7 @@ box::ModeManager::~ModeManager() {
 }
 
 bool box::ModeManager::run_mode_awareness(int distance){
-    box::ModeManager::box_mode_awareness->run(distance);
-    return false; // endless mode till interrupt will change mode in controller
+    return box::ModeManager::box_mode_awareness->run(distance);
 }
 
 bool box::ModeManager::run_mode_reset(){

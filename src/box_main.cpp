@@ -44,6 +44,7 @@ box::Main::Main() {
     pinMode(PIN_POWER_SONAR, OUTPUT);
     digitalWrite(PIN_POWER_SERVOS, HIGH);
     digitalWrite(PIN_POWER_SONAR, HIGH);
+    randomSeed(analogRead(0));
     box_controller = new box::Controller(   is_engery_safe_mode,
                                             box_switch,
                                             box_sonar,
@@ -51,7 +52,6 @@ box::Main::Main() {
                                             box_wait_servo_speed_control,
                                             box_wait_deepsleep,
                                             box_mode_manager);
-    randomSeed(analogRead(0));
 }
 
 box::Main::~Main() {
