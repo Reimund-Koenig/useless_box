@@ -99,7 +99,7 @@ int box::Servomotor::calculate_sleep_time_ms() {
     } else {
         steps = angle - current_angle;
     }
-    return (steps * speed_sleep_ms) + (steps * 4);
+    return (steps * speed_sleep_ms) + (steps * 5);
 }
 
 void box::Servomotor::set_angle(int angle) {
