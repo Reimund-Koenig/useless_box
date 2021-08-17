@@ -60,22 +60,11 @@ void box::Sonar::add_to_median_array(int distance_in_cm){
     }
     median_array[median_iter] = distance_in_cm;
     median_iter++;
-    printf("Array: ");
-    for (int i=0;i < NUMBER_OF_MEDIAN_VALUES;i++) {
-        printf("%d ",median_array[i]);
-    }
-    printf("\n");
 }
 
 unsigned int  box::Sonar::calculate_and_get_median () {
         std::vector<int> vec(median_array, median_array + NUMBER_OF_MEDIAN_VALUES);
         std::sort (vec.begin(), vec.end());
-        printf("Vector:");
-        for (int i=0;i < NUMBER_OF_MEDIAN_VALUES;i++) {
-            printf("%d ",vec[i]);
-        }
-        printf("\n");
-        printf("MEDIAN: %d\n", vec[NUMBER_OF_MEDIAN_VALUES/2]);
         return vec[NUMBER_OF_MEDIAN_VALUES/2];
 }
 
