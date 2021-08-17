@@ -3,7 +3,7 @@
 
 #define CM true
 #define INCH false
-#define NUMBER_OF_MEDIAN_VALUES 100
+#define NUMBER_OF_MEDIAN_VALUES 300
 #define NUMBER_OF_AVERAGE_VALUES 8
 
 namespace box {
