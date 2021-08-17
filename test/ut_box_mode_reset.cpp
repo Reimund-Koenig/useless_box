@@ -45,7 +45,6 @@ class TestModeReset : public ::testing::Test {
         int rnd_result = 2;
         int expected_speed = rnd_result+3;
         EXPECT_CALL(*arduino_mock, random(4)).WillOnce(Return(rnd_result));
-        EXPECT_CALL(*arduino_mock, random(100)).WillOnce(Return(49));
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0, expected_speed));
         EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0, expected_speed));
         EXPECT_TRUE(mode_reset_under_test->run());
