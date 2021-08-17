@@ -17,6 +17,7 @@ class ModeAwareness {
     box::SubModeFunctionJitter* box_submode_function_jitter;
     int last_distance;
     int box_percentage;
+    int box_speed;
     bool run_submode_jitter;
     void decide_for_jitter(int distance);
     bool run_awareness(int distance);
