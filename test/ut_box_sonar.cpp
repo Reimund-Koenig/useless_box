@@ -53,7 +53,7 @@ TEST_F(TestSonar, test_get_distance_cm) {
     EXPECT_EQ(expected_result, sonar_under_test->get_distance_cm());
 }
 
-TEST_F(TestSonar, test_average_exactly_one_iteration2) {
+TEST_F(TestSonar, test_average) {
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((5*2)/0.034));
     int expected_distance = 5; // 5 = 5/1
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
@@ -85,12 +85,28 @@ TEST_F(TestSonar, test_average_exactly_one_iteration2) {
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((8*2)/0.034));
     expected_distance = 8; // 5 7 3 25 10 4 2 8 = 64/8
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
-    // next
-    EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((21*2)/0.034));
-    expected_distance = 10; // 7 3 25 10 4 2 8 21 = 80/8
-    EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
-    // next
-    EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((23*2)/0.034));
-    expected_distance = 12; // 3 25 10 4 2 8 21 23 = 96/8
-    EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
+}
+
+
+TEST_F(TestSonar, test_median) {
+    int expected_distance = 50;
+    for(int i=0;i<NUMBER_OF_MEDIAN_VALUES;i++) {
+        EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((i*2)/0.034));
+        sonar_under_test->get_median_distance_cm();
+    }
+    EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((1*2)/0.034));
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
+    for(int i=0;i<NUMBER_OF_MEDIAN_VALUES;i++) {
+        EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((22*2)/0.034));
+        sonar_under_test->get_median_distance_cm();
+    }
+    expected_distance = 22;
+    EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((400*2)/0.034));
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
+    EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((1*2)/0.034));
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
+    EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((2*2)/0.034));
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
+    EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((3*2)/0.034));
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
 }
