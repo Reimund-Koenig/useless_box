@@ -89,7 +89,7 @@ TEST_F(TestSonar, test_average) {
 
 
 TEST_F(TestSonar, test_median) {
-    int expected_distance = 50;
+    int expected_distance = 151;
     for(int i=0;i<NUMBER_OF_MEDIAN_VALUES;i++) {
         EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((i*2)/0.034));
         sonar_under_test->get_median_distance_cm();

@@ -34,6 +34,7 @@ class BoxSonarMock : public box::Sonar{
   public:
     BoxSonarMock() : box::Sonar(0,1) {}
     MOCK_METHOD0(get_average_distance_cm, unsigned int());
+    MOCK_METHOD0(get_median_distance_cm, unsigned int());
 };
 
 class BoxSwitchMock : public box::Switch {
