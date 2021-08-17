@@ -22,6 +22,9 @@ box::ModeAwareness::~ModeAwareness() {
 bool box::ModeAwareness::run(int distance) {
     if(run_submode_jitter) {
         bool submode_finished = box_submode_function_jitter->run(true);
+        if(submode_finished) {
+            box_servo_manager->move_pilot_servo_to_percent(0, 6);
+        }
         run_submode_jitter = !submode_finished;
         return false;
     } else {
@@ -35,7 +38,7 @@ bool box::ModeAwareness::run(int distance) {
 void box::ModeAwareness::decide_for_jitter(int distance) {
     if(distance >= 30) { return; }
     if(distance < 15) { return; }
-    run_submode_jitter = random(100) > 66;
+    run_submode_jitter = random(100) > 80;
     if(!run_submode_jitter) { return; }
     box_submode_function_jitter->init(box_percentage);
 }
