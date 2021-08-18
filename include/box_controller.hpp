@@ -25,7 +25,7 @@ class Controller {
     box::ModeManager* box_mode_manager;
     void reset_servos_blocking();
     void switch_box_mode();
-    void switch_to_reset_mode();
+    void switch_and_run_reset_mode();
     void deep_sleep_till_switch_is_toggled();
 
   public:
