@@ -42,6 +42,7 @@ TEST_F(TestSubModeFunctionJitter, test_jitter) {
                                         .WillOnce(Return(2)) // speed
                                         .WillOnce(Return(10)); // percent
         submode_function_jitter_under_test->init(70);
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0, 6));
         EXPECT_FALSE(submode_function_jitter_under_test->run(false));
         for(int i = 0; i<5; i++) {
             EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(85, 5));
@@ -57,6 +58,7 @@ TEST_F(TestSubModeFunctionJitter, test_jitter_high_init) {
                                         .WillOnce(Return(2)) // speed
                                         .WillOnce(Return(5)); // percent
         submode_function_jitter_under_test->init(92);
+        EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0, 6));
         EXPECT_FALSE(submode_function_jitter_under_test->run(false));
         for(int i = 0; i<5; i++) {
             EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(82, 5));
@@ -65,4 +67,20 @@ TEST_F(TestSubModeFunctionJitter, test_jitter_high_init) {
             EXPECT_FALSE(submode_function_jitter_under_test->run(false)); // move 70 percent
         }
         EXPECT_TRUE(submode_function_jitter_under_test->run(false));
+}
+
+TEST_F(TestSubModeFunctionJitter, test_jitter_pilot) {
+        EXPECT_CALL(*arduino_mock, random(_)).WillOnce(Return(2)) //count
+                                        .WillOnce(Return(2)) // speed
+                                        .WillOnce(Return(5)); // percent
+        submode_function_jitter_under_test->init(92);
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0, 6));
+        EXPECT_FALSE(submode_function_jitter_under_test->run(true));
+        for(int i = 0; i<5; i++) {
+            EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(82, 5));
+            EXPECT_FALSE(submode_function_jitter_under_test->run(true)); // move 80 percent
+            EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(92 ,5));
+            EXPECT_FALSE(submode_function_jitter_under_test->run(true)); // move 70 percent
+        }
+        EXPECT_TRUE(submode_function_jitter_under_test->run(true));
 }
