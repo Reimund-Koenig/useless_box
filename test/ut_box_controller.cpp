@@ -102,7 +102,8 @@ class TestController : public ::testing::Test {
         EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillOnce(Return(true));
         EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(true));
         EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
-        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(true));
+        EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(false))
+                                                             .WillOnce(Return(true));
         controller_under_test->run();
     }
 };
@@ -140,7 +141,7 @@ TEST_F(TestController, test_controller_run_with_user_interrupt) {
 TEST_F(TestController, test_controller_test_is_expired) {
     EXPECT_CALL(*box_sonar_mock, get_median_distance_cm()).WillRepeatedly(Return(70));
     EXPECT_CALL(*box_servomanager_mock, move_steps()).Times(AtLeast(1));
-    EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(true));
+    EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(false));
     EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillRepeatedly(Return(false));
     EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
