@@ -44,7 +44,9 @@ int box::Servomotor::move_to_percent(int percentage, int speed) {
 void box::Servomotor::move_step() {
     if(angle == current_angle) { return; }
     if(!box_wait_servo_step_speed->is_expired()) { return; }
-    if(current_angle > angle) {
+    if(speed_sleep_ms == 0) {
+        current_angle = angle;
+    }else if(current_angle > angle) {
         current_angle--;
     } else {
         current_angle++;
