@@ -37,6 +37,19 @@ sudo apt-get install g++
     cd ~/workspace/useless_box/arduino/useless_box
     make
 
+### Debug with print
+
+    * Add following line to *.ino files function "setup()":
+    ** Serial.begin(9600);
+    * See Makefile for right tty* and execute following command while connected to the box
+    ** sudo screen /dev/ttyS4 9600
+    * End debugging
+    ** CTRL+a then type :quit
+    * OR
+    ** CTRL+a then CTRL+d   // to detach the session
+    ** sudo screen -X quit  // to end it
+
+
 ### Compile and run code
 
     cd ~/workspace/useless_box/arduino
