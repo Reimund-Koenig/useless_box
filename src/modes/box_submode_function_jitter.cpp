@@ -33,6 +33,11 @@ void box::SubModeFunctionJitter::init(int box_percentage){
 bool box::SubModeFunctionJitter::run(bool pilot) {
     if(box_mode_jitter_state == 0) {
         box_mode_jitter_state++;
+        if(pilot) {
+            box_servo_manager->move_copilot_servo_to_percent(0, 6);
+        } else  {
+            box_servo_manager->move_pilot_servo_to_percent(0, 6);
+        }
         return false;
     } if(box_mode_jitter_state == 1) {
         if(pilot) {

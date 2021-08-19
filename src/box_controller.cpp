@@ -26,7 +26,7 @@ box::Controller::Controller(bool is_engery_safe_mode,
     reset_servos_blocking();
     box_mode = MODE_AWARENESS;
     is_mode_finished = false;
-    distance = box_sonar->get_average_distance_cm();
+    distance = box_sonar->get_median_distance_cm();
     box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
 }
 
@@ -43,10 +43,10 @@ void box::Controller::run() {
         deep_sleep_till_switch_is_toggled();
         box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
     }
-    distance = box_sonar->get_average_distance_cm();
+    distance = box_sonar->get_median_distance_cm();
     box_servo_manager->move_steps();
     bool user_interrupt = box_switch->has_changed() && box_servo_manager->box_servos_not_reached_switch();
-    if(user_interrupt) { switch_to_reset_mode(); }
+    if(user_interrupt) { switch_and_run_reset_mode(); }
     if(!box_wait_till_servomanager_finished_moving->is_expired()) { return; }
     if(is_mode_finished) { switch_box_mode(); }
     switch (box_mode) {
@@ -68,9 +68,9 @@ void box::Controller::reset_servos_blocking() {
         }
 }
 
-void box::Controller::switch_to_reset_mode() {
+void box::Controller::switch_and_run_reset_mode() {
     box_mode = MODE_RESET;
-    is_mode_finished = false;
+    is_mode_finished = box_mode_manager->run_mode_reset();
     box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
 }
 

@@ -17,18 +17,16 @@ box::ModeReset::~ModeReset() {
  *************************************************/
 
 bool box::ModeReset::run() {
-    int speed;
     switch (run_mode_reset_step) {
         case 0:
-            speed = 6;
-            box_servo_manager->move_pilot_servo_to_percent(100, speed);
-            box_servo_manager->move_copilot_servo_to_percent(0, speed);
+            box_speed = random(4) + 3; // Speed = 3-6
+            box_servo_manager->move_pilot_servo_to_percent(100, box_speed);
+            box_servo_manager->move_copilot_servo_to_percent(0, 6);
             run_mode_reset_step++;
             return false; // not finished
         case 1:
-            speed = random(4) + 3; // Speed = 3-6
-            box_servo_manager->move_pilot_servo_to_percent(0, speed);
-            box_servo_manager->move_copilot_servo_to_percent(0, speed);
+            box_servo_manager->move_pilot_servo_to_percent(0, box_speed);
+            box_servo_manager->move_copilot_servo_to_percent(0, 6);
             run_mode_reset_step = 0;
             return true; // finished
         default:
