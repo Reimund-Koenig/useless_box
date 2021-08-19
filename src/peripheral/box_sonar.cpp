@@ -2,9 +2,7 @@
 #include "peripheral/box_sonar.hpp"
 #include <Arduino.h>
 #include <stdio.h>
-#include <vector>
 
-#include <algorithm>
 using namespace arduino;
 
 box::Sonar::Sonar(int pin_trigger, int pin_echo) {
@@ -62,10 +60,26 @@ void box::Sonar::add_to_median_array(int distance_in_cm){
     median_iter++;
 }
 
+void box::Sonar::bubble_sort(int a[], int size) {
+    for(int i=0; i<(size-1); i++) {
+        for(int o=0; o<(size-(i+1)); o++) {
+                if(a[o] > a[o+1]) {
+                    int t = a[o];
+                    a[o] = a[o+1];
+                    a[o+1] = t;
+                }
+        }
+    }
+}
+
 unsigned int  box::Sonar::calculate_and_get_median () {
-        std::vector<int> vec(median_array, median_array + NUMBER_OF_MEDIAN_VALUES);
-        std::sort (vec.begin(), vec.end());
-        return vec[NUMBER_OF_MEDIAN_VALUES/2];
+    int sort_median_array[NUMBER_OF_MEDIAN_VALUES];
+    for(int i=0; i<(NUMBER_OF_MEDIAN_VALUES-1); i++) {
+        sort_median_array[i] = median_array[i];
+    }
+    bubble_sort(sort_median_array, NUMBER_OF_MEDIAN_VALUES);
+    int mid_index = (int) (NUMBER_OF_MEDIAN_VALUES/2.0);
+    return sort_median_array[mid_index];
 }
 
 void box::Sonar::calculate_average(int distance_in_cm){

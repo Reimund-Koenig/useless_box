@@ -21,6 +21,7 @@ class Sonar {
     unsigned int average_summary;
     unsigned int average_distance_cm;
     unsigned int  calculate_and_get_median();
+    void bubble_sort(int a[], int size);
     void calculate_average(int distance_in_cm);
     void add_to_median_array(int distance_in_cm);
 
