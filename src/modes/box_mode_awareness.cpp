@@ -21,7 +21,7 @@ box::ModeAwareness::~ModeAwareness() {
 
 bool box::ModeAwareness::run(int distance) {
     if(run_submode_jitter) {
-        bool submode_finished = box_submode_function_jitter->run(true);
+        bool submode_finished = box_submode_function_jitter->run();
         if(submode_finished) {
             box_servo_manager->move_pilot_servo_to_percent(0, 6);
         }

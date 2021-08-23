@@ -20,7 +20,7 @@ class SubModeFunctionJitter {
     SubModeFunctionJitter(box::Servomanager* box_servo_manager);
     virtual ~SubModeFunctionJitter();
     virtual void init(int box_percentage);
-    virtual bool run(bool pilot);
+    virtual bool run();
 
 };
 

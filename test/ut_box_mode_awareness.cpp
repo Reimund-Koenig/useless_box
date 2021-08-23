@@ -41,7 +41,7 @@ class TestModeAwareness : public ::testing::Test {
     }
 
     virtual void ReRunSubmodeJitter(int distance, bool submode_finished) {
-        EXPECT_CALL(*box_submode_function_jitter_mock, run(true)).WillOnce(Return(submode_finished));
+        EXPECT_CALL(*box_submode_function_jitter_mock, run()).WillOnce(Return(submode_finished));
         if(submode_finished) {
             EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(_,_));
         }

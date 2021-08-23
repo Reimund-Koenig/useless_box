@@ -41,7 +41,6 @@ void box::Controller::run() {
     if (box_wait_deepsleep->is_expired()) {
         reset_servos_blocking();
         deep_sleep_till_switch_is_toggled();
-        box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
     }
     distance = box_sonar->get_median_distance_cm();
     box_servo_manager->move_steps();
@@ -92,4 +91,5 @@ void box::Controller::deep_sleep_till_switch_is_toggled() {
     sleep_enable(); // set sleep enable bit
     sleep_cpu(); //  sleep without SE bit.
     sleep_disable();
+    box_wait_deepsleep->milliseconds(TIME_TILL_DEEP_SLEEP);
 }
