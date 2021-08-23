@@ -19,7 +19,7 @@ class Servomanager {
                  box::Wait* box_wait_till_servomanager_finished_moving,
                  box::Switch* box_switch);
     virtual ~Servomanager();
-    virtual void move_steps();
+    virtual void move_motors();
     virtual void move_pilot_servo_to_percent(int percentage, int speed);
     virtual void move_copilot_servo_to_percent(int percentage, int speed);
     virtual bool box_servos_not_reached_switch();

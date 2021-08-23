@@ -77,7 +77,7 @@ class TestController : public ::testing::Test {
 
     virtual void RunPreSteps(const int ultra_sonar_result) {
         EXPECT_CALL(*box_sonar_mock, get_median_distance_cm()).WillOnce(Return(ultra_sonar_result));
-        EXPECT_CALL(*box_servomanager_mock, move_steps());
+        EXPECT_CALL(*box_servomanager_mock, move_motors());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(false));
         EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(true));
         EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
@@ -97,7 +97,7 @@ class TestController : public ::testing::Test {
 
     virtual void RunUserInterrupt() {
         EXPECT_CALL(*box_sonar_mock, get_median_distance_cm()).WillOnce(Return(5));
-        EXPECT_CALL(*box_servomanager_mock, move_steps());
+        EXPECT_CALL(*box_servomanager_mock, move_motors());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(true));
         EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillOnce(Return(true));
         EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(true));
@@ -140,7 +140,7 @@ TEST_F(TestController, test_controller_run_with_user_interrupt) {
 
 TEST_F(TestController, test_controller_test_is_expired) {
     EXPECT_CALL(*box_sonar_mock, get_median_distance_cm()).WillRepeatedly(Return(70));
-    EXPECT_CALL(*box_servomanager_mock, move_steps()).Times(AtLeast(1));
+    EXPECT_CALL(*box_servomanager_mock, move_motors()).Times(AtLeast(1));
     EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(false));
     EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillRepeatedly(Return(false));

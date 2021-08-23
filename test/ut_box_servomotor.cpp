@@ -58,7 +58,7 @@ class TestServo : public ::testing::Test {
         servo->move_to_percent(percentage, 5);
         EXPECT_CALL(*box_wait_servo_step_speed, is_expired()).WillRepeatedly(Return(true));
         for(int i=0; i<11; i++) {
-            servo->move_step();
+            servo->move();
         }
         EXPECT_EQ(expected_angle, servo->get_angle());
         EXPECT_EQ(expected_percentage, servo->get_last_percentage());
@@ -68,7 +68,7 @@ class TestServo : public ::testing::Test {
         EXPECT_CALL(*box_wait_servo_step_speed, is_expired()).WillOnce(Return(true));
         EXPECT_CALL(*servomotor_mock, write(expected_angle)).Times(1);
         EXPECT_CALL(*box_wait_servo_step_speed, milliseconds(_)).Times(1);
-        servomotor_under_test->move_step();
+        servomotor_under_test->move();
         EXPECT_EQ(expected_angle, servomotor_under_test->get_angle());
     }
 
@@ -76,7 +76,7 @@ class TestServo : public ::testing::Test {
         EXPECT_CALL(*box_wait_servo_step_speed, is_expired()).WillOnce(Return(true));
         EXPECT_CALL(*servomotor_mock, write(180-expected_angle)).Times(1);
         EXPECT_CALL(*box_wait_servo_step_speed, milliseconds(_)).Times(1);
-        servomotor_under_test_clockwise->move_step();
+        servomotor_under_test_clockwise->move();
         EXPECT_EQ(expected_angle, servomotor_under_test_clockwise->get_angle());
     }
 };
@@ -99,7 +99,7 @@ TEST_F(TestServo, test_servomotor_get_current_angle) {
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_angle_reached) {
     EXPECT_CALL(*box_wait_servo_step_speed, is_expired()).Times(0);
     EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
-    servomotor_under_test->move_step();
+    servomotor_under_test->move();
 }
 
 TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
@@ -107,7 +107,7 @@ TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
     EXPECT_TRUE(servomotor_under_test->move_to_percent(percentage,1) > 10);
     EXPECT_CALL(*box_wait_servo_step_speed, is_expired()).WillOnce(Return(false));
     EXPECT_CALL(*servomotor_mock, write(_)).Times(0);
-    servomotor_under_test->move_step();
+    servomotor_under_test->move();
 }
 
 TEST_F(TestServo, test_servomotor_sleep_time_for_speed) {

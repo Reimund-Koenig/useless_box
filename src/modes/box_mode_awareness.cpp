@@ -36,7 +36,7 @@ bool box::ModeAwareness::run(int distance) {
  * Private Methods
  *************************************************/
 void box::ModeAwareness::decide_for_jitter(int distance) {
-    if(distance >= 30) { return; }
+    if(distance >= 24) { return; }
     if(distance < 15) { return; }
     run_submode_jitter = random(100) > 80;
     if(!run_submode_jitter) { return; }
@@ -46,8 +46,8 @@ void box::ModeAwareness::decide_for_jitter(int distance) {
 bool box::ModeAwareness::run_awareness(int distance) {
     box_servo_manager->move_copilot_servo_to_percent(0, 6);
     decide_for_jitter(distance);
-    int diff = last_distance - distance;
-    if(5 > diff && diff > -5) { return false; }
+    // int diff = last_distance - distance;
+    // if(5 > diff && diff > -5) { return false; }
     box_speed = random(6) + 1;
     if (distance < 9)  { box_percentage = 100; box_speed = 6; } else
     if (distance < 12) { box_percentage = 90;  } else
@@ -58,7 +58,7 @@ bool box::ModeAwareness::run_awareness(int distance) {
     if (distance < 27) { box_percentage = 40;  } else
     if (distance < 30) { box_percentage = 30;  } else
                        { box_percentage = 0;   }
-    last_distance = distance;
+    // last_distance = distance;
     box_servo_manager->move_pilot_servo_to_percent(box_percentage, box_speed);
     return false; // endless mode (ending by controller -> user interrupt)
 }

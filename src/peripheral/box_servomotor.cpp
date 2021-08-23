@@ -41,22 +41,15 @@ int box::Servomotor::move_to_percent(int percentage, int speed) {
     return calculate_sleep_time_ms();
 }
 
-void box::Servomotor::move_step() {
+
+void box::Servomotor::move() {
     if(angle == current_angle) { return; }
-    if(!box_wait_servo_step_speed->is_expired()) { return; }
-    if(speed_sleep_ms == 0) {
+    if(speed_sleep_ms > 0) {
+        move_step();
+    } else {
         current_angle = angle;
-    }else if(current_angle > angle) {
-        current_angle--;
-    } else {
-        current_angle++;
+        write();
     }
-    if(box::Servomotor::clockwise) {
-        servo.write(180 - current_angle);
-    } else {
-        servo.write(current_angle);
-    }
-    box_wait_servo_step_speed->milliseconds(speed_sleep_ms);
 }
 
 bool box::Servomotor::current_angle_smaller_than_90_percent(){
@@ -83,6 +76,25 @@ int box::Servomotor::get_current_angle() {
 /*************************************************************************************************
  * Private Methods
  *************************************************/
+
+void box::Servomotor::write() {
+    if(box::Servomotor::clockwise) {
+        servo.write(180 - current_angle);
+    } else {
+        servo.write(current_angle);
+    }
+}
+
+void box::Servomotor::move_step() {
+    if(!box_wait_servo_step_speed->is_expired()) { return; }
+    if(current_angle > angle) {
+        current_angle--;
+    } else {
+        current_angle++;
+    }
+    write();
+    box_wait_servo_step_speed->milliseconds(speed_sleep_ms);
+}
 
 unsigned long box::Servomotor::speed_to_millseconds(int speed) {
     if(speed > 5) { return (unsigned long) 0; }

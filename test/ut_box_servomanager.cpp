@@ -55,9 +55,9 @@ class TestServomanager : public ::testing::Test {
 TEST_F(TestServomanager, test_servomanager_init) { EXPECT_TRUE(true); }
 
 TEST_F(TestServomanager, test_servomanager_test_move_steps) {
-    EXPECT_CALL(*box_lower_servo_mock, move_step());
-    EXPECT_CALL(*box_upper_servo_mock, move_step());
-    servomanager_under_test->move_steps();
+    EXPECT_CALL(*box_lower_servo_mock, move());
+    EXPECT_CALL(*box_upper_servo_mock, move());
+    servomanager_under_test->move_motors();
 }
 
 TEST_F(TestServomanager, test_servomanager_move_pilot_servo_percentage) {
