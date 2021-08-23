@@ -158,6 +158,7 @@ TEST_F(TestController, test_controller_test_is_expired) {
 
 TEST_F(TestController, test_deep_sleep) {
     EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillOnce(Return(true));
+    EXPECT_CALL(*box_servomanager_mock, move_motors_blocking()).Times(1);
     EXPECT_CALL(*arduino_mock, attachInterrupt(_,_,_)).Times(1);
     EXPECT_CALL(*mock_avr_sleep, set_sleep_mode(_)).Times(1);
     EXPECT_CALL(*mock_avr_sleep, sleep_enable()).Times(1);

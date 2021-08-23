@@ -9,6 +9,8 @@ class ServomotorMock : public Servo {
   public:
     MOCK_METHOD1(write, void(int));
     MOCK_METHOD0(read, int());
+    MOCK_METHOD0(get_current_angle, int());
+    MOCK_METHOD0(get_angle, int());
 };
 
 /**

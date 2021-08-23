@@ -56,9 +56,9 @@ class TestServo : public ::testing::Test {
     virtual void test_percentage(Servomotor_under_test* servo, int percentage,
                                     int expected_angle, int expected_percentage) {
         servo->move_to_percent(percentage, 5);
-        EXPECT_CALL(*box_wait_servo_step_speed, is_expired()).WillRepeatedly(Return(true));
         for(int i=0; i<11; i++) {
             servo->move();
+            EXPECT_CALL(*box_wait_servo_step_speed, is_expired()).WillRepeatedly(Return(true));
         }
         EXPECT_EQ(expected_angle, servo->get_angle());
         EXPECT_EQ(expected_percentage, servo->get_last_percentage());

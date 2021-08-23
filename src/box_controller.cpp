@@ -62,9 +62,7 @@ void box::Controller::run() {
 void box::Controller::reset_servos_blocking() {
         box_servo_manager->move_pilot_servo_to_percent(0, 6);
         box_servo_manager->move_copilot_servo_to_percent(0, 6);
-        while(!box_wait_till_servomanager_finished_moving->is_expired()) {
-            box_servo_manager->move_motors(); // blocking servo move
-        }
+        box_servo_manager->move_motors_blocking();
 }
 
 void box::Controller::switch_and_run_reset_mode() {

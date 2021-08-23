@@ -138,3 +138,51 @@ TEST_F(TestServomanager, test_servomanager_box_servos_not_reached_switch) {
     EXPECT_CALL(*box_lower_servo_mock, current_angle_smaller_than_x_percent(_)).WillOnce(Return(false));
     EXPECT_FALSE(servomanager_under_test->box_servos_not_reached_switch());
 }
+
+
+
+TEST_F(TestServomanager, test_servomanager_move_motors_blocking_timer) {
+    int i = 0;
+    EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(false))
+                                                        .WillOnce(Return(false))
+                                                        .WillOnce(Return(false))
+                                                        .WillOnce(Return(false))
+                                                        .WillOnce(Return(false))
+                                                        .WillOnce(Return(false))
+                                                        .WillOnce(Return(true));
+    EXPECT_CALL(*box_lower_servo_mock, get_angle()).Times(6).WillRepeatedly(Return(1));
+    EXPECT_CALL(*box_lower_servo_mock, get_current_angle()).Times(6).WillRepeatedly(Return(2));
+    EXPECT_CALL(*box_upper_servo_mock, get_angle()).Times(6).WillRepeatedly(Return(1));
+    EXPECT_CALL(*box_upper_servo_mock, get_current_angle()).Times(6).WillRepeatedly(Return(2));
+    servomanager_under_test->move_motors_blocking();
+}
+
+TEST_F(TestServomanager, test_servomanager_move_motors_blocking_lower_servo) {
+    int i = 0;
+    EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).Times(6).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_lower_servo_mock, get_angle()).WillOnce(Return(1))
+                                                    .WillOnce(Return(1))
+                                                    .WillOnce(Return(1))
+                                                    .WillOnce(Return(5))
+                                                    .WillOnce(Return(3))
+                                                    .WillOnce(Return(2));
+    EXPECT_CALL(*box_lower_servo_mock, get_current_angle()).Times(6).WillRepeatedly(Return(2));
+    EXPECT_CALL(*box_upper_servo_mock, get_angle()).Times(6).WillRepeatedly(Return(1));
+    EXPECT_CALL(*box_upper_servo_mock, get_current_angle()).Times(6).WillRepeatedly(Return(2));
+    servomanager_under_test->move_motors_blocking();
+}
+
+TEST_F(TestServomanager, test_servomanager_move_motors_blocking_upper_servo) {
+    int i = 0;
+    EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).Times(6).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_upper_servo_mock, get_angle()).WillOnce(Return(1))
+                                                    .WillOnce(Return(1))
+                                                    .WillOnce(Return(1))
+                                                    .WillOnce(Return(5))
+                                                    .WillOnce(Return(3))
+                                                    .WillOnce(Return(2));
+    EXPECT_CALL(*box_upper_servo_mock, get_current_angle()).Times(6).WillRepeatedly(Return(2));
+    EXPECT_CALL(*box_lower_servo_mock, get_angle()).Times(5).WillRepeatedly(Return(1));
+    EXPECT_CALL(*box_lower_servo_mock, get_current_angle()).Times(5).WillRepeatedly(Return(2));
+    servomanager_under_test->move_motors_blocking();
+}
