@@ -18,7 +18,7 @@ class BoxServoMock : public box::Servomotor {
     MOCK_METHOD0(get_last_percentage, int());
     MOCK_METHOD0(get_angle, int());
     MOCK_METHOD0(get_current_angle, int());
-    MOCK_METHOD0(current_angle_smaller_than_90_percent, bool());
+    MOCK_METHOD1(current_angle_smaller_than_x_percent, bool(double));
 };
 
 class BoxServoManagerMock : public box::Servomanager {

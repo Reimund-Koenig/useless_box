@@ -42,8 +42,8 @@ void box::Controller::run() {
         reset_servos_blocking();
         deep_sleep_till_switch_is_toggled();
     }
-    distance = box_sonar->get_median_distance_cm();
     box_servo_manager->move_motors();
+    distance = box_sonar->get_median_distance_cm();
     bool user_interrupt = box_switch->has_changed() && box_servo_manager->box_servos_not_reached_switch();
     if(user_interrupt) { switch_and_run_reset_mode(); }
     if(!box_wait_till_servomanager_finished_moving->is_expired()) { return; }

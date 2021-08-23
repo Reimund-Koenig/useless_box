@@ -52,9 +52,9 @@ void box::Servomotor::move() {
     }
 }
 
-bool box::Servomotor::current_angle_smaller_than_90_percent(){
+bool box::Servomotor::current_angle_smaller_than_x_percent(double x){
     double calc_angle = (double) current_angle;
-    double percent_90 = (((double)max_peak_angle/100.0)*90.0);
+    double percent_90 = (((double)max_peak_angle / 100.0) * x);
     return calc_angle < percent_90;
 }
 

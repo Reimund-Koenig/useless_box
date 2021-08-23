@@ -128,14 +128,15 @@ TEST_F(TestServo, test_servomotor_move_percentage) {
     int expected_angle_50_percent = 15;
     int expected_angle_75_percent = 17;
     int expected_angle_100_percent = 20;
+    double upper_range = 90.0;
     test_percentage(servomotor_under_test, 0, expected_angle_0_percent, 0);
-    EXPECT_TRUE(servomotor_under_test->current_angle_smaller_than_90_percent());
+    EXPECT_TRUE(servomotor_under_test->current_angle_smaller_than_x_percent(upper_range));
     test_percentage(servomotor_under_test, 50, expected_angle_50_percent, 50);
-    EXPECT_TRUE(servomotor_under_test->current_angle_smaller_than_90_percent());
+    EXPECT_TRUE(servomotor_under_test->current_angle_smaller_than_x_percent(upper_range));
     test_percentage(servomotor_under_test, 75,expected_angle_75_percent, 75);
-    EXPECT_TRUE(servomotor_under_test->current_angle_smaller_than_90_percent());
+    EXPECT_TRUE(servomotor_under_test->current_angle_smaller_than_x_percent(upper_range));
     test_percentage(servomotor_under_test, 100,expected_angle_100_percent, 100);
-    EXPECT_FALSE(servomotor_under_test->current_angle_smaller_than_90_percent());
+    EXPECT_FALSE(servomotor_under_test->current_angle_smaller_than_x_percent(upper_range));
 }
 
 TEST_F(TestServo, test_servomotor_clockwise_move_percentage) {
@@ -143,12 +144,13 @@ TEST_F(TestServo, test_servomotor_clockwise_move_percentage) {
     int expected_angle_50_percent = 15;
     int expected_angle_75_percent = 17;
     int expected_angle_100_percent = 20;
+    double upper_range = 90.0;
     test_percentage(servomotor_under_test_clockwise, 0,expected_angle_0_percent, 0);
-    EXPECT_TRUE(servomotor_under_test_clockwise->current_angle_smaller_than_90_percent());
+    EXPECT_TRUE(servomotor_under_test_clockwise->current_angle_smaller_than_x_percent(upper_range));
     test_percentage(servomotor_under_test_clockwise, 50,expected_angle_50_percent, 50);
-    EXPECT_TRUE(servomotor_under_test_clockwise->current_angle_smaller_than_90_percent());
+    EXPECT_TRUE(servomotor_under_test_clockwise->current_angle_smaller_than_x_percent(upper_range));
     test_percentage(servomotor_under_test_clockwise, 75,expected_angle_75_percent, 75);
-    EXPECT_TRUE(servomotor_under_test_clockwise->current_angle_smaller_than_90_percent());
+    EXPECT_TRUE(servomotor_under_test_clockwise->current_angle_smaller_than_x_percent(upper_range));
     test_percentage(servomotor_under_test_clockwise, 100,expected_angle_100_percent, 100);
-    EXPECT_FALSE(servomotor_under_test_clockwise->current_angle_smaller_than_90_percent());
+    EXPECT_FALSE(servomotor_under_test_clockwise->current_angle_smaller_than_x_percent(upper_range));
 }
