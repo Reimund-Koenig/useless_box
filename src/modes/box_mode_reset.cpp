@@ -26,7 +26,7 @@ bool box::ModeReset::run() {
             return false; // not finished
         case 1:
             box_servo_manager->move_pilot_servo_to_percent(0, box_speed);
-            box_servo_manager->move_copilot_servo_to_percent(0, 6);
+            box_servo_manager->move_copilot_servo_to_percent(0, box_speed);
             run_mode_reset_step = 0;
             return true; // finished
         default:

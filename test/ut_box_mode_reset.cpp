@@ -46,7 +46,7 @@ class TestModeReset : public ::testing::Test {
         EXPECT_FALSE(mode_reset_under_test->run());
 
         EXPECT_CALL(*box_servomanager_mock, move_pilot_servo_to_percent(0, expected_speed));
-        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0, 6));
+        EXPECT_CALL(*box_servomanager_mock, move_copilot_servo_to_percent(0, expected_speed));
         EXPECT_TRUE(mode_reset_under_test->run());
     }
 };
