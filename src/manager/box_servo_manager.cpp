@@ -24,6 +24,10 @@ box::Servomanager::~Servomanager() {
  * Public Methods
  *************************************************/
 
+bool box::Servomanager::is_moving() {
+    return !box_wait_till_servomanager_finished_moving->is_expired();
+}
+
 void box::Servomanager::move_pilot_servo_to_percent(int percentage, int speed) {
     int sleep_time_for_speed = 0;
     if(box_switch->is_high()) {

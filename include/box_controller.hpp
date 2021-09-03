@@ -20,7 +20,6 @@ class Controller {
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomanager* box_servo_manager;
-    box::Wait* box_wait_till_servomanager_finished_moving;
     box::Wait* box_wait_deepsleep;
     box::ModeManager* box_mode_manager;
     void reset_servos_blocking();
@@ -34,7 +33,6 @@ class Controller {
         box::Switch* box_switch,
         box::Sonar* box_sonar,
         box::Servomanager* box_servo_manager,
-        box::Wait* box_wait_till_servomanager_finished_moving,
         box::Wait* box_wait_deepsleep,
         box::ModeManager* box_mode_manager);
     virtual ~Controller();

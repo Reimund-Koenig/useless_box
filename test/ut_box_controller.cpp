@@ -20,14 +20,12 @@ struct Controller_under_test : public box::Controller {
     Controller_under_test(box::Switch* box_switch,
                     box::Sonar* box_sonar,
                     box::Servomanager* box_servo_manager,
-                    box::Wait* box_wait_till_servomanager_finished_moving,
                     box::Wait* box_wait_deepsleep,
                     box::ModeManager* box_mode_manager)
                     : Controller(true,
                             box_switch,
                             box_sonar,
                             box_servo_manager,
-                            box_wait_till_servomanager_finished_moving,
                             box_wait_deepsleep,
                             box_mode_manager) {}
 };
@@ -51,14 +49,12 @@ class TestController : public ::testing::Test {
         box_switch_mock = new NiceMock<BoxSwitchMock>;
         box_sonar_mock = new NiceMock<BoxSonarMock>;
         box_servomanager_mock = new NiceMock<BoxServoManagerMock>;
-        box_wait_till_servomanager_finished_moving = new NiceMock<BoxWaitMock>;
         box_wait_deep_sleep_mock = new NiceMock<BoxWaitMock>;
         box_mode_manager_mock = new NiceMock<BoxModeManagerMock>;
-        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillRepeatedly(Return(true));
+        EXPECT_CALL(*box_servomanager_mock, is_moving()).WillRepeatedly(Return(false));
         controller_under_test = new Controller_under_test((box::Switch*) box_switch_mock,
                                               (box::Sonar*) box_sonar_mock,
                                               (box::Servomanager*) box_servomanager_mock,
-                                              (box::Wait*) box_wait_till_servomanager_finished_moving,
                                               (box::Wait*) box_wait_deep_sleep_mock,
                                               (box::ModeManager*) box_mode_manager_mock);
     }
@@ -69,7 +65,6 @@ class TestController : public ::testing::Test {
         delete box_switch_mock;
         delete box_sonar_mock;
         delete box_servomanager_mock;
-        delete box_wait_till_servomanager_finished_moving;
         delete box_wait_deep_sleep_mock;
         delete box_mode_manager_mock;
         delete controller_under_test;
@@ -79,7 +74,7 @@ class TestController : public ::testing::Test {
         EXPECT_CALL(*box_sonar_mock, get_median_distance_cm()).WillOnce(Return(ultra_sonar_result));
         EXPECT_CALL(*box_servomanager_mock, move_motors());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(false));
-        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(true));
+        EXPECT_CALL(*box_servomanager_mock, is_moving()).WillOnce(Return(false));
         EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
     }
 
@@ -100,7 +95,7 @@ class TestController : public ::testing::Test {
         EXPECT_CALL(*box_servomanager_mock, move_motors());
         EXPECT_CALL(*box_switch_mock, has_changed()).WillOnce(Return(true));
         EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillOnce(Return(true));
-        EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillOnce(Return(true));
+        EXPECT_CALL(*box_servomanager_mock, is_moving()).WillOnce(Return(false));
         EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
         EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).WillOnce(Return(false))
                                                              .WillOnce(Return(true));
@@ -143,7 +138,7 @@ TEST_F(TestController, test_controller_test_is_expired) {
     EXPECT_CALL(*box_servomanager_mock, move_motors()).Times(AtLeast(1));
     EXPECT_CALL(*box_switch_mock, has_changed()).WillRepeatedly(Return(false));
     EXPECT_CALL(*box_servomanager_mock, box_servos_not_reached_switch()).WillRepeatedly(Return(true));
-    EXPECT_CALL(*box_wait_till_servomanager_finished_moving, is_expired()).WillRepeatedly(Return(false));
+        EXPECT_CALL(*box_servomanager_mock, is_moving()).WillRepeatedly(Return(true));
     EXPECT_CALL(*box_wait_deep_sleep_mock, is_expired()).WillRepeatedly(Return(false));
     EXPECT_CALL(*arduino_mock, random(_)).Times(0);
     EXPECT_CALL(*box_mode_manager_mock, run_mode_reset()).Times(0);
