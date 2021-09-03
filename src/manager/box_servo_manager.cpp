@@ -45,10 +45,8 @@ void box::Servomanager::move_copilot_servo_to_percent(int percentage, int speed)
 }
 
 void box::Servomanager::move_motors_blocking() {
-    box_wait_till_servomanager_finished_moving->milliseconds(1000); // 1 second to be sure position is reached
-    while(!box_wait_till_servomanager_finished_moving->is_expired() &&
-           box_upper_servo->get_angle() != box_upper_servo->get_current_angle() &&
-           box_lower_servo->get_angle() != box_lower_servo->get_current_angle() ) {
+    box_wait_till_servomanager_finished_moving->milliseconds(1000);
+    while(!box_wait_till_servomanager_finished_moving->is_expired()) {
         move_motors(); // blocking servo move
     }
 }
