@@ -1,4 +1,5 @@
 #include "ardunio_namespace.h" // needed for arduino build
+#include "log.h"
 #include "box_controller.hpp"
 #include <Arduino.h>
 #include <stdio.h>
@@ -36,6 +37,7 @@ box::Controller::~Controller() {
  *************************************************/
 
 void box::Controller::run() {
+    LOG("test");
     if (box_wait_deepsleep->is_expired()) {
         reset_servos_blocking();
         deep_sleep_till_switch_is_toggled();

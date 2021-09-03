@@ -4,6 +4,10 @@
 box::Main* box_main;
 
 void setup() {
+    #ifdef DEBUG
+    Serial.begin(9600);
+    while (!Serial);
+    #endif
     box_main = new box::Main();
 }
 
