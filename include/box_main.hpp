@@ -14,6 +14,7 @@ class Main {
   public:
     Main();
     virtual ~Main();
+    box::Controller* box_controller;
   private:
     box::Sonar* box_sonar;
     box::Switch* box_switch;
@@ -25,7 +26,6 @@ class Main {
     box::Wait* box_wait_servo_step_speed_upper;
     box::Wait* box_wait_till_servomanager_finished_moving;
     box::ModeManager* box_mode_manager;
-    box::Controller* box_controller;
 };
 
 } // namespace box
