@@ -8,29 +8,29 @@ using namespace arduino;
 box::Switch::Switch(int pin_switch) {
     box::Switch::pin_switch = pin_switch;
     box::Switch::box_wait_switch_debounce = new box::Wait();
-    box::Switch::debounce_delay_ms = 10;
+    box::Switch::debounce_delay_ms = 15;
     box::Switch::last_debounce_time = 0;
     pinMode(pin_switch, INPUT_PULLUP);
-    switch_state = digitalRead(box::Switch::pin_switch);
+    switch_state = (bool) digitalRead(box::Switch::pin_switch);
     last_switch_state = switch_state;
-    m_has_changed = false;
+    switch_state_has_changed = false;
 }
 
 box::Switch::~Switch() {
 }
 
 bool box::Switch::check() {
-    bool reading = (bool) digitalRead(box::Switch::pin_switch);
-    if (reading != last_switch_state) {
+    bool current_switch_state = (bool) digitalRead(box::Switch::pin_switch);
+    if (current_switch_state != last_switch_state) {
         last_debounce_time = millis();
     }
     if ((millis() - last_debounce_time) > debounce_delay_ms) {
-        if (reading != switch_state) {
-            switch_state = (bool) reading;
-            m_has_changed = true;
+        if (current_switch_state != switch_state) {
+            switch_state = current_switch_state;
+            switch_state_has_changed = true;
         }
     }
-    last_switch_state = (bool) reading;
+    last_switch_state = current_switch_state;
     return switch_state;
 }
 /*************************************************************************************************
@@ -43,8 +43,8 @@ bool box::Switch::is_high() {
 
 bool box::Switch::has_changed() {
     check();
-    if(m_has_changed) {
-        m_has_changed = false;
+    if(switch_state_has_changed) {
+        switch_state_has_changed = false;
         return true;
     }
     return false;

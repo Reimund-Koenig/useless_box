@@ -11,7 +11,7 @@ class Switch {
     int pin_switch;
     bool switch_state;
     bool last_switch_state;
-    bool m_has_changed;
+    bool switch_state_has_changed;
     unsigned long last_debounce_time;
     unsigned long debounce_delay_ms;
     bool check();
