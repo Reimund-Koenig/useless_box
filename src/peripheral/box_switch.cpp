@@ -7,7 +7,6 @@ using namespace arduino;
 
 box::Switch::Switch(int pin_switch) {
     box::Switch::pin_switch = pin_switch;
-    box::Switch::box_wait_switch_debounce = new box::Wait();
     box::Switch::debounce_delay_ms = 15;
     box::Switch::last_debounce_time = 0;
     pinMode(pin_switch, INPUT_PULLUP);

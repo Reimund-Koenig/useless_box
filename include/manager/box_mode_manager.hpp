@@ -3,7 +3,6 @@
 
 #include "peripheral/box_sonar.hpp"
 #include "manager/box_servo_manager.hpp"
-#include "manager/box_wait_manager.hpp"
 
 #include "modes/box_submode_function_jitter.hpp"
 #include "modes/box_mode_awareness.hpp"

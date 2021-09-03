@@ -2,7 +2,6 @@
 #define BOX_AWARENESS_HPP_
 
 #include "modes/box_submode_function_jitter.hpp"
-#include "manager/box_wait_manager.hpp"
 #include "manager/box_servo_manager.hpp"
 #include "peripheral/box_sonar.hpp"
 #include "peripheral/box_switch.hpp"

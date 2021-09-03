@@ -2,9 +2,6 @@
 #define BOX_RESET_HPP_
 
 #include "manager/box_servo_manager.hpp"
-#include "manager/box_wait_manager.hpp"
-#include "peripheral/box_sonar.hpp"
-#include "peripheral/box_switch.hpp"
 
 namespace box {
 
