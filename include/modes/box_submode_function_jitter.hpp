@@ -12,7 +12,6 @@ class SubModeFunctionJitter {
     int box_mode_jitter_state;
     int jitter_speed;
     int jitter_count;
-    int jitter_count2;
     int jitter_percentage_start;
     int jitter_percentage_end;
 

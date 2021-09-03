@@ -15,11 +15,10 @@ class Servomotor {
     int last_percentage;
     int min_peak_angle;
     int max_peak_angle;
-    bool hit_switch;
     unsigned long speed_sleep_ms;
     bool clockwise;
-    void set_angle(int);
     box::Wait* box_wait_servo_step_speed;
+    void set_angle(int);
     unsigned long speed_to_millseconds(int speed);
     int calculate_sleep_time_ms();
     void move_step();

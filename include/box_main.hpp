@@ -14,6 +14,7 @@ class Main {
   public:
     Main();
     virtual ~Main();
+  private:
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomotor* box_lower_servo;

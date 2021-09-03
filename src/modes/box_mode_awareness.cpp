@@ -8,7 +8,7 @@ box::ModeAwareness::ModeAwareness(box::Servomanager* box_servo_manager,
                 box::SubModeFunctionJitter* box_submode_function_jitter) {
     box::ModeAwareness::box_submode_function_jitter = box_submode_function_jitter;
     box::ModeAwareness::box_servo_manager = box_servo_manager;
-    box::ModeAwareness::last_distance = 0;
+    // last_distance = 0;
     run_submode_jitter = false;
 }
 

@@ -13,10 +13,8 @@ class Controller {
 
   private:
     int box_mode;
-    int box_speed;
     int distance;
     bool is_mode_finished;
-    int time_till_sleep;
     box::Sonar* box_sonar;
     box::Switch* box_switch;
     box::Servomanager* box_servo_manager;
