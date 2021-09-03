@@ -2,7 +2,6 @@
 #define BOX_MODEMANAGER_HPP_
 
 #include "peripheral/box_sonar.hpp"
-#include "peripheral/box_switch.hpp"
 #include "manager/box_servo_manager.hpp"
 #include "manager/box_wait_manager.hpp"
 
@@ -20,7 +19,7 @@ class ModeManager {
     box::ModeReset* box_mode_reset;
 
   public:
-    ModeManager(box::Servomanager* box_servo_manager, box::Switch* box_switch);
+    ModeManager(box::Servomanager* box_servo_manager);
     virtual ~ModeManager();
     virtual bool run_mode_awareness(int distance);
     virtual bool run_mode_reset();

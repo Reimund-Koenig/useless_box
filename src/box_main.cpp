@@ -38,7 +38,7 @@ box::Main::Main() {
                                               box_upper_servo,
                                               box_wait_till_servomanager_finished_moving,
                                               box_switch);
-    box_mode_manager = new box::ModeManager(box_servo_manager, box_switch);
+    box_mode_manager = new box::ModeManager(box_servo_manager);
     pinMode(PIN_POWER_SERVOS, OUTPUT);
     pinMode(PIN_POWER_SONAR, OUTPUT);
     digitalWrite(PIN_POWER_SERVOS, HIGH);

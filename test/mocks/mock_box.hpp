@@ -56,7 +56,7 @@ class BoxWaitMock : public box::Wait {
 
 class BoxModeManagerMock : public box::ModeManager {
   public:
-    BoxModeManagerMock() : box::ModeManager(NULL,NULL) {}
+    BoxModeManagerMock() : box::ModeManager(NULL) {}
     MOCK_METHOD1(run_mode_awareness, bool(int));
     MOCK_METHOD0(run_mode_reset, bool());
 };
