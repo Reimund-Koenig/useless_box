@@ -4,9 +4,6 @@
 
 using namespace arduino;
 
-
-#define POWER_SUPPLY_CONNECTED false
-
 #define PIN_SWITCH 2
 #define PIN_POWER_SERVOS 7
 #define PIN_POWER_SONAR 8
@@ -42,18 +39,18 @@ box::Main::Main() {
                                               box_wait_till_servomanager_finished_moving,
                                               box_switch);
     box_mode_manager = new box::ModeManager(box_servo_manager, box_switch);
-    bool is_engery_safe_mode = !POWER_SUPPLY_CONNECTED;
     pinMode(PIN_POWER_SERVOS, OUTPUT);
     pinMode(PIN_POWER_SONAR, OUTPUT);
     digitalWrite(PIN_POWER_SERVOS, HIGH);
     digitalWrite(PIN_POWER_SONAR, HIGH);
     randomSeed(analogRead(0));
-    box_controller = new box::Controller(   is_engery_safe_mode,
-                                            box_switch,
-                                            box_sonar,
-                                            box_servo_manager,
-                                            box_wait_deepsleep,
-                                            box_mode_manager);
+    box_controller = new box::Controller(
+                                        box_switch,
+                                        box_sonar,
+                                        box_servo_manager,
+                                        box_wait_deepsleep,
+                                        box_mode_manager
+                                        );
 }
 
 box::Main::~Main() {

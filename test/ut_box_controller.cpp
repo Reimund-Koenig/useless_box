@@ -22,7 +22,7 @@ struct Controller_under_test : public box::Controller {
                     box::Servomanager* box_servo_manager,
                     box::Wait* box_wait_deepsleep,
                     box::ModeManager* box_mode_manager)
-                    : Controller(true,
+                    : Controller(
                             box_switch,
                             box_sonar,
                             box_servo_manager,

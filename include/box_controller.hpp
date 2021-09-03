@@ -29,7 +29,6 @@ class Controller {
 
   public:
     Controller(
-        bool is_engery_safe_mode,
         box::Switch* box_switch,
         box::Sonar* box_sonar,
         box::Servomanager* box_servo_manager,

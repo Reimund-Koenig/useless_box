@@ -10,7 +10,7 @@ using namespace arduino;
 #define MODE_AWARENESS 2
 #define TIME_TILL_DEEP_SLEEP 60000
 
-box::Controller::Controller(bool is_engery_safe_mode,
+box::Controller::Controller(
                 box::Switch* box_switch,
                 box::Sonar* box_sonar,
                 box::Servomanager* box_servo_manager,
