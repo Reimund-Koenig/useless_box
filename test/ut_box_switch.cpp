@@ -12,7 +12,7 @@ using ::testing::Return;
 using ::testing::NiceMock;
 
 #define TEST_PIN_SWITCH 1
-#define TEST_DEBOUNCE_DELAY 10
+#define TEST_DEBOUNCE_DELAY 15
 
 struct Switch_under_test : public box::Switch {
     Switch_under_test() : Switch(TEST_PIN_SWITCH) {}
