@@ -1,5 +1,6 @@
 #include "ardunio_namespace.h"
 #include "box_main.hpp"
+#include "log.h"
 
 box::Main* box_main;
 
@@ -13,4 +14,5 @@ void setup() {
 
 void loop() {
     box_main->box_controller->run();
+    PRINT_LOGS();
 }

@@ -37,7 +37,7 @@ box::Controller::~Controller() {
  *************************************************/
 
 void box::Controller::run() {
-    LOG("test");
+    // LOG("test");
     if (box_wait_deepsleep->is_expired()) {
         reset_servos_blocking();
         deep_sleep_till_switch_is_toggled();
