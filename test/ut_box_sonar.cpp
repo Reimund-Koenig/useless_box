@@ -3,6 +3,7 @@
 #include <cstdio>
 
 #include "mock_arduino.hpp"
+#include "mock_box.hpp"
 #include "peripheral/box_sonar.hpp"
 
 
@@ -19,8 +20,8 @@ using ::testing::Throw;
 #define TEST_PIN_ECHO 2
 
 struct Sonar_under_test : public box::Sonar {
-    Sonar_under_test() : Sonar(TEST_PIN_TRIGGER,
-                            TEST_PIN_ECHO) {}
+    Sonar_under_test(box::Wait* box_wait_till_next_distance_measurement_mock) : Sonar(TEST_PIN_TRIGGER,
+                            TEST_PIN_ECHO, box_wait_till_next_distance_measurement_mock) {}
     virtual ~Sonar_under_test() = default;
 };
 
@@ -30,8 +31,9 @@ class TestSonar : public ::testing::Test {
     void (*echo_isr_callback)();
 
     virtual void SetUp() {
+        box_wait_till_next_distance_measurement_mock = new NiceMock<BoxWaitMock>;
         arduino_mock = new NiceMock<ArduinoMock>;
-        sonar_under_test = new Sonar_under_test();
+        sonar_under_test = new Sonar_under_test(box_wait_till_next_distance_measurement_mock);
     }
     virtual void TearDown() {
         delete sonar_under_test;

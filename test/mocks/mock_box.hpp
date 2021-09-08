@@ -34,7 +34,7 @@ class BoxServoManagerMock : public box::Servomanager {
 
 class BoxSonarMock : public box::Sonar{
   public:
-    BoxSonarMock() : box::Sonar(0,1) {}
+    BoxSonarMock() : box::Sonar(0,1,NULL) {}
     MOCK_METHOD0(get_average_distance_cm, unsigned int());
     MOCK_METHOD0(get_median_distance_cm, unsigned int());
 };
@@ -76,6 +76,7 @@ class BoxModeFunctionJitterMock : public box::SubModeFunctionJitter {
 ::testing::NiceMock<BoxWaitMock>* box_wait_till_servomanager_finished_moving;
 ::testing::NiceMock<BoxWaitMock>* box_wait_servo_step_speed;
 ::testing::NiceMock<BoxWaitMock>* box_wait_deep_sleep_mock;
+::testing::NiceMock<BoxWaitMock>* box_wait_till_next_distance_measurement_mock;
 ::testing::NiceMock<BoxModeManagerMock>* box_mode_manager_mock;
 ::testing::NiceMock<BoxModeFunctionJitterMock>* box_submode_function_jitter_mock;
 
