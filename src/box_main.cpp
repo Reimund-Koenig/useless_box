@@ -13,18 +13,19 @@ using namespace arduino;
 #define PIN_SONAR_ECHO 12
 
 #define LOWER_SERVO_MAX 160
-#define LOWER_SERVO_MIN 25
+#define LOWER_SERVO_MIN 0
 #define LOWER_SERVO_CLOCKWISE false
-#define UPPER_SERVO_MIN 0
+#define UPPER_SERVO_MIN 10
 #define UPPER_SERVO_MAX 160
 #define UPPER_SERVO_CLOCKWISE true
 
 box::Main::Main() {
     box_wait_till_servomanager_finished_moving = new box::Wait();
     box_wait_deepsleep = new box::Wait();
+    box_wait_till_next_distance_measurement = new box::Wait();
     box_wait_servo_step_speed_lower = new box::Wait();
     box_wait_servo_step_speed_upper = new box::Wait();
-    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO);
+    box_sonar = new box::Sonar(PIN_SONAR_TRIGGER, PIN_SONAR_ECHO, box_wait_till_next_distance_measurement);
     box_switch = new box::Switch(PIN_SWITCH);
     box_lower_servo = new box::Servomotor(
                         PIN_LOWER_SERVO_PWM, LOWER_SERVO_CLOCKWISE,

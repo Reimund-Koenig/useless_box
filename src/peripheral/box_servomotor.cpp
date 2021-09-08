@@ -54,8 +54,8 @@ void box::Servomotor::move() {
 
 bool box::Servomotor::current_angle_smaller_than_x_percent(double x){
     double calc_angle = (double) current_angle;
-    double percent_90 = (((double)max_peak_angle / 100.0) * x);
-    return calc_angle < percent_90;
+    double x_percent = (((double)max_peak_angle / 100.0) * x);
+    return calc_angle < x_percent;
 }
 
 int box::Servomotor::get_last_percentage() {
@@ -100,9 +100,9 @@ unsigned long box::Servomotor::speed_to_millseconds(int speed) {
     if(speed > 5) { return (unsigned long) 0; }
     if(speed > 4) { return (unsigned long) 1; }
     if(speed > 3) { return (unsigned long) 2; }
-    if(speed > 2) { return (unsigned long) 5; }
-    if(speed > 1) { return (unsigned long) 8; }
-    return (unsigned long) 10;
+    if(speed > 2) { return (unsigned long) 3; }
+    if(speed > 1) { return (unsigned long) 4; }
+    return (unsigned long) 5;
 }
 
 int box::Servomotor::calculate_sleep_time_ms() {

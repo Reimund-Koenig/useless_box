@@ -31,23 +31,20 @@ void box::SubModeFunctionJitter::init(int box_percentage){
 }
 
 bool box::SubModeFunctionJitter::run() {
+    box_servo_manager->move_copilot_servo_to_percent(0, 6);
     if(box_mode_jitter_state == 0) {
-        box_mode_jitter_state++;
-        box_servo_manager->move_copilot_servo_to_percent(0, 6);
-        return false;
-    } if(box_mode_jitter_state == 1) {
         box_servo_manager->move_pilot_servo_to_percent(jitter_percentage_end, jitter_speed);
         box_mode_jitter_state++;
         return false;
-    } if(box_mode_jitter_state == 2) {
+    } if(box_mode_jitter_state == 1) {
         box_servo_manager->move_pilot_servo_to_percent(jitter_percentage_start, jitter_speed);
         if(--jitter_count == 0) {
-            box_mode_jitter_state = 3;
+            box_mode_jitter_state = 2;
         } else {
             box_mode_jitter_state--;
         }
         return false;
-    } if(box_mode_jitter_state == 3) {
+    } if(box_mode_jitter_state == 2) {
         box_mode_jitter_state = 0;
         return true;
     }

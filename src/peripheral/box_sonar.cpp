@@ -5,13 +5,15 @@
 
 using namespace arduino;
 
-box::Sonar::Sonar(int pin_trigger, int pin_echo) {
+box::Sonar::Sonar(int pin_trigger, int pin_echo, box::Wait* box_wait_till_next_distance_measurement) {
     box::Sonar::pin_trigger = pin_trigger;
     box::Sonar::pin_echo = pin_echo;
     box::Sonar::average_not_the_first_iteration = false;
     box::Sonar::median_iter = 0;
     box::Sonar::average_iter = 0;
     box::Sonar::average_summary = 0;
+    box::Sonar::sleep_time_till_next_measurement = (int)1000/MEASURES_PER_SECOND;
+    box::Sonar::box_wait_till_next_distance_measurement = box_wait_till_next_distance_measurement;
     pinMode(box::Sonar::pin_trigger, OUTPUT);
     digitalWrite(box::Sonar::pin_trigger, LOW);
     pinMode(box::Sonar::pin_echo, INPUT);
@@ -25,11 +27,20 @@ box::Sonar::~Sonar(){
  *************************************************/
 
 unsigned int box::Sonar::get_median_distance_cm(){
+    if(!box_wait_till_next_distance_measurement->is_expired()) {
+        return box::Sonar::get_median();
+    }
+    box_wait_till_next_distance_measurement->milliseconds(sleep_time_till_next_measurement);
     box::Sonar::get_distance_cm();
-    return box::Sonar::calculate_and_get_median();
+    box::Sonar::calculate_median();
+    return box::Sonar::get_median();
 }
 
 unsigned int box::Sonar::get_average_distance_cm(){
+    if(!box_wait_till_next_distance_measurement->is_expired()) {
+        return average_distance_cm;
+    }
+    box_wait_till_next_distance_measurement->milliseconds(sleep_time_till_next_measurement);
     box::Sonar::get_distance_cm();
     return average_distance_cm;
 }
@@ -72,14 +83,16 @@ void box::Sonar::bubble_sort(int a[], int size) {
     }
 }
 
-unsigned int  box::Sonar::calculate_and_get_median () {
-    int sort_median_array[NUMBER_OF_MEDIAN_VALUES];
+unsigned int  box::Sonar::get_median () {
+    int mid_index = (int) (NUMBER_OF_MEDIAN_VALUES/2.0);
+    return sort_median_array[mid_index];
+}
+
+void box::Sonar::calculate_median () {
     for(int i=0; i<(NUMBER_OF_MEDIAN_VALUES-1); i++) {
         sort_median_array[i] = median_array[i];
     }
     bubble_sort(sort_median_array, NUMBER_OF_MEDIAN_VALUES);
-    int mid_index = (int) (NUMBER_OF_MEDIAN_VALUES/2.0);
-    return sort_median_array[mid_index];
 }
 
 void box::Sonar::calculate_average(int distance_in_cm){

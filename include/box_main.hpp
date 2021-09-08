@@ -21,6 +21,7 @@ class Main {
     box::Servomotor* box_lower_servo;
     box::Servomotor* box_upper_servo;
     box::Servomanager* box_servo_manager;
+    box::Wait* box_wait_till_next_distance_measurement;
     box::Wait* box_wait_deepsleep;
     box::Wait* box_wait_servo_step_speed_lower;
     box::Wait* box_wait_servo_step_speed_upper;

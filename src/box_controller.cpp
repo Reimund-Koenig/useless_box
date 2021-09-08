@@ -37,13 +37,14 @@ box::Controller::~Controller() {
  *************************************************/
 
 void box::Controller::run() {
-    LOG("test");
+    // LOG("test");
     if (box_wait_deepsleep->is_expired()) {
         reset_servos_blocking();
         deep_sleep_till_switch_is_toggled();
     }
     box_servo_manager->move_motors();
-    distance = box_sonar->get_median_distance_cm();
+    distance = box_sonar->get_average_distance_cm();
+    // distance = box_sonar->get_median_distance_cm();
     bool user_interrupt = box_switch->has_changed() && box_servo_manager->box_servos_not_reached_switch();
     if(user_interrupt) { switch_and_run_reset_mode(); }
     if(box_servo_manager->is_moving()) { return; }
