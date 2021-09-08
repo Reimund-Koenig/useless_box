@@ -113,11 +113,11 @@ TEST_F(TestServo, test_servomotor_move_step_not_called_if_not_free) {
 TEST_F(TestServo, test_servomotor_sleep_time_for_speed) {
     test_speed(servomotor_under_test, 0, 1, 0); // 0 steps
     test_speed(servomotor_under_test, 0, 6, 0); // 0 steps
-    test_speed(servomotor_under_test, 50, 1, 75); // 5 steps
+    test_speed(servomotor_under_test, 50, 1, 50); // 5 steps
     test_speed(servomotor_under_test, 50, 6, 25); // 5 steps
-    test_speed(servomotor_under_test, 100, 1, 150); // 10 steps
-    test_speed(servomotor_under_test, 100, 2, 130); // 10 steps
-    test_speed(servomotor_under_test, 100, 3, 100); // 10 steps
+    test_speed(servomotor_under_test, 100, 1, 100); // 10 steps
+    test_speed(servomotor_under_test, 100, 2, 90); // 10 steps
+    test_speed(servomotor_under_test, 100, 3, 80); // 10 steps
     test_speed(servomotor_under_test, 100, 4, 70); // 10 steps
     test_speed(servomotor_under_test, 100, 5, 60); // 10 steps
     test_speed(servomotor_under_test, 100, 6, 50); // 10 steps
