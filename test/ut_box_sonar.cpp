@@ -38,6 +38,7 @@ class TestSonar : public ::testing::Test {
     virtual void TearDown() {
         delete sonar_under_test;
         delete arduino_mock;
+        delete box_wait_till_next_distance_measurement_mock;
     }
 };
 
@@ -56,42 +57,58 @@ TEST_F(TestSonar, test_get_distance_cm) {
 }
 
 TEST_F(TestSonar, test_average) {
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, is_expired()).WillRepeatedly(Return(true));
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((5*2)/0.034));
     int expected_distance = 5; // 5 = 5/1
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     // next
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((7*2)/0.034));
     expected_distance = 6; // 5 7 = 12/2
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     // next
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((3*2)/0.034));
     expected_distance = 5; // 5 7 3 = 15/3
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     // next
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((25*2)/0.034));
     expected_distance = 10; // 5 7 3 25 = 40/4
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     // next
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((10*2)/0.034));
     expected_distance = 10; // 5 7 3 25 10 = 50/5
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     // next
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((4*2)/0.034));
     expected_distance = 9; // 5 7 3 25 10 4 = 54/6
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     // next
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((2*2)/0.034));
     expected_distance = 8; // 5 7 3 25 10 4 2 = 56/7
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     // next
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((8*2)/0.034));
     expected_distance = 8; // 5 7 3 25 10 4 2 8 = 64/8
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_));
+    EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
+    //next with timer expired
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, is_expired()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_)).Times(0);
+    EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
+    EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
     EXPECT_EQ(expected_distance, sonar_under_test->get_average_distance_cm());
 }
 
 
 TEST_F(TestSonar, test_median) {
-    int expected_distance = 151;
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, is_expired()).WillRepeatedly(Return(true));
+    int expected_distance = 10;
     for(int i=0;i<NUMBER_OF_MEDIAN_VALUES;i++) {
         EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((i*2)/0.034));
         sonar_under_test->get_median_distance_cm();
@@ -110,5 +127,11 @@ TEST_F(TestSonar, test_median) {
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((2*2)/0.034));
     EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
     EXPECT_CALL(*arduino_mock, pulseIn(_, _, _)).WillOnce(Return((3*2)/0.034));
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
+    //next with timer expired
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, is_expired()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*box_wait_till_next_distance_measurement_mock, milliseconds(_)).Times(0);
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
+    EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
     EXPECT_EQ(expected_distance, sonar_under_test->get_median_distance_cm());
 }
