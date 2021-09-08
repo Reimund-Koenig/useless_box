@@ -36,8 +36,8 @@ bool box::ModeAwareness::run(int distance) {
  * Private Methods
  *************************************************/
 void box::ModeAwareness::decide_for_jitter(int distance) {
-    if(distance >= 24) { return; }
-    if(distance < 15) { return; }
+    if(distance > 24) { return; }
+    if(distance < 12) { return; }
     run_submode_jitter = random(100) > 80;
     if(!run_submode_jitter) { return; }
     box_submode_function_jitter->init(box_percentage);
